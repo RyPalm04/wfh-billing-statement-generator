@@ -2,12 +2,12 @@ package com.palmer.billingstatementgenerator.controllers;
 
 import java.time.LocalDate;
 
-import com.palmer.billingstatementgenerator.models.TabOneModel;
+import com.palmer.billingstatementgenerator.models.TabTwoModel;
 
-public class TabOneController {
-	private final TabOneModel model;
+public class TabTwoController {
+	private final TabTwoModel model;
 
-	public TabOneController(TabOneModel model) {
+	public TabTwoController(TabTwoModel model) {
 		this.model = model;
 	}
 

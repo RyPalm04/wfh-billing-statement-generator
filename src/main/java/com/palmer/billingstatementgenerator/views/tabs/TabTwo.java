@@ -2,8 +2,8 @@ package com.palmer.billingstatementgenerator.views.tabs;
 
 import java.util.Arrays;
 
-import com.palmer.billingstatementgenerator.controllers.TabOneController;
-import com.palmer.billingstatementgenerator.models.TabOneModel;
+import com.palmer.billingstatementgenerator.controllers.TabTwoController;
+import com.palmer.billingstatementgenerator.models.TabTwoModel;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -21,14 +21,14 @@ import javafx.scene.text.Font;
 
 public class TabTwo extends Tab {
 
-	private TabOneController controller;
-	private final TabOneModel model;
+	private TabTwoController controller;
+	private final TabTwoModel model;
 	private GridPane root;
 	private Button nextButton;
 
-	public TabTwo(/*TabOneController controller,*/ TabOneModel model) {
+	public TabTwo(/*TabOneController controller,*/ TabTwoModel model) {
 		//		this.controller = controller;
-		this.setText("Tab 1");
+		this.setText("SERVICE INFORMATION");
 		this.model = model;
 
 		createAndConfigurePane();
