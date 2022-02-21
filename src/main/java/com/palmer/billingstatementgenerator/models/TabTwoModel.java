@@ -5,14 +5,14 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class TabOneModel {
+public class TabTwoModel {
 	private final IntegerProperty controlNumber = new SimpleIntegerProperty(null, "Control Number");
 	private final StringProperty servicesForName = new SimpleStringProperty(null, "Services For");
 	private final StringProperty placeOfDeath = new SimpleStringProperty(null, "Place of Death");
 	private final StringProperty dateOfDeath = new SimpleStringProperty(null, "Date of Death");
 	private final StringProperty serviceDate = new SimpleStringProperty(null, "Service Date");
 
-	public TabOneModel() {
+	public TabTwoModel() {
 	}
 
 	public final Integer getControlNumber() {

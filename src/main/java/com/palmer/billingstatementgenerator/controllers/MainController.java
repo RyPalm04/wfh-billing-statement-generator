@@ -2,13 +2,13 @@ package com.palmer.billingstatementgenerator.controllers;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.palmer.billingstatementgenerator.models.TabOneModel;
+import com.palmer.billingstatementgenerator.models.TabTwoModel;
 
 public class MainController {
 
-	private final TabOneModel model;
+	private final TabTwoModel model;
 
-	public MainController(TabOneModel model) {
+	public MainController(TabTwoModel model) {
 		this.model = model;
 	}
 
