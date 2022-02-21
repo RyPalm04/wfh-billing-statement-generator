@@ -1,23 +1,23 @@
 package com.palmer.billingstatementgenerator;
 
-import com.palmer.billingstatementgenerator.controllers.MainController;
-import com.palmer.billingstatementgenerator.models.MainWindowModel;
 import com.palmer.billingstatementgenerator.views.MainView;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		MainWindowModel model = new MainWindowModel();
-		MainController controller = new MainController(model);
-		MainView view = new MainView(controller, model);
+		MainView view = new MainView();
 
-		Scene scene = new Scene(view.asParent(), 400, 400);
+		BorderPane root = new BorderPane(view.asParent());
+
+		Scene scene = new Scene(root, 400, 300);
 		primaryStage.setScene(scene);
+		primaryStage.setTitle("Wright Funeral Home Billing Statement");
 		primaryStage.show();
 	}
 
