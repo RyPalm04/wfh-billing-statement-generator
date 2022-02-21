@@ -1,25 +1,21 @@
 package com.palmer.billingstatementgenerator.controllers;
 
-import java.util.Objects;
-
 import org.apache.commons.lang3.StringUtils;
 
-import com.palmer.billingstatementgenerator.models.MainWindowModel;
+import com.palmer.billingstatementgenerator.models.TabOneModel;
 
 public class MainController {
 
-	private final MainWindowModel model;
+	private final TabOneModel model;
 
-	public MainController(MainWindowModel model) {
+	public MainController(TabOneModel model) {
 		this.model = model;
 	}
 
 	public void updateX(String x) {
-		model.setX(convertStringToInt(x));
 	}
 
 	public void updateY(String y) {
-		model.setY(convertStringToInt(y));
 	}
 
 	private int convertStringToInt(String s) {
