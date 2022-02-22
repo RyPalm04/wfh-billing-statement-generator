@@ -1,12 +1,9 @@
 package com.palmer.billingstatementgenerator.views;
 
-import com.palmer.billingstatementgenerator.models.TabTwoModel;
 import com.palmer.billingstatementgenerator.views.tabs.TabThree;
 import com.palmer.billingstatementgenerator.views.tabs.TabTwo;
-
 import javafx.geometry.Side;
 import javafx.scene.Parent;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TabPane;
 
 public class MainView {
@@ -23,7 +20,7 @@ public class MainView {
 	}
 
 	private void createAndConfigurePane() {
-		tabTwo = new TabTwo(new TabTwoModel());
+		tabTwo = new TabTwo();
 		tabThree = new TabThree();
 		view = new TabPane(tabTwo, tabThree);
 		view.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
