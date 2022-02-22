@@ -2,35 +2,25 @@ package com.palmer.billingstatementgenerator.views.tabs;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class TabThree extends GeneratorTabs {
 
-    private static final NumberFormat DOLLAR_FORMATTER = NumberFormat.getCurrencyInstance();
     public static final String PACKAGE_SELECTION = "Package Selection...";
 
-    public TabThree() {
-        setText("SERVICES, FACILITIES, AND TRANSPORTATION");
+    public TabThree(String tabTitle) {
+        super(tabTitle);
     }
 
     @Override
     protected void addForm() {
-        Button clearButton = new Button("Clear Selections");
-        GridPane grid = new GridPane();
-
         final ComboBox<String> packages = new ComboBox<>();
         List<String> packageValues = Arrays.stream(Packages.values())
                                            .map(value -> {
@@ -55,33 +45,22 @@ public class TabThree extends GeneratorTabs {
                                    .map(value -> new Label(DOLLAR_FORMATTER.format(value.getCost())))
                                    .collect(Collectors.toList());
 
-        grid.setAlignment(Pos.CENTER);
-        grid.setHgap(7);
-        grid.setVgap(10);
-
         GridPane.setConstraints(packages, 0, 0);
 
         for (int i = 0; i < checkBoxes.size(); i++) {
             CheckBox checkBox = checkBoxes.get(i);
+            Label price = prices.get(i);
             EventHandler<ActionEvent> clearButtonHandler = e -> clearButton.setDisable(!checkBox.isSelected() && StringUtils.equalsIgnoreCase(PACKAGE_SELECTION, packages.getValue()));
             GridPane.setConstraints(checkBox, 0, i + 1);
+            GridPane.setConstraints(price, 1, i + 1);
             checkBox.setFont(new Font(14));
-            grid.getChildren()
-                .add(checkBox);
+            price.setFont(new Font(14));
+            addGridElements(checkBox, price);
             checkBox.setOnAction(clearButtonHandler);
             packages.setOnAction(clearButtonHandler);
         }
 
-        for (int i = 0; i < prices.size(); i++) {
-            GridPane.setConstraints(prices.get(i), 1, i + 1);
-            prices.get(i)
-                  .setFont(new Font(14));
-            grid.getChildren()
-                .add(prices.get(i));
-        }
-
-        grid.getChildren()
-            .add(packages);
+        addGridElements(packages);
 
         clearButton.setOnAction(e -> {
             packages.getSelectionModel()
@@ -89,28 +68,6 @@ public class TabThree extends GeneratorTabs {
             checkBoxes.forEach(checkBox -> checkBox.setSelected(false));
             clearButton.setDisable(true);
         });
-        clearButton.setDisable(StringUtils.equalsIgnoreCase(PACKAGE_SELECTION, packages.getValue()) && checkBoxes.stream()
-                                                                                                                 .anyMatch(cb -> !cb.isSelected()));
-
-        GridPane.setConstraints(grid, 1, 0);
-        GridPane.setConstraints(prevButton, 0, 1);
-        GridPane.setConstraints(nextButton, 2, 1);
-        GridPane.setConstraints(clearButton, 1, 1);
-        GridPane.setHalignment(clearButton, HPos.CENTER);
-
-        root.getChildren()
-            .addAll(grid, prevButton, nextButton, clearButton);
-    }
-
-    @Override
-    protected void createAndConfigurePanel() {
-        root = new GridPane();
-
-        root.setAlignment(Pos.CENTER);
-        root.setHgap(7);
-        root.setVgap(10);
-
-        this.setContent(root);
     }
 }
 
