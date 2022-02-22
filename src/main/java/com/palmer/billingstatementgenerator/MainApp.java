@@ -15,7 +15,7 @@ public class MainApp extends Application {
 
 		BorderPane root = new BorderPane(view.asParent());
 
-		Scene scene = new Scene(root, 400, 500);
+		Scene scene = new Scene(root, 550, 500);
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Wright Funeral Home Billing Statement");
 		primaryStage.show();
