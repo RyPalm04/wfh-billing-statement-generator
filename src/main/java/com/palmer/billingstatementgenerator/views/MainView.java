@@ -6,6 +6,7 @@ import com.palmer.billingstatementgenerator.views.tabs.TabTwo;
 
 import javafx.geometry.Side;
 import javafx.scene.Parent;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TabPane;
 
 public class MainView {
