@@ -7,6 +7,7 @@ import com.palmer.billingstatementgenerator.views.controllers.TabThreeFxmlContro
 import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
 import javafx.geometry.Side;
 import javafx.scene.Parent;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
