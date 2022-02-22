@@ -19,25 +19,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 
-public class TabTwo extends Tab {
-
-	private TabTwoController controller;
-	private final TabTwoModel model;
+public class TabTwo extends GeneratorTabs {
 	private GridPane root;
-	private Button nextButton;
 
-	public TabTwo(/*TabOneController controller,*/ TabTwoModel model) {
-		//		this.controller = controller;
+	public TabTwo() {
 		this.setText("SERVICE INFORMATION");
-		this.model = model;
-
-		createAndConfigurePane();
-		addForm();
 	}
 
-	private void addForm() {
-		nextButton = new Button("Next");
-
+	@Override
+	protected void addForm() {
 		GridPane grid = new GridPane();
 
 		TextField cNumber = new TextField();
@@ -92,7 +82,8 @@ public class TabTwo extends Tab {
 		Arrays.stream(labels).forEach(label -> label.setFont(new Font(14)));
 	}
 
-	private void createAndConfigurePane() {
+	@Override
+	protected void createAndConfigurePanel() {
 		root = new GridPane();
 
 		root.setAlignment(Pos.CENTER);

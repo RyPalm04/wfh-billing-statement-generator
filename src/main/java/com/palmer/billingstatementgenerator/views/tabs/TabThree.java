@@ -1,41 +1,33 @@
 package com.palmer.billingstatementgenerator.views.tabs;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import org.apache.commons.lang3.StringUtils;
 
-public class TabThree extends Tab {
+import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class TabThree extends GeneratorTabs {
 
     private static final NumberFormat DOLLAR_FORMATTER = NumberFormat.getCurrencyInstance();
     public static final String PACKAGE_SELECTION = "Package Selection...";
-    private GridPane root;
-    private Button nextButton;
-    private Button prevButton;
 
     public TabThree() {
         setText("SERVICES, FACILITIES, AND TRANSPORTATION");
-        createAndConfigurePanel();
-        addForm();
     }
 
-    private void addForm() {
-        nextButton = new Button("Next");
-        prevButton = new Button("Previous");
+    @Override
+    protected void addForm() {
         Button clearButton = new Button("Clear Selections");
         GridPane grid = new GridPane();
 
@@ -53,12 +45,8 @@ public class TabThree extends Tab {
         packages.getItems()
                 .setAll(packageValues);
         packages.setStyle("-fx-font-size:14px");
-        packages.getSelectionModel().selectFirst();
-        packages.setOnAction(e -> {
-            if (!StringUtils.equalsIgnoreCase(PACKAGE_SELECTION, packages.getValue())) {
-                clearButton.setDisable(false);
-            }
-        });
+        packages.getSelectionModel()
+                .selectFirst();
 
         List<CheckBox> checkBoxes = Arrays.stream(Services.values())
                                           .map(value -> new CheckBox(value.getName()))
@@ -75,16 +63,13 @@ public class TabThree extends Tab {
 
         for (int i = 0; i < checkBoxes.size(); i++) {
             CheckBox checkBox = checkBoxes.get(i);
+            EventHandler<ActionEvent> clearButtonHandler = e -> clearButton.setDisable(!checkBox.isSelected() && StringUtils.equalsIgnoreCase(PACKAGE_SELECTION, packages.getValue()));
             GridPane.setConstraints(checkBox, 0, i + 1);
-            checkBox
-                    .setFont(new Font(14));
+            checkBox.setFont(new Font(14));
             grid.getChildren()
                 .add(checkBox);
-            checkBox.setOnAction(e -> {
-                if (checkBox.isSelected()) {
-                    clearButton.setDisable(false);
-                }
-            });
+            checkBox.setOnAction(clearButtonHandler);
+            packages.setOnAction(clearButtonHandler);
         }
 
         for (int i = 0; i < prices.size(); i++) {
@@ -99,7 +84,8 @@ public class TabThree extends Tab {
             .add(packages);
 
         clearButton.setOnAction(e -> {
-            packages.getSelectionModel().selectFirst();
+            packages.getSelectionModel()
+                    .selectFirst();
             checkBoxes.forEach(checkBox -> checkBox.setSelected(false));
             clearButton.setDisable(true);
         });
@@ -116,7 +102,8 @@ public class TabThree extends Tab {
             .addAll(grid, prevButton, nextButton, clearButton);
     }
 
-    private void createAndConfigurePanel() {
+    @Override
+    protected void createAndConfigurePanel() {
         root = new GridPane();
 
         root.setAlignment(Pos.CENTER);
@@ -124,14 +111,6 @@ public class TabThree extends Tab {
         root.setVgap(10);
 
         this.setContent(root);
-    }
-
-    public Button getNextButton() {
-        return nextButton;
-    }
-
-    public Button getPrevButton() {
-        return prevButton;
     }
 }
 
