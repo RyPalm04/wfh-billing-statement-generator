@@ -2,15 +2,9 @@ package com.palmer.billingstatementgenerator.views.tabs;
 
 import java.util.Arrays;
 
-import com.palmer.billingstatementgenerator.controllers.TabTwoController;
-import com.palmer.billingstatementgenerator.models.TabTwoModel;
-
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
@@ -20,16 +14,13 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 
 public class TabTwo extends GeneratorTabs {
-	private GridPane root;
 
-	public TabTwo() {
-		this.setText("SERVICE INFORMATION");
+	public TabTwo(String tabTitle, boolean showPrev, boolean showNext, boolean showClear) {
+		super(tabTitle, showPrev, showNext, showClear);
 	}
 
 	@Override
 	protected void addForm() {
-		GridPane grid = new GridPane();
-
 		TextField cNumber = new TextField();
 		TextField sFor = new TextField();
 		DatePicker dDate = new DatePicker();
@@ -45,10 +36,6 @@ public class TabTwo extends GeneratorTabs {
 		Label sDateLabel = new Label("Service Date");
 
 		formatLabels(cNumberLabel, sForLabel, dDateLabel, dPlaceLabel, sDateLabel);
-
-		grid.setAlignment(Pos.CENTER);
-		grid.setHgap(7);
-		grid.setVgap(10);
 
 		ColumnConstraints leftCol = new ColumnConstraints();
 		leftCol.setHgrow(Priority.NEVER);
@@ -70,28 +57,13 @@ public class TabTwo extends GeneratorTabs {
 		GridPane.setConstraints(sDateLabel, 0, 4);
 		GridPane.setConstraints(sDate, 1, 4);
 
-		grid.getChildren().addAll(cNumberLabel, cNumber, sForLabel, sFor, dDateLabel, dDate, dPlaceLabel, dPlace, sDateLabel, sDate);
-
-		GridPane.setConstraints(grid, 0, 0);
-		GridPane.setConstraints(nextButton, 1, 1);
-
-		root.getChildren().addAll(grid, nextButton);
+		addGridElements(cNumberLabel, cNumber, sForLabel, sFor, dDateLabel, dDate, dPlaceLabel, dPlace, sDateLabel, sDate);
 	}
 
 	private void formatLabels(Label... labels) {
 		Arrays.stream(labels).forEach(label -> label.setFont(new Font(14)));
 	}
 
-	@Override
-	protected void createAndConfigurePanel() {
-		root = new GridPane();
-
-		root.setAlignment(Pos.CENTER);
-		root.setHgap(7);
-		root.setVgap(10);
-
-		this.setContent(root);
-	}
 
 	private void configTextFieldForInts(TextField... fields) {
 		Arrays.stream(fields).forEach(field -> field.setTextFormatter(new TextFormatter<Integer>((Change c) -> {
@@ -100,9 +72,5 @@ public class TabTwo extends GeneratorTabs {
 			}
 			return null;
 		})));
-	}
-
-	public Button getNextButton() {
-		return nextButton;
 	}
 }
