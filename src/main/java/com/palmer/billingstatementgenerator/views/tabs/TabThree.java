@@ -22,7 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 public class TabThree extends Tab {
 
     private static final NumberFormat DOLLAR_FORMATTER = NumberFormat.getCurrencyInstance();
-    public static final String PACKAGE_SELECTION = "Package Selection";
+    public static final String PACKAGE_SELECTION = "Package Selection...";
     private GridPane root;
     private Button nextButton;
     private Button prevButton;
@@ -42,7 +42,7 @@ public class TabThree extends Tab {
         final ComboBox<String> packages = new ComboBox<>();
         List<String> packageValues = Arrays.stream(Packages.values())
                                            .map(value -> {
-                                               if (!StringUtils.equalsIgnoreCase(value.getName(), Services.DEFAULT.getName())) {
+                                               if (!StringUtils.equalsIgnoreCase(value.getName(), PACKAGE_SELECTION)) {
                                                    return String.format("%-15s %14s", value.getName(),
                                                            DOLLAR_FORMATTER.format(value.getCost()));
                                                } else {
@@ -55,8 +55,7 @@ public class TabThree extends Tab {
         packages.setStyle("-fx-font-size:14px");
         packages.getSelectionModel().selectFirst();
         packages.setOnAction(e -> {
-            if (packageValues.contains(packages.getValue()) ||
-                (!Objects.isNull(packages.getValue()) && !StringUtils.equalsIgnoreCase(PACKAGE_SELECTION, packages.getValue()))) {
+            if (!StringUtils.equalsIgnoreCase(PACKAGE_SELECTION, packages.getValue())) {
                 clearButton.setDisable(false);
             }
         });
@@ -137,7 +136,6 @@ public class TabThree extends Tab {
 }
 
 enum Services {
-    DEFAULT("Package Selection", 0.00),
     BASIC("Basic Services", 0.00),
     EMBALMING("Embalming", 0.00),
     OTHER_PREP("Other Preparation", 0.00),
@@ -171,6 +169,7 @@ enum Services {
 }
 
 enum Packages {
+    DEFAULT("Package Selection...", 0.00),
     T1("Traditional One", 0.00),
     T2("Traditional Two", 0.00),
     C1("Cremation One", 0.00),
