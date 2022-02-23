@@ -1,0 +1,2592 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="WFH_Billing_Statement" pageWidth="612" pageHeight="1008" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fbdf9578-153e-4c6b-b6e3-cdc9f010d83a">
+    <property name="com.jaspersoft.studio.unit." value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+    <property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+    <queryString>
+        <![CDATA[]]>
+    </queryString>
+    <field name="controlNumber" class="java.lang.Integer"/>
+    <field name="servicesFor" class="java.lang.String"/>
+    <field name="dateOfDeath" class="java.lang.String"/>
+    <field name="placeOfDeath" class="java.lang.String"/>
+    <field name="serviceDate" class="java.lang.String"/>
+    <field name="packagePrice" class="java.lang.Double"/>
+    <field name="basicServicesPrice" class="java.lang.Double"/>
+    <field name="embalmingPrice" class="java.lang.Double"/>
+    <field name="otherPreparationPrice" class="java.lang.Double"/>
+    <field name="useForVisitationPrice" class="java.lang.Double"/>
+    <field name="useForFuneralPrice" class="java.lang.Double"/>
+    <field name="useForMemorialPrice" class="java.lang.Double"/>
+    <field name="useForGravesidePrice" class="java.lang.Double"/>
+    <field name="funeralCoachPrice" class="java.lang.Double"/>
+    <field name="pallbearerCarPrice" class="java.lang.Double"/>
+    <field name="serviceCarPrice" class="java.lang.Double"/>
+    <field name="transferOfRemainsPrice" class="java.lang.Double"/>
+    <field name="otherAPrice" class="java.lang.Double"/>
+    <field name="otherBPrice" class="java.lang.Double"/>
+    <field name="casketPrice" class="java.lang.Double"/>
+    <field name="casketDescription" class="java.lang.String"/>
+    <field name="urnPrice" class="java.lang.Double"/>
+    <field name="cremationDescription" class="java.lang.String"/>
+    <field name="vaultPrice" class="java.lang.Double"/>
+    <field name="vaultDescription" class="java.lang.String"/>
+    <field name="serviceAccessoryPrice" class="java.lang.Double"/>
+    <field name="registerBookDescription" class="java.lang.String"/>
+    <field name="registerBookPrice" class="java.lang.Double"/>
+    <field name="thankYouCardPrice" class="java.lang.Double"/>
+    <field name="folderDescription" class="java.lang.String"/>
+    <field name="memorialFolderPrice" class="java.lang.Double"/>
+    <field name="videoDescription" class="java.lang.String"/>
+    <field name="memorialVideoPrice" class="java.lang.Double"/>
+    <field name="jewelryDescription" class="java.lang.String"/>
+    <field name="jewelryPrice" class="java.lang.Double"/>
+    <field name="burialSupervisionPrice" class="java.lang.Double"/>
+    <field name="graveMarkerPrice" class="java.lang.Double"/>
+    <field name="otherMerchAPrice" class="java.lang.Double"/>
+    <field name="otherMerchBPrice" class="java.lang.Double"/>
+    <field name="totalMerchandise" class="java.lang.String"/>
+    <field name="graveSetupPrice" class="java.lang.Double"/>
+    <field name="cremationPrice" class="java.lang.Double"/>
+    <field name="mileageDescription" class="java.lang.String"/>
+    <field name="mileagePrice" class="java.lang.Double"/>
+    <field name="remainsForwardingPrice" class="java.lang.Double"/>
+    <field name="remainsReceivingPrice" class="java.lang.Double"/>
+    <field name="vaultWeekendPrice" class="java.lang.Double"/>
+    <field name="immediateBurialPrice" class="java.lang.Double"/>
+    <field name="totalSpecialCharges" class="java.lang.String"/>
+    <field name="embalmingReason" class="java.lang.String"/>
+    <field name="graveOpeningDetail" class="java.lang.String"/>
+    <field name="graveOpeningPrice" class="java.lang.Double"/>
+    <field name="weekendHolidayDetail" class="java.lang.String"/>
+    <field name="weekendHolidayPrice" class="java.lang.Double"/>
+    <field name="newspaperADetail" class="java.lang.String"/>
+    <field name="newspaperAPrice" class="java.lang.Double"/>
+    <field name="newspaperBDetail" class="java.lang.String"/>
+    <field name="newspaperBPrice" class="java.lang.Double"/>
+    <field name="newspaperCDetail" class="java.lang.String"/>
+    <field name="newspaperCPrice" class="java.lang.Double"/>
+    <field name="newspaperDDetail" class="java.lang.String"/>
+    <field name="newspaperDPrice" class="java.lang.Double"/>
+    <field name="radioNoticeDetail" class="java.lang.String"/>
+    <field name="radioNoticePrice" class="java.lang.Double"/>
+    <field name="ministerADetail" class="java.lang.String"/>
+    <field name="ministerAPrice" class="java.lang.Double"/>
+    <field name="ministerBDetail" class="java.lang.String"/>
+    <field name="ministerBPrice" class="java.lang.Double"/>
+    <field name="organistDetail" class="java.lang.String"/>
+    <field name="organistPrice" class="java.lang.Double"/>
+    <field name="singerADetail" class="java.lang.String"/>
+    <field name="singerAPrice" class="java.lang.Double"/>
+    <field name="singerBDetail" class="java.lang.String"/>
+    <field name="singerBPrice" class="java.lang.Double"/>
+    <field name="singerCDetail" class="java.lang.String"/>
+    <field name="singerCPrice" class="java.lang.Double"/>
+    <field name="hairdresserDetail" class="java.lang.String"/>
+    <field name="hairdresserPrice" class="java.lang.Double"/>
+    <field name="deathCertDetail" class="java.lang.String"/>
+    <field name="deathCertPrice" class="java.lang.Double"/>
+    <field name="outOfTownDetail" class="java.lang.String"/>
+    <field name="outOfTownPrice" class="java.lang.Double"/>
+    <field name="markerDateDetail" class="java.lang.String"/>
+    <field name="markerDatePrice" class="java.lang.Double"/>
+    <field name="flowerDetail" class="java.lang.String"/>
+    <field name="flowerPrice" class="java.lang.Double"/>
+    <field name="cashAdvOtherADetail" class="java.lang.String"/>
+    <field name="cashAdvOtherAPrice" class="java.lang.Double"/>
+    <field name="cashAdvOtherBDetail" class="java.lang.String"/>
+    <field name="cashAdvOtherBPrice" class="java.lang.Double"/>
+    <field name="totalCashAdv" class="java.lang.Double"/>
+    <field name="totalServices" class="java.lang.Double"/>
+    <field name="salesTax" class="java.lang.Double"/>
+    <field name="subTotal" class="java.lang.Double"/>
+    <field name="downPayment" class="java.lang.Double"/>
+    <field name="finalTotal" class="java.lang.String"/>
+    <field name="otherMerchADescription" class="java.lang.String"/>
+    <field name="otherMerchBDescription" class="java.lang.String"/>
+    <field name="graveDescription" class="java.lang.String"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <detail>
+        <band height="968" splitType="Stretch">
+            <frame>
+                <reportElement x="1" y="44" width="571" height="880" uuid="624960c7-cac3-4d79-9bed-88eacc3fd87a"/>
+                <rectangle>
+                    <reportElement mode="Transparent" x="0" y="0" width="570" height="880" uuid="995e5806-23c4-42b0-9528-d84ba6f64888">
+                        <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    </reportElement>
+                    <graphicElement>
+                        <pen lineWidth="2.0"/>
+                    </graphicElement>
+                </rectangle>
+                <staticText>
+                    <reportElement x="0" y="0" width="287" height="19" uuid="e9bdf5d3-e5a0-435d-80c4-a29115802459">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+                        <font fontName="Arial" size="16" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[WRIGHT FUNERAL HOME]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="0" y="19" width="286" height="17" uuid="4295aba2-f77c-444b-810e-28ca5faa7e75">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font fontName="Great Vibes" size="11"/>
+                    </textElement>
+                    <text><![CDATA["A Family Tradition of Trust & Dignity"]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="0" y="36" width="286" height="39" uuid="8af67e31-d431-4b2b-8e33-619c018ba0a9">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font fontName="Arial"/>
+                    </textElement>
+                    <text><![CDATA[1201 W HELM STREET PO BOX 496
+BROOKFIELD, MISSOURI 64628
+(660) 258-5050]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="180" y="75" width="31" height="11" uuid="47b6ae2c-2a0d-4b20-b6b3-c1261ec3712d">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font fontName="Arial" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[No.]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="211" y="75" width="59" height="11" uuid="ce330a15-cdff-44fd-a40d-d7b8f2c2d1b3">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <box>
+                        <bottomPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font fontName="Arial" size="9"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{controlNumber}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="10" y="86" width="80" height="11" uuid="3a264df9-3385-446d-a058-d00678e449b1">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[SERVICES FOR]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="10" y="97" width="80" height="11" uuid="562758a5-f45c-4de7-aabc-46f863333237">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[DATE OF DEATH]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="10" y="108" width="80" height="11" uuid="235d0edf-9475-46cf-8208-939c85795fee">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[PLACE OF DEATH]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="10" y="119" width="80" height="11" uuid="7b903bd3-d10b-4281-bdee-c9db468d3400">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[SERVICE DATE]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="100" y="86" width="170" height="11" uuid="daae45a8-777a-4740-8c82-5c8f71fad231">
+                        <property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+                    </reportElement>
+                    <box>
+                        <pen lineWidth="1.75"/>
+                        <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                        <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                        <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                        <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="9"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{servicesFor}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="100" y="97" width="170" height="11" uuid="60439de4-1d57-4ad1-b1d1-d90c164ee4c2"/>
+                    <box>
+                        <pen lineWidth="1.75"/>
+                        <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                        <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                        <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                        <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="9"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{dateOfDeath}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="100" y="108" width="170" height="11" uuid="07f0e19c-d44b-4e05-b53b-66dd908a33e9"/>
+                    <box>
+                        <pen lineWidth="1.75"/>
+                        <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                        <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                        <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                        <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="9"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{placeOfDeath}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="100" y="119" width="170" height="11" uuid="651bf728-532c-4071-a137-e29f7bfdb160"/>
+                    <box>
+                        <pen lineWidth="1.75"/>
+                        <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                        <leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                        <bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+                        <rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="9"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{serviceDate}]]></textFieldExpression>
+                </textField>
+                <line>
+                    <reportElement x="286" y="0" width="1" height="615" uuid="b57762de-1d35-49a7-a13b-5a3004d390d4">
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <graphicElement>
+                        <pen lineWidth="2.0"/>
+                    </graphicElement>
+                </line>
+                <line>
+                    <reportElement x="0" y="141" width="570" height="1" uuid="ecc729a5-8905-4014-8e49-4f04246d0add">
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <graphicElement>
+                        <pen lineWidth="2.0"/>
+                    </graphicElement>
+                </line>
+                <staticText>
+                    <reportElement x="3" y="142" width="210" height="15" uuid="5c82115b-2380-45b0-bf6a-864c378590cd">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[A. SERVICES, FACILITIES & TRANSPORTATION]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="157" width="100" height="10" uuid="804938ef-0a84-416d-9fb0-e931b4069a74">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[Package Selection]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="167" width="170" height="10" uuid="a99c4fee-25e5-495b-b031-bc008037e311">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Basic Services of Funeral Director & Staff]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="177" width="170" height="10" uuid="54117867-629c-430d-b6c5-39ead43878da">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Embalming]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="187" width="170" height="10" uuid="6ea9bd4d-bb2e-451b-9ac1-e2304237a174">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Other Preparation of Body]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="197" width="170" height="10" uuid="9a668892-3e95-41a8-8199-daaa01fac4c0">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Use of Facilities & Staff for Visitation]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="207" width="170" height="10" uuid="b938ed8a-70b6-4da0-bcb1-3574d0905f06">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Use of Facilities & Staff for Funeral Service]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="217" width="170" height="10" uuid="0f28e592-76af-4846-b5fc-6217b7c51214">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Use of Facilities & Staff for Memorial Service]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="227" width="170" height="10" uuid="b8eb6edc-2c3c-4cbd-9c69-5f08eff697fc">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Use of Equipment & Staff for Graveside Service]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="237" width="170" height="10" uuid="f09de152-10a3-4d49-972f-a5861c58412a">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Funeral Coach]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="247" width="170" height="10" uuid="59016b46-e030-4629-bc28-5a7b145279a8">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Pallbearer Car]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="257" width="170" height="10" uuid="cc564c5e-7c00-4338-9aef-64f871892104">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Service Car]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="267" width="170" height="10" uuid="0a6a21fc-cc39-4b9f-b0b9-2fd5020370e2">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Transfer of Remains to Funeral Home]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="277" width="170" height="10" uuid="bf15be3c-3f0f-4d50-bc7c-5c80a2f4004b">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Other]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="287" width="170" height="10" uuid="63e7b6ad-d91c-45d3-afee-0c48574311bd">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Other]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="157" width="97" height="10" uuid="1e1191f5-895a-4c9d-b777-070f64cc72a9"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{packagePrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="167" width="97" height="10" uuid="12f0716e-b314-4ed7-8db9-cfbdb36e33e6"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{basicServicesPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="177" width="97" height="10" uuid="f5460ff8-1bf7-498f-a477-431bf447fd1d"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{embalmingPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="187" width="97" height="10" uuid="282a0061-997e-4bcf-85e4-8c7a2f5dd67e"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{otherPreparationPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="197" width="97" height="10" uuid="b8fcf44b-7304-43eb-8091-d084868fb3f9"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{useForVisitationPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="207" width="97" height="10" uuid="c0a3d0ad-79ae-4c93-9446-2b36551fd6a9"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{useForFuneralPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="217" width="97" height="10" uuid="ed672f14-3e0d-4f44-997a-0bd030669f68"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{useForMemorialPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="227" width="97" height="10" uuid="4cfc4ab4-d175-4431-bf3a-56e5b388f54b"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{useForGravesidePrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="237" width="97" height="10" uuid="4991aa07-59c2-42f1-9af5-d8f3eb1bf6b2"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{funeralCoachPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="247" width="97" height="10" uuid="3c7ff9ce-1551-46dc-929a-107ebb5e809a"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{pallbearerCarPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="257" width="97" height="10" uuid="1f962ff0-e6d9-43bd-a2a3-08cbb7f674f9"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{serviceCarPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="267" width="97" height="10" uuid="afe76172-c0eb-40c7-ac9c-d6ede80af149"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{transferOfRemainsPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="277" width="97" height="10" uuid="5535ae48-5834-42df-bd40-fa825c574c3e"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{otherAPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="287" width="97" height="10" uuid="f1e77ba3-ab2e-448d-982f-3c1f7c37d33e"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{otherBPrice}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="3" y="308" width="170" height="11" uuid="d36094e0-fe5e-4b1c-90fb-2dd0e33c9821">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[TOTAL SERVICE CHARGE]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement mode="Opaque" x="179" y="308" width="107" height="11" backcolor="#F2F2F2" uuid="3a9d6f3a-d8d7-4fb2-be8a-7871d2e36b01">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <box rightPadding="4">
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="1.0"/>
+                        <leftPen lineWidth="1.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{totalServices}]]></textFieldExpression>
+                </textField>
+                <line>
+                    <reportElement x="0" y="319" width="286" height="1" uuid="e3104897-cbb6-4b91-80e9-ec65ec187ff0">
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    </reportElement>
+                    <graphicElement>
+                        <pen lineWidth="2.0"/>
+                    </graphicElement>
+                </line>
+                <staticText>
+                    <reportElement x="3" y="320" width="210" height="15" uuid="72e534f8-3b65-45e7-9b53-340812f09beb">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[B. MERCHANDISE SELECTED]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="335" width="170" height="11" uuid="b41a9fa9-2c59-4db6-af9c-7f97986a6ceb">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Casket or (alternative container)]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="346" width="58" height="10" uuid="c133e1bb-dceb-4c43-8361-1f85f9000f73">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <text><![CDATA[    Description]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="356" width="170" height="10" uuid="02e56d44-2408-4b77-bfb9-f14d485bda98">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Cremation Urn]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="366" width="58" height="10" uuid="561bead8-21f6-4085-ad75-5eb1b9fb7edd">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <text><![CDATA[    Description]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="376" width="170" height="10" uuid="2a34fd6a-a501-49c2-bc75-f9ac57422ed3">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Outer Burial Container]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="386" width="87" height="10" uuid="eda6720c-40d4-44d8-a17a-97094aafc4f0">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <text><![CDATA[    Description]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="396" width="170" height="10" uuid="80a5e5ad-955b-4f6a-87a4-fc2f8500e3ad">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Service Accessory Package]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="406" width="170" height="10" uuid="5c4f68b3-8039-47c1-9336-1030a92d0bb5">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Register Book]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="416" width="170" height="10" uuid="079094a9-d75d-4748-ae2f-e1b9b3ad2822">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Thank You Cards]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="426" width="170" height="10" uuid="bdf13f2d-ce4f-4d32-9af7-d0e2990d8e4e">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Memorial Folders]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="436" width="170" height="10" uuid="017f4617-4e3b-4626-abf4-d054b9e9192a">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Memorial Video]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="446" width="170" height="10" uuid="bb521f63-3f10-4c8c-a1d5-b980bb2c4787">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Jewelry]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="456" width="170" height="10" uuid="bc954952-1bf5-42d0-b965-aebcb142482d">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Supervision of Burial]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="466" width="170" height="10" uuid="2cde1c31-55d8-481a-ab20-28eacafa8098">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Temporary Grave Marker]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="476" width="170" height="10" uuid="3c97adfd-4ba8-428a-99b1-c6e6789f3d6f">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Other Merchandise]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="486" width="170" height="10" uuid="68ecf056-cc1a-41d6-838d-1a87fb8c805f">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Other Merchandise]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="336" width="97" height="10" uuid="db35f824-550d-4b56-a5ea-df0a7020b6a0"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{casketPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="80" y="346" width="90" height="10" uuid="de5509be-bf9b-49cc-a2ee-1b4ffda76f62"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement verticalAlignment="Middle">
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{casketDescription}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="356" width="97" height="10" uuid="61b0705c-4cf3-4744-9cf1-90eb1f551fe4"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{urnPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="80" y="366" width="90" height="10" uuid="efc06cab-f389-4754-b058-7a8419112522"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement verticalAlignment="Middle">
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{cremationDescription}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="376" width="97" height="10" uuid="c497f555-13de-4e1e-b949-c62450257b59"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{vaultPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="80" y="386" width="90" height="10" uuid="bb5fe1c0-01f5-4f6b-9d8f-00db5e885555"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement verticalAlignment="Middle">
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{vaultDescription}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="396" width="97" height="10" uuid="811d8b03-1b2d-4584-9f7e-b04b71cf8176"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{serviceAccessoryPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="406" width="97" height="10" uuid="fc98ca95-909d-455b-b498-fcaeef629fae"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{registerBookPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="416" width="97" height="10" uuid="68601997-1fc2-43f4-a979-789e84ec76af"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{thankYouCardPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="426" width="97" height="10" uuid="306f2ddf-6f02-4d83-acb4-c5e826fae08a"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{memorialFolderPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="436" width="97" height="10" uuid="30744b99-c460-4a6e-bf78-05f0d182e05a"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{memorialVideoPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="446" width="97" height="10" uuid="eb3dc8d7-c670-44e5-9df1-70938d9ffbad"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{jewelryPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="456" width="97" height="10" uuid="161948a0-9fae-4254-aa52-d1aa96e08c3a"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{burialSupervisionPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="466" width="97" height="10" uuid="b543ee8b-509b-49dd-b952-490bf5b4a33e"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{graveMarkerPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="476" width="97" height="10" uuid="b6f2302e-36eb-4f98-b184-511ab9c0e75f"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{otherMerchAPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="486" width="97" height="10" uuid="d437c6f3-804d-4bb3-9f79-5b2cd3e9894b"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{otherMerchBPrice}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="3" y="496" width="170" height="11" uuid="58f6561a-3bd5-4051-8248-8fc268091445">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[TOTAL MERCHANDISE CHARGE]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement mode="Opaque" x="179" y="496" width="107" height="11" backcolor="#F2F2F2" uuid="69a6f195-ac7c-48c0-aa4f-4718584d0668"/>
+                    <box rightPadding="4">
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="1.0"/>
+                        <leftPen lineWidth="1.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{totalMerchandise}]]></textFieldExpression>
+                </textField>
+                <line>
+                    <reportElement x="0" y="507" width="286" height="1" uuid="d9871a38-fe0b-436d-962d-c4760886640d">
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    </reportElement>
+                    <graphicElement>
+                        <pen lineWidth="2.0"/>
+                    </graphicElement>
+                </line>
+                <staticText>
+                    <reportElement x="3" y="508" width="210" height="15" uuid="93c35d25-4276-4fce-8162-0f9d1e67e202">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[B. MERCHANDISE SELECTED]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="523" width="170" height="11" uuid="f5c02949-32c3-4868-b5ab-2af50e59430f">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Grave Service Setup/Delivery]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="524" width="97" height="10" uuid="977165f2-0947-4b62-bcdd-6cb84de883b7"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{graveSetupPrice}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="3" y="534" width="170" height="10" uuid="a02d3505-5c67-4171-8544-07e6e2147983">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="false"/>
+                    </textElement>
+                    <text><![CDATA[Direct Cremation]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="534" width="97" height="10" uuid="306ba33a-9b4f-41aa-a669-c70df4991f7d"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{cremationPrice}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="3" y="544" width="170" height="10" uuid="023cab31-28bc-4a27-a1aa-1400cf6196fe">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Mileage]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="544" width="97" height="10" uuid="8e86eb9c-6297-41ec-95ed-34461e45be76"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{mileagePrice}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="3" y="554" width="170" height="10" uuid="e6f8ed3a-c06b-4e75-ae25-4ca7be976221">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="false"/>
+                    </textElement>
+                    <text><![CDATA[Forward of remains to (funeral home)]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="554" width="97" height="10" uuid="1963d82a-a89b-4777-a09c-6587a18f4601"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{remainsForwardingPrice}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="3" y="564" width="170" height="10" uuid="653c10ab-58dc-4847-99f0-3c4334c3e82d">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Receiving of remains from (funeral home)]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="564" width="97" height="10" uuid="63750d52-daa3-4402-a13c-e5ebcf8cefec"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{remainsReceivingPrice}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="3" y="574" width="170" height="10" uuid="e963b95f-21a0-4af1-bb44-016efc465941">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="false"/>
+                    </textElement>
+                    <text><![CDATA[Vault Company Weekend/Holiday Charge]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="574" width="97" height="10" uuid="b5ffee1a-4ad2-4f13-9c39-10ac81e0e804"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{vaultWeekendPrice}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="3" y="584" width="170" height="10" uuid="8db30c2a-42a4-45bf-ac3b-df0bffd56661">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Immediate Burial]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="584" width="97" height="10" uuid="a1230df8-ec30-4bcf-95b4-995a49cc8633"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{immediateBurialPrice}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="3" y="594" width="170" height="10" uuid="22090ed3-e478-42d0-8fe7-a0fc9d8f6221">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Other]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="179" y="594" width="97" height="10" uuid="be6f6f55-ceb1-4466-9bc3-e95faf002b0c"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{immediateBurialPrice}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="3" y="604" width="170" height="11" uuid="0ab0493c-55b2-47b6-b8a9-9c0e0e2e9a1e">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[TOTAL OF SPECIAL CHARGES]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement mode="Opaque" x="179" y="604" width="107" height="11" backcolor="#F2F2F2" uuid="a852e2f3-fbfd-4a8c-b574-54761cd45b09"/>
+                    <box rightPadding="4">
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="1.0"/>
+                        <leftPen lineWidth="1.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{totalSpecialCharges}]]></textFieldExpression>
+                </textField>
+                <line>
+                    <reportElement x="0" y="615" width="571" height="1" uuid="66663e25-d8c6-484c-a136-68fd37e50a19">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <graphicElement>
+                        <pen lineWidth="2.0"/>
+                    </graphicElement>
+                </line>
+                <staticText>
+                    <reportElement x="287" y="0" width="284" height="36" uuid="fad71b37-8506-406b-9e62-ebfa537c8784">
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    </reportElement>
+                    <textElement textAlignment="Center" verticalAlignment="Middle">
+                        <font fontName="Arial" size="12" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[STATEMENT OF FUNERAL GOODS AND
+SERVICES SELECTED]]></text>
+                </staticText>
+                <line>
+                    <reportElement x="286" y="36" width="285" height="1" uuid="104b01ab-0e26-4afe-ab6c-d36854097a06">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    </reportElement>
+                    <graphicElement>
+                        <pen lineWidth="2.0"/>
+                    </graphicElement>
+                </line>
+                <staticText>
+                    <reportElement x="300" y="38" width="254" height="85" uuid="700048fd-5bcf-43fb-9a0c-22d18ef0a63d">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement>
+                        <font fontName="Arial" size="8" isItalic="true"/>
+                    </textElement>
+                    <text><![CDATA[Charges are only for those items that you selected or that are required. If we are required by law or by a cemetary or crematory to use any items, we will explain the reasons in writing below. If you selected a funeral that may require embalming such as a funeral with a viewing, you may have to pay for embalming. You do not have to pay for embalming you did not approve of if you selected arrangements such as direct cremation or immediate burial. If we charged for embalming, we will explain why below.]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="300" y="123" width="127" height="13" uuid="585c9b12-57e9-4d8a-81c0-434029f76ab9">
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[REASON FOR EMBALMING]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="427" y="123" width="127" height="13" uuid="87f339f1-ae42-44e1-a7ba-c6169eed21b6"/>
+                    <box>
+                        <bottomPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Center" verticalAlignment="Bottom">
+                        <font fontName="Arial" size="9"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{embalmingReason}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="289" y="142" width="111" height="15" uuid="7b0212cf-e5a3-4e77-8e3b-732684afbf6e">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[D. CASH ADVANCE ITEM ]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="400" y="142" width="111" height="15" uuid="44027f9c-8580-49fe-b028-45ad6b3526ed">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="9" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[(PRICES NOT FROZEN)]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="157" width="273" height="41" uuid="44c1415f-1998-45fe-8e91-fbca9ac1140c"/>
+                    <textElement>
+                        <font fontName="Arial" size="8" isItalic="true"/>
+                    </textElement>
+                    <text><![CDATA[The following expenses are not included in our charges. They are not a direct expense of our funeral home. There are several ways in which these expenses can be paid and we will discuss them with you. You are responsible for payment before the service.]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="198" width="170" height="10" uuid="7110a012-6099-48b0-9f86-cddd176ecd10">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Grave Opening]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="208" width="170" height="10" uuid="6682c2bf-6dde-4703-99a5-10af0c077545">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="false"/>
+                    </textElement>
+                    <text><![CDATA[Weekend/Holiday Charge]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="218" width="170" height="10" uuid="b61d9b30-eaee-49f7-bea2-8e2ce3561752">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Newspaper Notices]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="228" width="170" height="10" uuid="cf1fd4f3-2289-4b87-bf02-0d0510e01157">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="false"/>
+                    </textElement>
+                    <text><![CDATA[Newspaper Notices]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="238" width="170" height="10" uuid="6c01645b-e45b-4240-a0c3-76e519aeddda">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Newspaper Notices]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="248" width="170" height="10" uuid="1b179a9a-6e84-41e5-9f41-44fea94698a9">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="false"/>
+                    </textElement>
+                    <text><![CDATA[Newspaper Notices]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="258" width="170" height="10" uuid="c9e4bb72-18f9-4aed-86bd-863d590a314a">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Radio Notices]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="268" width="170" height="10" uuid="6a976ecb-06ee-473f-8263-c47259df93ae">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Honorarium Minister]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="278" width="170" height="11" uuid="5cb673af-e8cb-4bc0-9150-67673e5d7e8b">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Honorarium Minister]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="289" width="170" height="10" uuid="ccfbc98e-ebc8-4cac-ac2b-d844aea38234">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="false"/>
+                    </textElement>
+                    <text><![CDATA[Honorarium Organist]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="299" width="170" height="10" uuid="01417076-59f0-43e2-b354-22be0d47a306">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Honorarium Singer]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="309" width="170" height="10" uuid="bf9ab994-ea4b-4a39-be1a-1f454d98c925">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="false"/>
+                    </textElement>
+                    <text><![CDATA[Honorarium Singer]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="319" width="170" height="10" uuid="750bcb33-0e4c-4b58-b069-e1c463010b04">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Honorarium Singer]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="329" width="170" height="10" uuid="be44397f-4770-4645-83cf-59520c4f80e8">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="false"/>
+                    </textElement>
+                    <text><![CDATA[Honorarium Hairdresser]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="339" width="170" height="10" uuid="c3f96ae9-9837-4491-9a47-7aa186c6f2b4">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Certified Death Certificate]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="349" width="170" height="10" uuid="c6ae4d9d-b6bb-4b44-9d62-76dbda45cf42">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Out of Town Mortuary Charges]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="359" width="170" height="10" uuid="f092ca33-e8bc-4d51-b4d6-5bd9839cb80c">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Date for Cemetery Marker]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="369" width="170" height="10" uuid="c146ee6b-d7f7-4b95-aaf1-91770597f5b7">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="false"/>
+                    </textElement>
+                    <text><![CDATA[Flowers]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="379" width="170" height="10" uuid="253045fe-19e9-4893-921d-26ebdeb1a7fe">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Other]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="389" width="170" height="10" uuid="946f41a5-ea79-465c-abe6-79142d2a24d2">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Other]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="198" width="97" height="10" uuid="f1ff63a3-68e5-401d-b591-efeedb57b6df">
+                        <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+                    </reportElement>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{graveOpeningPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="208" width="97" height="10" uuid="c8a2c37c-6ce5-43a7-b24b-2e5594f439b9"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{weekendHolidayPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="218" width="97" height="10" uuid="211e6ab2-812c-494d-a7d6-39a14144725b"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{newspaperAPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="228" width="97" height="10" uuid="5630788b-9b39-4dee-b259-4d1b5a77d424"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{newspaperBPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="238" width="97" height="10" uuid="f9af7e49-b7de-47af-a0a0-bafc60b2ec25"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{newspaperCPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="248" width="97" height="10" uuid="df91ef2c-475d-49f8-8412-5c651a29d128"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{newspaperDPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="258" width="97" height="10" uuid="e03628f8-4c0d-4e04-aa14-1690086c9a93"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{radioNoticePrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="268" width="97" height="10" uuid="9335dcc7-a4a5-401c-982b-f2cbc8c342bf"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{ministerAPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="279" width="97" height="10" uuid="e7f86dde-fb0e-4ba7-bad4-64dac4743170">
+                        <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+                    </reportElement>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{ministerBPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="289" width="97" height="10" uuid="a825d0dd-1053-4ade-a51e-601261b6cc8d"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{organistPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="299" width="97" height="10" uuid="d92cc3a1-d3c8-47b0-aad2-0df9cdc2de71"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{singerAPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="309" width="97" height="10" uuid="8867c465-9c20-4530-8a22-e986fc14391e"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{singerBPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="319" width="97" height="10" uuid="527b8ec1-0d20-49a8-8dcd-d0afb454dc46"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{singerCPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="329" width="97" height="10" uuid="7e0d3001-8e77-4224-8cde-8f2c29697a45"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{hairdresserPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="339" width="97" height="10" uuid="93782292-f33c-4cdc-8bd6-0300113c6efa"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{deathCertPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="349" width="97" height="10" uuid="4fd41ae7-7e1a-4f50-b587-1d7abf445928"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{outOfTownPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="359" width="97" height="10" uuid="e053ecc1-985c-4797-bfcb-ea85d5dc68d1"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{markerDatePrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="369" width="97" height="10" uuid="245a7660-c127-44ce-acbb-ce7fbaa48291"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{flowerPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="389" width="97" height="10" uuid="01bfe8ac-a07a-489b-be64-c807026792aa"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{cashAdvOtherBPrice}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement x="465" y="379" width="97" height="10" uuid="c7aa11f5-04d5-4ac2-8623-c7149b5fdca7"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{cashAdvOtherAPrice}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="289" y="409" width="170" height="10" uuid="b097b87b-73b3-4e9f-9bd8-6efe3f711cda">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    </reportElement>
+                    <textElement>
+                        <font fontName="Arial" size="8" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[TOTAL CASH ADVANCE CHARGES]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement mode="Opaque" x="463" y="407" width="107" height="11" backcolor="#F2F2F2" uuid="f0376bdb-12da-4578-b9d5-2e04113db0ad">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <box rightPadding="4">
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="1.0"/>
+                        <leftPen lineWidth="1.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{totalCashAdv}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="289" y="419" width="273" height="41" uuid="90009920-d87b-4d1b-bdfc-d767bc901b5a"/>
+                    <textElement>
+                        <font fontName="Arial" size="8" isItalic="true"/>
+                    </textElement>
+                    <text><![CDATA[You may write one check for the cash advance items, you may make individual checks for each of the above expenses, you may pay in cash, or you may ask us to pay them on your behalf. If we agree to pay them for you the following items will apply.]]></text>
+                </staticText>
+                <line>
+                    <reportElement x="287" y="476" width="284" height="1" uuid="c078dc66-afd3-420d-8d72-8bc82c9c5d29">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <graphicElement>
+                        <pen lineWidth="2.0"/>
+                    </graphicElement>
+                </line>
+                <staticText>
+                    <reportElement x="289" y="477" width="111" height="15" uuid="abb4aac4-9b9a-4def-a130-9f6913a25b09">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[SUMMARY OF CHARGES]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="522" width="170" height="10" uuid="21f99016-ccbf-4de7-9cc9-a4e4d399da05">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[D. Cash Advance Items]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="492" width="170" height="10" uuid="6500cadb-27a8-4313-a7a0-fc2129eb8603">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[A. Services, Facilities, & Transportation]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="512" width="170" height="10" uuid="6ce20ee0-1050-496c-8c51-c066714e9c11">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[C. Special Charges]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="502" width="170" height="10" uuid="8fac0fa4-e992-456e-baa7-0c3234131a44">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false" isItalic="false"/>
+                    </textElement>
+                    <text><![CDATA[B. Merchandise]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement mode="Transparent" x="463" y="492" width="107" height="11" backcolor="#F2F2F2" uuid="7ea7473e-23a9-43fb-beab-5e5de9c5b396">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <box rightPadding="4">
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="1.0"/>
+                        <leftPen lineWidth="1.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{totalServices}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement mode="Transparent" x="463" y="503" width="107" height="11" backcolor="#F2F2F2" uuid="8503bb3c-ca96-465d-a9c4-944f53efb3d1"/>
+                    <box rightPadding="4">
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="1.0"/>
+                        <leftPen lineWidth="1.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{totalMerchandise}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement mode="Transparent" x="463" y="514" width="107" height="11" backcolor="#F2F2F2" uuid="1bcee1be-463e-464c-8e5f-3bb28cbc5db9"/>
+                    <box rightPadding="4">
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="1.0"/>
+                        <leftPen lineWidth="1.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{totalSpecialCharges}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement mode="Transparent" x="463" y="525" width="107" height="11" backcolor="#F2F2F2" uuid="aa981714-7027-43bd-b2f6-3a9e67143d6e">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <box rightPadding="4">
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="1.0"/>
+                        <leftPen lineWidth="1.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{totalCashAdv}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement mode="Transparent" x="463" y="543" width="107" height="11" backcolor="#F2F2F2" uuid="6e05c0d7-7d36-45b8-8499-a9a47dcbc1a0">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <box rightPadding="4">
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="1.0"/>
+                        <leftPen lineWidth="1.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{salesTax}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="271" y="544" width="129" height="10" uuid="23da368a-1f20-4520-b4eb-89d48c7f6554">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement textAlignment="Right" verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Sales Tax 8.475%]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement mode="Opaque" x="463" y="554" width="107" height="11" backcolor="#F2F2F2" uuid="ac230a2e-5625-4848-9002-bd91b870602a"/>
+                    <box rightPadding="4">
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="1.0"/>
+                        <leftPen lineWidth="1.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{subTotal}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement mode="Opaque" x="463" y="576" width="107" height="11" backcolor="#F2F2F2" uuid="cc631268-59a2-4fe7-9869-850752f4dd13">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                    </reportElement>
+                    <box rightPadding="4">
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="1.0"/>
+                        <leftPen lineWidth="1.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{finalTotal}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
+                    <reportElement mode="Transparent" x="463" y="565" width="107" height="11" backcolor="#F2F2F2" uuid="02678346-fbad-4fa0-a9be-729bbe1ed1ca"/>
+                    <box rightPadding="4">
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="1.0"/>
+                        <leftPen lineWidth="1.0"/>
+                        <bottomPen lineWidth="1.0"/>
+                        <rightPen lineWidth="1.0"/>
+                    </box>
+                    <textElement textAlignment="Right">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{downPayment}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="289" y="554" width="170" height="10" uuid="b4331fa9-1c70-49df-ba98-cd150cf67a04">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="true" isItalic="false"/>
+                    </textElement>
+                    <text><![CDATA[TOTAL OF ALL SELECTIONS]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="289" y="577" width="170" height="10" uuid="77c08802-31ca-4f80-bfc9-65b386d9f4a5">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[BALANCE DUE]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="271" y="566" width="129" height="10" uuid="e69b62f9-4ff0-45eb-a3d1-a8fd9cf67a6b">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
+                    <textElement textAlignment="Right" verticalAlignment="Bottom">
+                        <font fontName="Arial" size="8" isBold="false"/>
+                    </textElement>
+                    <text><![CDATA[Down Payment]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="208" width="65" height="10" uuid="014c50f1-c8bb-4dbc-947d-39b6a705ceff"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{weekendHolidayDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="218" width="65" height="10" uuid="19b6adb8-979b-49fa-81bd-dcc8134d96e5"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{newspaperADetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="228" width="65" height="10" uuid="e231e233-6dae-45c2-9ee1-86d2ed9a4766"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{newspaperBDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="238" width="65" height="10" uuid="682824ad-e644-449e-a37e-0a0c30da56ff"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{newspaperCDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="248" width="65" height="10" uuid="d5103212-9390-4867-adef-a5ff99764890"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{newspaperDDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="258" width="65" height="10" uuid="67d9d0ee-e357-44c2-8e04-d2442ab28dd6"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{radioNoticeDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="268" width="65" height="10" uuid="be625b71-22f9-4d02-b59f-685d1df79a7e"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{ministerADetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="279" width="65" height="10" uuid="e04ed451-d581-4e6b-b408-ee5a05b08f10">
+                        <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+                    </reportElement>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{ministerBDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="289" width="65" height="10" uuid="bc7372b0-765a-4ff0-9ae1-f275dfc7aed3"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{organistDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="299" width="65" height="10" uuid="3cef1aab-e369-4dc5-ac06-56244ac14472"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{singerADetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="309" width="65" height="10" uuid="5f0f9877-3ad7-4715-8fa8-cc2a84977458"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{singerBDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="319" width="65" height="10" uuid="3fcced58-d28d-4f31-a66d-92acdbcd1fac"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{singerCDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="329" width="65" height="10" uuid="af471590-c48a-467b-a47e-beb9f11ba58c"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{hairdresserDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="339" width="65" height="10" uuid="a4c0a737-dd3f-4676-a3fe-d2e109923a8c"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{deathCertDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="349" width="65" height="10" uuid="6e9d3b20-9456-482a-bbd7-82288deedfa0"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{outOfTownDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="359" width="65" height="10" uuid="9018c6a5-c9a0-4db8-b13a-1e4e3fb17c08"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{markerDateDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="369" width="65" height="10" uuid="032da823-a270-4d4f-a1c6-027f1661ec40"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{flowerDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="389" width="65" height="10" uuid="96704389-a3e4-4b58-ab2b-91df6f040124"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{cashAdvOtherBDetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="379" width="65" height="10" uuid="d739ec2a-c103-426c-8d4c-f88b1cf50861"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{cashAdvOtherADetail}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="400" y="198" width="65" height="10" uuid="04790eb2-a7f9-4f92-b8c9-96ca0e41e1e6">
+                        <property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+                    </reportElement>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{graveOpeningDetail}]]></textFieldExpression>
+                </textField>
+                <staticText>
+                    <reportElement x="3" y="618" width="210" height="15" uuid="d7ea8345-e0b3-4162-bf5d-2191fe971d52">
+                        <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.x" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.y" value="px"/>
+                    </reportElement>
+                    <textElement verticalAlignment="Bottom">
+                        <font fontName="Arial" size="9" isBold="true"/>
+                    </textElement>
+                    <text><![CDATA[ACKNOWLEDGEMENT AND AGREEMENT]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="4" y="633" width="455" height="116" uuid="f3db243c-c21d-45f9-b962-340d5b87e3aa"/>
+                    <textElement>
+                        <font fontName="Arial" size="8"/>
+                    </textElement>
+                    <text><![CDATA[I/we hereby agree that I have examined the above stated items and found them to be correct and according to the arrangements requested and I hereby acknowledge receipt of a copy of this memorandum and agreement. I also acknowledge that I have read the General Price List, Casket Price List, and Outer Burial Container List along with statements concerning embalming, required purchase of caskets or outer burial containers and warranty disclaimers. I hereby represent that I have sufficient assets legally available for payment of the cash price and hereby agree and covenant jointly and severally to make a payment of $_________ according to these terms _________________________________________________________________________________
+_____________________________________________________________________________________________________. A late charge of ___________ per month amounting to ___________________ per year is applied to the unpaid balance beginning _____ days after this agreement. Any additional services or merchandise ordered or requested after the date of this agreement will be considered part of this agreement and cost thereof will be reflected on the final statement.]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="3" y="760" width="244" height="120" uuid="60673ea1-8ec5-4028-a6c6-c2ded0fdf257"/>
+                    <textElement>
+                        <font fontName="Arial" size="8"/>
+                    </textElement>
+                    <text><![CDATA[Authorization is hereby granted for Wright Funeral Home to embalm, care for, and prepare for final disposition in accordance with customary professional practice, the body named above. We state we have legal right to control such disposition.
+
+Signed:   ___________________________________________
+Address: ___________________________________________
+               ___________________________________________
+Phone:   ___________________________________________
+SSN:      ___________________________________________
+Date:      ___________________________________________]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="285" y="760" width="282" height="120" uuid="1e3cbee8-b8b8-4227-aa38-f12462fc11a1"/>
+                    <textElement markup="html">
+                        <font fontName="Arial" size="8"/>
+                    </textElement>
+                    <text><![CDATA[<b>ACCEPTANCE:</b>    Wright Funeral Home agrees to provide all the services, merchandise, and cash advances indicated on this statement.
+<br/><br/>
+
+
+   _____________________________________________________<br/>
+  <i>Accepted for Wright Funeral Home</i>
+<br/><br/>
+
+   _____________________________________________________<br/>
+  <i>Date</i>]]></text>
+                </staticText>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="80" y="476" width="90" height="10" uuid="7b9775c0-99d9-468c-add4-5dc21554531d"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement verticalAlignment="Middle">
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{otherMerchADescription}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="80" y="446" width="90" height="10" uuid="6ce670a5-1e72-41b3-a5e1-0b96339e399b"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement verticalAlignment="Middle">
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{jewelryDescription}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="80" y="436" width="90" height="10" uuid="abc317e1-6b11-4465-a77a-553f4c285d23"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement verticalAlignment="Middle">
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{videoDescription}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="80" y="426" width="90" height="10" uuid="d78ca190-5095-4adb-b9f5-7bdd872ca6aa"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement verticalAlignment="Middle">
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{folderDescription}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="80" y="406" width="90" height="10" uuid="c95e822d-e0d7-4ea8-afa7-a65b515704d5"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement verticalAlignment="Middle">
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{registerBookDescription}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="80" y="486" width="90" height="10" uuid="b56a70d2-a5db-491b-96a1-d2efce54b35f"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement verticalAlignment="Middle">
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{otherMerchBDescription}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="112" y="525" width="61" height="10" uuid="31f5f85f-c1b0-462c-bf32-1064dbb21afe"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{graveDescription}]]></textFieldExpression>
+                </textField>
+                <textField textAdjust="ScaleFont" isBlankWhenNull="true">
+                    <reportElement x="83" y="545" width="90" height="10" uuid="f3451dc4-e44d-4098-85f9-f9dcfd0177da"/>
+                    <box>
+                        <pen lineWidth="2.0"/>
+                        <topPen lineWidth="0.0"/>
+                        <leftPen lineWidth="0.0"/>
+                        <bottomPen lineWidth="0.0"/>
+                        <rightPen lineWidth="0.0"/>
+                    </box>
+                    <textElement>
+                        <font fontName="Arial" size="7" isBold="false" isItalic="true"/>
+                    </textElement>
+                    <textFieldExpression><![CDATA[$F{mileageDescription}]]></textFieldExpression>
+                </textField>
+            </frame>
+        </band>
+    </detail>
+</jasperReport>
