@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="WFH_Billing_Statement" pageWidth="612" pageHeight="1008" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fbdf9578-153e-4c6b-b6e3-cdc9f010d83a">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="WFH_Billing_Statement" pageWidth="612" pageHeight="1008" columnWidth="572" leftMargin=π"20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fbdf9578-153e-4c6b-b6e3-cdc9f010d83a">
     <property name="com.jaspersoft.studio.unit." value="pixel"/>
     <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
     <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
@@ -1357,7 +1357,7 @@ SERVICES SELECTED]]></text>
                     <textElement>
                         <font fontName="Arial" size="8" isItalic="true"/>
                     </textElement>
-                    <text><![CDATA[Charges are only for those items that you selected or that are required. If we are required by law or by a cemetary or crematory to use any items, we will explain the reasons in writing below. If you selected a funeral that may require embalming such as a funeral with a viewing, you may have to pay for embalming. You do not have to pay for embalming you did not approve of if you selected arrangements such as direct cremation or immediate burial. If we charged for embalming, we will explain why below.]]></text>
+                    <text><![CDATA[Charges are only for those items that you selected or that are required. If we are required by law or by a cemetery or crematory to use any items, we will explain the reasons in writing below. If you selected a funeral that may require embalming such as a funeral with a viewing, you may have to pay for embalming. You do not have to pay for embalming you did not approve of if you selected arrangements such as direct cremation or immediate burial. If we charged for embalming, we will explain why below.]]></text>
                 </staticText>
                 <staticText>
                     <reportElement x="300" y="123" width="127" height="13" uuid="585c9b12-57e9-4d8a-81c0-434029f76ab9">
@@ -1900,8 +1900,9 @@ SERVICES SELECTED]]></text>
                     <text><![CDATA[TOTAL CASH ADVANCE CHARGES]]></text>
                 </staticText>
                 <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
-                    <reportElement mode="Opaque" x="463" y="407" width="107" height="11" backcolor="#F2F2F2" uuid="f0376bdb-12da-4578-b9d5-2e04113db0ad">
+                    <reportElement mode="Opaque" x="463" y="407" width="106" height="11" backcolor="#F2F2F2" uuid="f0376bdb-12da-4578-b9d5-2e04113db0ad">
                         <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
                     </reportElement>
                     <box rightPadding="4">
                         <pen lineWidth="2.0"/>
@@ -1982,8 +1983,9 @@ SERVICES SELECTED]]></text>
                     <text><![CDATA[B. Merchandise]]></text>
                 </staticText>
                 <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
-                    <reportElement mode="Transparent" x="463" y="492" width="107" height="11" backcolor="#F2F2F2" uuid="7ea7473e-23a9-43fb-beab-5e5de9c5b396">
+                    <reportElement mode="Transparent" x="463" y="492" width="106" height="11" backcolor="#F2F2F2" uuid="7ea7473e-23a9-43fb-beab-5e5de9c5b396">
                         <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
                     </reportElement>
                     <box rightPadding="4">
                         <pen lineWidth="2.0"/>
@@ -1998,7 +2000,9 @@ SERVICES SELECTED]]></text>
                     <textFieldExpression><![CDATA[$F{totalServices}]]></textFieldExpression>
                 </textField>
                 <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
-                    <reportElement mode="Transparent" x="463" y="503" width="107" height="11" backcolor="#F2F2F2" uuid="8503bb3c-ca96-465d-a9c4-944f53efb3d1"/>
+                    <reportElement mode="Transparent" x="463" y="503" width="106" height="11" backcolor="#F2F2F2" uuid="8503bb3c-ca96-465d-a9c4-944f53efb3d1">
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
                     <box rightPadding="4">
                         <pen lineWidth="2.0"/>
                         <topPen lineWidth="1.0"/>
@@ -2012,7 +2016,9 @@ SERVICES SELECTED]]></text>
                     <textFieldExpression><![CDATA[$F{totalMerchandise}]]></textFieldExpression>
                 </textField>
                 <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
-                    <reportElement mode="Transparent" x="463" y="514" width="107" height="11" backcolor="#F2F2F2" uuid="1bcee1be-463e-464c-8e5f-3bb28cbc5db9"/>
+                    <reportElement mode="Transparent" x="463" y="514" width="106" height="11" backcolor="#F2F2F2" uuid="1bcee1be-463e-464c-8e5f-3bb28cbc5db9">
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
                     <box rightPadding="4">
                         <pen lineWidth="2.0"/>
                         <topPen lineWidth="1.0"/>
@@ -2026,8 +2032,9 @@ SERVICES SELECTED]]></text>
                     <textFieldExpression><![CDATA[$F{totalSpecialCharges}]]></textFieldExpression>
                 </textField>
                 <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
-                    <reportElement mode="Transparent" x="463" y="525" width="107" height="11" backcolor="#F2F2F2" uuid="aa981714-7027-43bd-b2f6-3a9e67143d6e">
+                    <reportElement mode="Transparent" x="463" y="525" width="106" height="11" backcolor="#F2F2F2" uuid="aa981714-7027-43bd-b2f6-3a9e67143d6e">
                         <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
                     </reportElement>
                     <box rightPadding="4">
                         <pen lineWidth="2.0"/>
@@ -2042,8 +2049,9 @@ SERVICES SELECTED]]></text>
                     <textFieldExpression><![CDATA[$F{totalCashAdv}]]></textFieldExpression>
                 </textField>
                 <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
-                    <reportElement mode="Transparent" x="463" y="543" width="107" height="11" backcolor="#F2F2F2" uuid="6e05c0d7-7d36-45b8-8499-a9a47dcbc1a0">
+                    <reportElement mode="Transparent" x="463" y="543" width="106" height="11" backcolor="#F2F2F2" uuid="6e05c0d7-7d36-45b8-8499-a9a47dcbc1a0">
                         <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
                     </reportElement>
                     <box rightPadding="4">
                         <pen lineWidth="2.0"/>
@@ -2068,7 +2076,9 @@ SERVICES SELECTED]]></text>
                     <text><![CDATA[Sales Tax 8.475%]]></text>
                 </staticText>
                 <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
-                    <reportElement mode="Opaque" x="463" y="554" width="107" height="11" backcolor="#F2F2F2" uuid="ac230a2e-5625-4848-9002-bd91b870602a"/>
+                    <reportElement mode="Opaque" x="463" y="554" width="106" height="11" backcolor="#F2F2F2" uuid="ac230a2e-5625-4848-9002-bd91b870602a">
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
                     <box rightPadding="4">
                         <pen lineWidth="2.0"/>
                         <topPen lineWidth="1.0"/>
@@ -2082,8 +2092,9 @@ SERVICES SELECTED]]></text>
                     <textFieldExpression><![CDATA[$F{subTotal}]]></textFieldExpression>
                 </textField>
                 <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
-                    <reportElement mode="Opaque" x="463" y="576" width="107" height="11" backcolor="#F2F2F2" uuid="cc631268-59a2-4fe7-9869-850752f4dd13">
+                    <reportElement mode="Opaque" x="463" y="576" width="106" height="11" backcolor="#F2F2F2" uuid="cc631268-59a2-4fe7-9869-850752f4dd13">
                         <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
                     </reportElement>
                     <box rightPadding="4">
                         <pen lineWidth="2.0"/>
@@ -2098,7 +2109,9 @@ SERVICES SELECTED]]></text>
                     <textFieldExpression><![CDATA[$F{finalTotal}]]></textFieldExpression>
                 </textField>
                 <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
-                    <reportElement mode="Transparent" x="463" y="565" width="107" height="11" backcolor="#F2F2F2" uuid="02678346-fbad-4fa0-a9be-729bbe1ed1ca"/>
+                    <reportElement mode="Transparent" x="463" y="565" width="106" height="11" backcolor="#F2F2F2" uuid="02678346-fbad-4fa0-a9be-729bbe1ed1ca">
+                        <property name="com.jaspersoft.studio.unit.width" value="px"/>
+                    </reportElement>
                     <box rightPadding="4">
                         <pen lineWidth="2.0"/>
                         <topPen lineWidth="1.0"/>
