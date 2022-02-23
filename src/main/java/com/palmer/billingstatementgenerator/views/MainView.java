@@ -1,8 +1,6 @@
 package com.palmer.billingstatementgenerator.views;
 
-import com.palmer.billingstatementgenerator.views.tabs.TabFour;
-import com.palmer.billingstatementgenerator.views.tabs.TabThree;
-import com.palmer.billingstatementgenerator.views.tabs.TabTwo;
+import com.palmer.billingstatementgenerator.views.tabs.*;
 import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.control.TabPane;
@@ -12,6 +10,8 @@ public class MainView {
 	private TabTwo tabTwo;
 	private TabThree tabThree;
 	private TabFour tabFour;
+	private TabFive tabFive;
+	private TabSix tabSix;
 
 	public MainView() {
 		createAndConfigurePane();
@@ -26,7 +26,9 @@ public class MainView {
 		tabTwo = new TabTwo("SERVICE INFORMATION", false, true, false);
 		tabThree = new TabThree("SERVICES, FACILITIES, AND TRANSPORTATION");
 		tabFour = new TabFour("MERCHANDISE");
-		view = new TabPane(tabTwo, tabThree, tabFour);
+		tabFive = new TabFive("SPECIAL CHARGES");
+		tabSix = new TabSix("CASH ADVANCE ITEM");
+		view = new TabPane(tabTwo, tabThree, tabFour, tabFive, tabSix);
 		view.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 		view.setSide(Side.LEFT);
 	}
@@ -37,6 +39,10 @@ public class MainView {
 		tabThree.getNextButton().setOnAction(e -> view.getSelectionModel().selectNext());
 		tabFour.getPrevButton().setOnAction(e -> view.getSelectionModel().selectPrevious());
 		tabFour.getNextButton().setOnAction(e -> view.getSelectionModel().selectNext());
+		tabFive.getPrevButton().setOnAction(e -> view.getSelectionModel().selectPrevious());
+		tabFive.getNextButton().setOnAction(e -> view.getSelectionModel().selectNext());
+		tabSix.getPrevButton().setOnAction(e -> view.getSelectionModel().selectPrevious());
+		tabSix.getNextButton().setOnAction(e -> view.getSelectionModel().selectNext());
 	}
 
 }
