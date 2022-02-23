@@ -1,10 +1,7 @@
 package com.palmer.billingstatementgenerator.views.tabs;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 
@@ -26,7 +23,7 @@ public class TabFour extends GeneratorTabs {
         List<CheckBox> checkBoxes = Arrays.stream(Merchandise.values())
                                           .map(v -> new CheckBox(v.getName()))
                                           .collect(Collectors.toList());
-        List<Label> prices = Arrays.stream(values())
+        List<Label> prices = Arrays.stream(Merchandise.values())
                                     .map(v -> {
                                         if (!Arrays.asList(CASKET.getName(), CREMATION.getName(), VAULT.getName(), OTHER_A.getName(), OTHER_B.getName())
                                                    .contains(v.getName())) {
