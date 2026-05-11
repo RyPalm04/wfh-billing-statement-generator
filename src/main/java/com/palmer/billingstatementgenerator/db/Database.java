@@ -27,8 +27,8 @@ public final class Database {
         ds.setUser("sa");
         ds.setPassword("");
         dataSource = ds;
-        runScript("/db/schema.sql");
-        runScript("/db/seed.sql");
+        runScript("/com/palmer/billingstatementgenerator/db/schema.sql");
+        runScript("/com/palmer/billingstatementgenerator/db/seed.sql");
     }
 
     public static DataSource get() {

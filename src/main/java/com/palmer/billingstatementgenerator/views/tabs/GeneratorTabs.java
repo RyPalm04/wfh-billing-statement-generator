@@ -27,6 +27,7 @@ public class GeneratorTabs extends Tab {
         super(tabTitle);
         createAndConfigurePanel(showPrev, showNext, showClear);
         configureGrid();
+        configureButtons();
     }
 
     public static GeneratorTabs fromFxml(String title, String fxmlPath, boolean showPrev, boolean showNext, boolean showClear) {
@@ -104,6 +105,10 @@ public class GeneratorTabs extends Tab {
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(7);
         grid.setVgap(10);
+    }
+
+    private void configureButtons() {
+        clearButton.getStyleClass().add("button-clear");
     }
 
     public Button getNextButton() { return nextButton; }

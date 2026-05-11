@@ -27,7 +27,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public final class PdfGenerator {
-    private static final String JRXML_RESOURCE = "/pdf/pdfTemplate.jrxml";
+    private static final String JRXML_RESOURCE = "/com/palmer/billingstatementgenerator/pdf/pdfTemplate.jrxml";
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("M/d/yyyy");
 
     private static JasperReport compiledReport;

@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -16,9 +17,11 @@ public class MainApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		loadFonts();
+
 		SplashView splashView = new SplashView();
 		Scene splashScene = new Scene(splashView.asParent());
-		splashScene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+		splashScene.getStylesheets().add(getClass().getResource("/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
 		primaryStage.setScene(splashScene);
 		primaryStage.initStyle(StageStyle.UNDECORATED);
 		primaryStage.show();
@@ -55,7 +58,7 @@ public class MainApp extends Application {
 			MainView mainView = new MainView();
 			BorderPane root = new BorderPane(mainView.asParent());
 			Scene mainScene = new Scene(root);
-			mainScene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+			mainScene.getStylesheets().add(getClass().getResource("/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
 
 			Stage mainStage = new Stage();
 			mainStage.setScene(mainScene);
@@ -67,6 +70,15 @@ public class MainApp extends Application {
 		});
 
 		new Thread(initTask).start();
+	}
+
+	private void loadFonts() {
+		String base = "/com/palmer/billingstatementgenerator/fonts/";
+		Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Bold.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Regular.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Regular.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Bold.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Light.ttf"), 14);
 	}
 
 	public static void main(String[] args) {

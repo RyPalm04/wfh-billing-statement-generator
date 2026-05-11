@@ -25,7 +25,7 @@ public class SplashView {
         container.setAlignment(Pos.CENTER);
         container.setPrefSize(500, 400);
 
-        Image logo = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/wfh splash logo.jpg")));
+        Image logo = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/com/palmer/billingstatementgenerator/img/wfh splash logo.jpg")));
         ImageView imageView = new ImageView(logo);
         imageView.setFitWidth(400);
         imageView.setPreserveRatio(true);
