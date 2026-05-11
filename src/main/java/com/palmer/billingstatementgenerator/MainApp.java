@@ -1,24 +1,72 @@
 package com.palmer.billingstatementgenerator;
 
+import com.palmer.billingstatementgenerator.db.Database;
+import com.palmer.billingstatementgenerator.models.StatementContext;
 import com.palmer.billingstatementgenerator.views.MainView;
+import com.palmer.billingstatementgenerator.views.SplashView;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class MainApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		MainView view = new MainView();
-
-		BorderPane root = new BorderPane(view.asParent());
-
-		Scene scene = new Scene(root, 550, 650);
-		primaryStage.setScene(scene);
-		primaryStage.setTitle("Wright Funeral Home Billing Statement");
+		SplashView splashView = new SplashView();
+		Scene splashScene = new Scene(splashView.asParent());
+		splashScene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+		primaryStage.setScene(splashScene);
+		primaryStage.initStyle(StageStyle.UNDECORATED);
 		primaryStage.show();
+
+		Task<Void> initTask = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				updateMessage("Connecting to database...");
+				updateProgress(1, 4);
+				Database.init();
+				Thread.sleep(1000); // Simulate some loading time
+
+				updateMessage("Loading statement context...");
+				updateProgress(2, 4);
+				StatementContext.init();
+				Thread.sleep(1000);
+
+				updateMessage("Preparing UI...");
+				updateProgress(3, 4);
+				Thread.sleep(1000);
+
+				updateMessage("Ready!");
+				updateProgress(4, 4);
+				Thread.sleep(1000);
+
+				return null;
+			}
+		};
+
+		splashView.getProgressBar().progressProperty().bind(initTask.progressProperty());
+		splashView.getStatusLabel().textProperty().bind(initTask.messageProperty());
+
+		initTask.setOnSucceeded(e -> {
+			MainView mainView = new MainView();
+			BorderPane root = new BorderPane(mainView.asParent());
+			Scene mainScene = new Scene(root);
+			mainScene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+
+			Stage mainStage = new Stage();
+			mainStage.setScene(mainScene);
+			mainStage.setTitle("Wright Funeral Home Billing Statement Generator");
+			mainStage.show();
+
+			mainView.fitWindowToLargestTab();
+			primaryStage.close();
+		});
+
+		new Thread(initTask).start();
 	}
 
 	public static void main(String[] args) {
