@@ -1,13 +1,16 @@
 package com.palmer.billingstatementgenerator.views.tabs;
 
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
+import com.palmer.billingstatementgenerator.models.StatementContext;
+import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem;
+import com.palmer.billingstatementgenerator.pdf.PdfGenerator;
 
-import java.util.Arrays;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+
+import java.io.File;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TabSix extends GeneratorTabs {
 
@@ -17,55 +20,18 @@ public class TabSix extends GeneratorTabs {
 
     @Override
     protected void addForm() {
-        Label totalLabel = new Label("CASH ADVANCE ITEMS");
-        List<CheckBox> checkBoxes = Arrays.stream(CashAdvances.values())
-                                          .map(v -> new CheckBox(v.getName()))
-                                          .collect(Collectors.toList());
-
-        for (int i = 0; i < checkBoxes.size(); i++) {
-            CheckBox checkBox = checkBoxes.get(i);
-            GridPane.setConstraints(checkBox, 0, i);
-            checkBox.setFont(new Font(14));
-            addGridElements(checkBox);
-            checkBox.setOnAction(e -> clearButton.setDisable(!checkBox.isSelected()));
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/com/palmer/billingstatementgenerator/views/tab_six.fxml"));
+            javafx.scene.layout.GridPane loaded = loader.load();
+            grid.getColumnConstraints().addAll(loaded.getColumnConstraints());
+            grid.getChildren().addAll(loaded.getChildren());
+            Object ctrl = loader.getController();
+            if (ctrl instanceof com.palmer.billingstatementgenerator.views.controllers.TabSixFxmlController) {
+                ((com.palmer.billingstatementgenerator.views.controllers.TabSixFxmlController) ctrl).setClearButton(clearButton);
+                ((com.palmer.billingstatementgenerator.views.controllers.TabSixFxmlController) ctrl).setNextButton(nextButton);
+            }
+        } catch (java.io.IOException e) {
+            throw new RuntimeException(e);
         }
-
-        clearButton.setOnAction(e -> {
-            checkBoxes.forEach(checkBox -> checkBox.setSelected(false));
-            clearButton.setDisable(true);
-        });
-    }
-}
-
-enum CashAdvances {
-    GRAVE("Grave Opening"),
-    WEEKEND_HOLIDAY("Weekend/Holiday Charge"),
-    NEWSPAPER_A("Newspaper Notices"),
-    NEWSPAPER_B("Newspaper Notices"),
-    NEWSPAPER_C("Newspaper Notices"),
-    NEWSPAPER_D("Newspaper Notices"),
-    RADIO("Radio Notices"),
-    MINISTER_A("Honorarium Minister"),
-    MINISTER_B("Honorarium Minister"),
-    ORGANIST("Honorarium Organist"),
-    SINGER_A("Honorarium Singer"),
-    SINGER_B("Honorarium Singer"),
-    SINGER_C("Honorarium Singer"),
-    HAIRDRESSER("Honorarium Hairdresser"),
-    DEATH_CERTIFICATE("Certified Death Certificate"),
-    OUT_OF_TOWN("Out of Town Mortuary Charges"),
-    MARKER_DATE("Date for Cemetery Maker"),
-    FLOWERS("Flowers"),
-    OTHER_A("Other"),
-    OTHER_B("Other");
-
-    private final String name;
-
-    CashAdvances(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
     }
 }
