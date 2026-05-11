@@ -18,7 +18,7 @@ public class TabFiveFxmlController extends GridTabController<SpecialChargeLineIt
     @Override
     protected CheckBox addItemRow(SpecialChargeLineItem item, int row) {
         CheckBox cb = buildCheckBox(item.getCatalog().getName(), row, itemsGrid);
-        buildPriceLabel(item.getCatalog().getDefaultCost(), 2, row, itemsGrid);
+        buildPriceLabel(item.getCatalog().getDefaultCost(), row, itemsGrid);
         cb.selectedProperty().bindBidirectional(item.selectedProperty());
 
         if (item.getCatalog().isDescriptionRequired()) {

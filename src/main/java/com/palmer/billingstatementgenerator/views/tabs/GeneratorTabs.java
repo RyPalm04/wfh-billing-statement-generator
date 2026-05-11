@@ -1,6 +1,7 @@
 package com.palmer.billingstatementgenerator.views.tabs;
 
 import com.palmer.billingstatementgenerator.views.controllers.BaseController;
+import com.palmer.billingstatementgenerator.views.controllers.GridTabController;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
@@ -11,23 +12,39 @@ import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 
 public class GeneratorTabs extends Tab {
+    protected static final NumberFormat DOLLAR_FORMATTER = NumberFormat.getCurrencyInstance();
+
     protected Button nextButton = new Button("Next");
     protected Button prevButton = new Button("Previous");
     protected Button clearButton = new Button("Clear Selections");
     protected GridPane grid = new GridPane();
     protected GridPane root = new GridPane();
 
-    private GeneratorTabs(String tabTitle, boolean showPrev, boolean showNext, boolean showClear, String fxmlPath) {
+    private GeneratorTabs(String tabTitle, boolean showPrev, boolean showNext, boolean showClear) {
         super(tabTitle);
         createAndConfigurePanel(showPrev, showNext, showClear);
         configureGrid();
-        loadFxml(fxmlPath, showNext);
     }
 
-    public static GeneratorTabs create(String title, String fxmlPath, boolean showPrev, boolean showNext, boolean showClear) {
-        return new GeneratorTabs(title, showPrev, showNext, showClear, fxmlPath);
+    // For FXML-based tabs (TabTwo)
+    public static GeneratorTabs fromFxml(String title, String fxmlPath, boolean showPrev, boolean showNext, boolean showClear) {
+        GeneratorTabs tab = new GeneratorTabs(title, showPrev, showNext, showClear);
+        tab.loadFxml(fxmlPath, showNext);
+        return tab;
+    }
+
+    // For programmatic tabs (Three through Six)
+    public static GeneratorTabs fromController(String title, GridTabController<?> controller, boolean showPrev, boolean showNext, boolean showClear) {
+        GeneratorTabs tab = new GeneratorTabs(title, showPrev, showNext, showClear);
+        tab.loadController(controller, showNext);
+        return tab;
+    }
+
+    public static GeneratorTabs fromController(String title, GridTabController<?> controller) {
+        return fromController(title, controller, true, true, true);
     }
 
     private void loadFxml(String fxmlPath, boolean showNext) {
@@ -41,9 +58,7 @@ public class GeneratorTabs extends Tab {
             if (ctrl instanceof BaseController) {
                 BaseController base = (BaseController) ctrl;
                 base.setClearButton(clearButton);
-                if (showNext) {
-                    base.setNextButton(nextButton);
-                }
+                if (showNext) base.setNextButton(nextButton);
                 this.selectedProperty().addListener((obs, wasSel, isSel) -> {
                     if (isSel) base.onShow();
                     else base.onHide();
@@ -52,6 +67,18 @@ public class GeneratorTabs extends Tab {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void loadController(GridTabController<?> controller, boolean showNext) {
+        controller.setClearButton(clearButton);
+        if (showNext) controller.setNextButton(nextButton);
+        GridPane built = controller.buildView();
+        GridPane.setConstraints(built, 0, 0);
+        grid.getChildren().add(built);
+        this.selectedProperty().addListener((obs, wasSel, isSel) -> {
+            if (isSel) controller.onShow();
+            else controller.onHide();
+        });
     }
 
     private void createAndConfigurePanel(boolean showPrev, boolean showNext, boolean showClear) {

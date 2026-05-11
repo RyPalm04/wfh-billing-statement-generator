@@ -11,6 +11,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
 
 import java.util.List;
@@ -18,14 +19,14 @@ import java.util.stream.Stream;
 
 public class TabThreeFxmlController extends GridTabController<ServiceLineItem> {
 
-    @FXML private ComboBox<ServicePackage> packagesCombo;
+    private ComboBox<ServicePackage> packagesCombo;
 
-    @FXML
     @Override
-    protected void initialize() {
+    public GridPane buildView() {
         ServicePackageDao dao = new ServicePackageDao(Database.get());
+        packagesCombo = new ComboBox<>();
         packagesCombo.getItems().addAll(dao.findAll());
-        packagesCombo.setConverter(new StringConverter<>() {
+        packagesCombo.setConverter(new javafx.util.StringConverter<ServicePackage>() {
             @Override
             public String toString(ServicePackage p) {
                 return p == null ? "" : String.format("%-15s %14s", p.getName(), DOLLAR_FORMATTER.format(p.getDefaultCost()));
@@ -34,7 +35,20 @@ public class TabThreeFxmlController extends GridTabController<ServiceLineItem> {
             public ServicePackage fromString(String s) { return null; }
         });
 
-        super.initialize();
+        GridPane pane = new GridPane();
+        pane.setHgap(7);
+        pane.setVgap(5);
+        GridPane.setConstraints(packagesCombo, 0, 0);
+        GridPane.setColumnSpan(packagesCombo, 2);
+        pane.getChildren().add(packagesCombo);
+
+        // now let parent build the itemsGrid rows into a sub-grid
+        GridPane itemsPane = super.buildView();
+        GridPane.setConstraints(itemsPane, 0, 1);
+        GridPane.setColumnSpan(itemsPane, 2);
+        pane.getChildren().add(itemsPane);
+
+        return pane;
     }
 
     @Override
@@ -45,7 +59,7 @@ public class TabThreeFxmlController extends GridTabController<ServiceLineItem> {
     @Override
     protected CheckBox addItemRow(ServiceLineItem item, int row) {
         CheckBox cb = buildCheckBox(item.getCatalog().getName(), row, itemsGrid);
-        buildPriceLabel(item.getCatalog().getDefaultCost(), 1, row, itemsGrid);
+        buildPriceLabel(item.getCatalog().getDefaultCost(), row, itemsGrid);
         cb.selectedProperty().bindBidirectional(item.selectedProperty());
         return cb;
     }

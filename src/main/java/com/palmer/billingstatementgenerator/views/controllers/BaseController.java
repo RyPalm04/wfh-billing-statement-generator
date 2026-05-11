@@ -36,14 +36,14 @@ public abstract class BaseController {
 
     protected CheckBox buildCheckBox(String label, int row, GridPane grid) {
         CheckBox cb = new CheckBox(label);
-        GridPane.setConstraints(cb, 1, row);
+        GridPane.setConstraints(cb, 0, row);
         grid.getChildren().add(cb);
         return cb;
     }
 
-    protected void buildPriceLabel(BigDecimal cost, int col, int row, GridPane grid) {
-        Label price = new Label(DOLLAR_FORMATTER.format(cost));
-        GridPane.setConstraints(price, col, row);
+    protected void buildPriceLabel(BigDecimal cost, int row, GridPane grid) {
+        Label price = new Label(cost != null ? DOLLAR_FORMATTER.format(cost) : "");
+        GridPane.setConstraints(price, 2, row);
         grid.getChildren().add(price);
     }
 

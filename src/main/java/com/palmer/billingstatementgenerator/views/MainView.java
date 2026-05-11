@@ -1,5 +1,9 @@
 package com.palmer.billingstatementgenerator.views;
 
+import com.palmer.billingstatementgenerator.views.controllers.TabFiveFxmlController;
+import com.palmer.billingstatementgenerator.views.controllers.TabFourFxmlController;
+import com.palmer.billingstatementgenerator.views.controllers.TabSixFxmlController;
+import com.palmer.billingstatementgenerator.views.controllers.TabThreeFxmlController;
 import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
 import javafx.geometry.Side;
 import javafx.scene.Parent;
@@ -27,11 +31,16 @@ public class MainView {
 	}
 
 	private void createAndConfigurePane() {
-		tabTwo   = GeneratorTabs.create("SERVICE INFORMATION",                    FXML_BASE + "tab_two.fxml",   false, true,  false);
-		tabThree = GeneratorTabs.create("SERVICES, FACILITIES, AND TRANSPORTATION", FXML_BASE + "tab_three.fxml", true,  true,  true);
-		tabFour  = GeneratorTabs.create("MERCHANDISE",                             FXML_BASE + "tab_four.fxml",  true,  true,  true);
-		tabFive  = GeneratorTabs.create("SPECIAL CHARGES",                         FXML_BASE + "tab_five.fxml",  true,  true,  true);
-		tabSix   = GeneratorTabs.create("CASH ADVANCE ITEM",                       FXML_BASE + "tab_six.fxml",   true,  true,  true);
+		tabTwo = GeneratorTabs.fromFxml("SERVICE INFORMATION",
+				FXML_BASE + "tab_two.fxml", false, true, false);
+		tabThree = GeneratorTabs.fromController("SERVICES, FACILITIES, AND TRANSPORTATION",
+				new TabThreeFxmlController());
+		tabFour = GeneratorTabs.fromController("MERCHANDISE",
+				new TabFourFxmlController());
+		tabFive = GeneratorTabs.fromController("SPECIAL CHARGES",
+				new TabFiveFxmlController());
+		tabSix = GeneratorTabs.fromController("CASH ADVANCE ITEM",
+				new TabSixFxmlController());
 
 		view = new TabPane(tabTwo, tabThree, tabFour, tabFive, tabSix);
 		view.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
