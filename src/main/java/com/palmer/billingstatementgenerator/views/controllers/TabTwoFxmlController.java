@@ -6,11 +6,7 @@ import com.palmer.billingstatementgenerator.models.StatementContext;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
-import javafx.util.converter.NumberStringConverter;
 
-/**
- * FXML controller for TabTwo. Binds controls to the current Statement.
- */
 public class TabTwoFxmlController extends BaseController {
 
     @FXML private TextField controlNumberField;
@@ -23,7 +19,6 @@ public class TabTwoFxmlController extends BaseController {
     private void initialize() {
         Statement stmt = StatementContext.current();
 
-        // configure and bind using helpers from BaseController
         configTextFieldForInts(controlNumberField);
         bindIntegerTextField(controlNumberField, stmt.controlNumberProperty());
 

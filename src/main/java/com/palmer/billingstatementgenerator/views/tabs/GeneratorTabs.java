@@ -1,66 +1,60 @@
 package com.palmer.billingstatementgenerator.views.tabs;
 
-import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
+import com.palmer.billingstatementgenerator.views.controllers.BaseController;
+
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
 
-import java.math.BigDecimal;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.io.IOException;
 
-public abstract class GeneratorTabs extends Tab {
-    protected static final NumberFormat DOLLAR_FORMATTER = NumberFormat.getCurrencyInstance();
-
-    private final boolean showPrev;
-    private final boolean showNext;
-    private final boolean showClear;
+public class GeneratorTabs extends Tab {
     protected Button nextButton = new Button("Next");
     protected Button prevButton = new Button("Previous");
     protected Button clearButton = new Button("Clear Selections");
     protected GridPane grid = new GridPane();
     protected GridPane root = new GridPane();
 
-    public GeneratorTabs(String tabTitle) {
-        this(tabTitle, true, true, true);
-    }
-    public GeneratorTabs(String tabTitle, boolean showPrev, boolean showNext, boolean showClear) {
+    private GeneratorTabs(String tabTitle, boolean showPrev, boolean showNext, boolean showClear, String fxmlPath) {
         super(tabTitle);
-        this.showPrev = showPrev;
-        this.showNext = showNext;
-        this.showClear = showClear;
-        createAndConfigurePanel();
+        createAndConfigurePanel(showPrev, showNext, showClear);
         configureGrid();
-        addForm();
+        loadFxml(fxmlPath, showNext);
     }
 
-    public static class Row<T> {
-        public final T value;
-        public final CheckBox checkBox;
-        public final TextField descriptionField;
-        public final Label priceLabel;
+    public static GeneratorTabs create(String title, String fxmlPath, boolean showPrev, boolean showNext, boolean showClear) {
+        return new GeneratorTabs(title, showPrev, showNext, showClear, fxmlPath);
+    }
 
-        Row(T value, CheckBox checkBox, TextField descriptionField, Label priceLabel) {
-            this.value = value;
-            this.checkBox = checkBox;
-            this.descriptionField = descriptionField;
-            this.priceLabel = priceLabel;
+    private void loadFxml(String fxmlPath, boolean showNext) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            GridPane loaded = loader.load();
+            grid.getColumnConstraints().addAll(loaded.getColumnConstraints());
+            grid.getChildren().addAll(loaded.getChildren());
+
+            Object ctrl = loader.getController();
+            if (ctrl instanceof BaseController) {
+                BaseController base = (BaseController) ctrl;
+                base.setClearButton(clearButton);
+                if (showNext) {
+                    base.setNextButton(nextButton);
+                }
+                this.selectedProperty().addListener((obs, wasSel, isSel) -> {
+                    if (isSel) base.onShow();
+                    else base.onHide();
+                });
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    protected void createAndConfigurePanel() {
+    private void createAndConfigurePanel(boolean showPrev, boolean showNext, boolean showClear) {
         root.getStyleClass().add("form-grid");
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(15));
@@ -74,32 +68,11 @@ public abstract class GeneratorTabs extends Tab {
         GridPane.setHalignment(clearButton, HPos.CENTER);
 
         root.getChildren().add(grid);
-
-        if (showPrev) {
-            root.getChildren().add(prevButton);
-        }
-
-        if (showNext) {
-            root.getChildren().add(nextButton);
-        }
-
-        if (showClear) {
-            root.getChildren().add(clearButton);
-        }
+        if (showPrev) root.getChildren().add(prevButton);
+        if (showNext) root.getChildren().add(nextButton);
+        if (showClear) root.getChildren().add(clearButton);
 
         this.setContent(root);
-    }
-
-    protected void addGridElements(Node... nodes) {
-        grid.getChildren().addAll(nodes);
-    }
-
-    public Button getNextButton() {
-        return nextButton;
-    }
-
-    public Button getPrevButton() {
-        return prevButton;
     }
 
     private void configureGrid() {
@@ -108,88 +81,6 @@ public abstract class GeneratorTabs extends Tab {
         grid.setVgap(10);
     }
 
-    protected abstract void addForm();
-
-    protected <T> List<Row<T>> addCheckboxRows(
-            List<T> values,
-            Function<T, String> nameFn,
-            Predicate<T> needsDescription) {
-        List<Row<T>> rows = new ArrayList<>(values.size());
-        int rowIdx = 0;
-        for (T value : values) {
-            CheckBox cb = new CheckBox(nameFn.apply(value));
-            GridPane.setConstraints(cb, 0, rowIdx);
-            addGridElements(cb);
-
-            TextField description = null;
-            if (needsDescription.test(value)) {
-                description = newDescriptionField();
-                GridPane.setConstraints(description, 1, rowIdx);
-                addGridElements(description);
-            }
-
-            rows.add(new Row<>(value, cb, description, null));
-            rowIdx++;
-        }
-        wireClearButton(extractCheckboxes(rows));
-        return rows;
-    }
-
-    protected <T> List<Row<T>> addCheckboxRowsWithPrices(
-            List<T> values,
-            Function<T, String> nameFn,
-            Function<T, BigDecimal> costFn,
-            Predicate<T> needsDescription) {
-        List<Row<T>> rows = new ArrayList<>(values.size());
-        int rowIdx = 0;
-        for (T value : values) {
-            CheckBox cb = new CheckBox(nameFn.apply(value));
-            GridPane.setConstraints(cb, 0, rowIdx);
-            addGridElements(cb);
-
-            TextField description = null;
-            if (needsDescription.test(value)) {
-                description = newDescriptionField();
-                GridPane.setConstraints(description, 1, rowIdx);
-                addGridElements(description);
-            }
-
-            BigDecimal cost = costFn.apply(value);
-            String priceText = cost == null
-                    ? ""
-                    : String.format("%14s", DOLLAR_FORMATTER.format(cost));
-            Label price = new Label(priceText);
-            GridPane.setConstraints(price, 2, rowIdx);
-            addGridElements(price);
-
-            rows.add(new Row<>(value, cb, description, price));
-            rowIdx++;
-        }
-        wireClearButton(extractCheckboxes(rows));
-        return rows;
-    }
-
-    private TextField newDescriptionField() {
-        TextField field = new TextField();
-        field.setPrefColumnCount(18);
-        return field;
-    }
-
-    private static List<CheckBox> extractCheckboxes(List<? extends Row<?>> rows) {
-        List<CheckBox> result = new ArrayList<>(rows.size());
-        for (Row<?> row : rows) {
-            result.add(row.checkBox);
-        }
-        return result;
-    }
-
-    private void wireClearButton(List<CheckBox> checkBoxes) {
-        Observable[] selectedProperties = checkBoxes.stream()
-                .map(CheckBox::selectedProperty)
-                .toArray(Observable[]::new);
-        clearButton.disableProperty().bind(Bindings.createBooleanBinding(
-                () -> checkBoxes.stream().noneMatch(CheckBox::isSelected),
-                selectedProperties));
-        clearButton.setOnAction(e -> checkBoxes.forEach(cb -> cb.setSelected(false)));
-    }
+    public Button getNextButton() { return nextButton; }
+    public Button getPrevButton() { return prevButton; }
 }

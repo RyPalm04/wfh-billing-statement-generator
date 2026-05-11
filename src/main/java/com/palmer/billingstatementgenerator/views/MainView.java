@@ -1,6 +1,6 @@
 package com.palmer.billingstatementgenerator.views;
 
-import com.palmer.billingstatementgenerator.views.tabs.*;
+import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
 import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.control.TabPane;
@@ -8,12 +8,14 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 public class MainView {
+	private static final String FXML_BASE = "/com/palmer/billingstatementgenerator/views/";
+
 	private TabPane view;
-	private TabTwo tabTwo;
-	private TabThree tabThree;
-	private TabFour tabFour;
-	private TabFive tabFive;
-	private TabSix tabSix;
+	private GeneratorTabs tabTwo;
+	private GeneratorTabs tabThree;
+	private GeneratorTabs tabFour;
+	private GeneratorTabs tabFive;
+	private GeneratorTabs tabSix;
 
 	public MainView() {
 		createAndConfigurePane();
@@ -25,11 +27,12 @@ public class MainView {
 	}
 
 	private void createAndConfigurePane() {
-		tabTwo = new TabTwo("SERVICE INFORMATION", false, true, false);
-		tabThree = new TabThree("SERVICES, FACILITIES, AND TRANSPORTATION");
-		tabFour = new TabFour("MERCHANDISE");
-		tabFive = new TabFive("SPECIAL CHARGES");
-		tabSix = new TabSix("CASH ADVANCE ITEM");
+		tabTwo   = GeneratorTabs.create("SERVICE INFORMATION",                    FXML_BASE + "tab_two.fxml",   false, true,  false);
+		tabThree = GeneratorTabs.create("SERVICES, FACILITIES, AND TRANSPORTATION", FXML_BASE + "tab_three.fxml", true,  true,  true);
+		tabFour  = GeneratorTabs.create("MERCHANDISE",                             FXML_BASE + "tab_four.fxml",  true,  true,  true);
+		tabFive  = GeneratorTabs.create("SPECIAL CHARGES",                         FXML_BASE + "tab_five.fxml",  true,  true,  true);
+		tabSix   = GeneratorTabs.create("CASH ADVANCE ITEM",                       FXML_BASE + "tab_six.fxml",   true,  true,  true);
+
 		view = new TabPane(tabTwo, tabThree, tabFour, tabFive, tabSix);
 		view.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 		view.setSide(Side.LEFT);
@@ -44,17 +47,13 @@ public class MainView {
 		tabFive.getPrevButton().setOnAction(e -> view.getSelectionModel().selectPrevious());
 		tabFive.getNextButton().setOnAction(e -> view.getSelectionModel().selectNext());
 		tabSix.getPrevButton().setOnAction(e -> view.getSelectionModel().selectPrevious());
-		// TabSix's next button is "Generate PDF" — wired inside TabSix itself.
+		// TabSix's next button is "Generate PDF" — wired inside TabSixFxmlController.
 	}
 
 	public void fitWindowToLargestTab() {
-		if (view.getScene() == null) {
-			return;
-		}
+		if (view.getScene() == null) return;
 		Window window = view.getScene().getWindow();
-		if (!(window instanceof Stage)) {
-			return;
-		}
+		if (!(window instanceof Stage)) return;
 		Stage stage = (Stage) window;
 
 		int originalIndex = view.getSelectionModel().getSelectedIndex();
