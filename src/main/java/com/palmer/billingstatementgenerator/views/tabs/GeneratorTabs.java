@@ -29,14 +29,12 @@ public class GeneratorTabs extends Tab {
         configureGrid();
     }
 
-    // For FXML-based tabs (TabTwo)
     public static GeneratorTabs fromFxml(String title, String fxmlPath, boolean showPrev, boolean showNext, boolean showClear) {
         GeneratorTabs tab = new GeneratorTabs(title, showPrev, showNext, showClear);
         tab.loadFxml(fxmlPath, showNext);
         return tab;
     }
 
-    // For programmatic tabs (Three through Six)
     public static GeneratorTabs fromController(String title, GridTabController<?> controller, boolean showPrev, boolean showNext, boolean showClear) {
         GeneratorTabs tab = new GeneratorTabs(title, showPrev, showNext, showClear);
         tab.loadController(controller, showNext);
