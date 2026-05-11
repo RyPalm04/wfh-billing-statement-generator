@@ -1,106 +1,87 @@
 package com.palmer.billingstatementgenerator.views;
 
-import com.palmer.billingstatementgenerator.controllers.MainController;
-import com.palmer.billingstatementgenerator.models.MainWindowModel;
-
-import javafx.geometry.HPos;
-import javafx.geometry.Pos;
+import com.palmer.billingstatementgenerator.views.controllers.TabFiveFxmlController;
+import com.palmer.billingstatementgenerator.views.controllers.TabFourFxmlController;
+import com.palmer.billingstatementgenerator.views.controllers.TabSixFxmlController;
+import com.palmer.billingstatementgenerator.views.controllers.TabThreeFxmlController;
+import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
+import javafx.geometry.Side;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TextFormatter.Change;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class MainView {
+	private static final String FXML_BASE = "/com/palmer/billingstatementgenerator/views/";
+
 	private TabPane view;
-	private GridPane secondView;
-	private Button button;
-	private Label label;
-	private TextField xField;
-	private TextField yField;
-	private Label sumLabel;
+	private GeneratorTabs tabTwo;
+	private GeneratorTabs tabThree;
+	private GeneratorTabs tabFour;
+	private GeneratorTabs tabFive;
+	private GeneratorTabs tabSix;
 
-	private MainController controller;
-	private MainWindowModel model;
-
-	public MainView(MainController controller, MainWindowModel model) {
-		this.controller = controller;
-		this.model = model;
-
+	public MainView() {
 		createAndConfigurePane();
-		createAndLayoutControls();
-		updateControllerFromListeners();
-		observeModelAndUpdateControls();
+		setActions();
 	}
 
 	public Parent asParent() {
 		return view;
 	}
 
-	private void observeModelAndUpdateControls() {
-		model.xProperty().addListener((obs, oldX, newX) -> updateIfNeeded(newX, xField));
-		model.yProperty().addListener((obs, oldY, newY) -> updateIfNeeded(newY, yField));
-		sumLabel.textProperty().bind(model.sumProperty().asString());
-	}
-
-	private void updateIfNeeded(Number value, TextField field) {
-		String s = value.toString();
-
-		if(!field.getText().equals(s)) {
-			field.setText(s);
-		}
-	}
-
-	private void updateControllerFromListeners() {
-		xField.textProperty().addListener((obs, oldText, newText) -> controller.updateX(newText));
-		yField.textProperty().addListener((obs, oldText, newText) -> controller.updateY(newText));
-	}
-
-	private void createAndLayoutControls() {
-		xField = new TextField();
-		configTextFieldForInts(xField);
-
-		yField = new TextField();
-		configTextFieldForInts(yField);
-
-		sumLabel = new Label();
-
-		secondView.addRow(0, new Label("X:"), xField);
-		secondView.addRow(1, new Label("Y:"), yField);
-		secondView.addRow(2, new Label("Sum:"), sumLabel);
-	}
-
 	private void createAndConfigurePane() {
-		secondView = new GridPane();
-		view = new TabPane(new Tab("Tab 1", secondView), new Tab("tab2"));
+		tabTwo = GeneratorTabs.fromFxml("SERVICE INFORMATION",
+				FXML_BASE + "tab_two.fxml", false, true, false);
+		tabThree = GeneratorTabs.fromController("SERVICES, FACILITIES, AND TRANSPORTATION",
+				new TabThreeFxmlController());
+		tabFour = GeneratorTabs.fromController("MERCHANDISE",
+				new TabFourFxmlController());
+		tabFive = GeneratorTabs.fromController("SPECIAL CHARGES",
+				new TabFiveFxmlController());
+		tabSix = GeneratorTabs.fromController("CASH ADVANCE ITEM",
+				new TabSixFxmlController());
+
+		view = new TabPane(tabTwo, tabThree, tabFour, tabFive, tabSix);
 		view.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
-		ColumnConstraints leftCol = new ColumnConstraints();
-		leftCol.setHalignment(HPos.RIGHT);
-		leftCol.setHgrow(Priority.NEVER);
-
-		ColumnConstraints rightCol = new ColumnConstraints();
-		rightCol.setHgrow(Priority.SOMETIMES);
-
-		secondView.getColumnConstraints().addAll(leftCol, rightCol);
-
-		secondView.setAlignment(Pos.CENTER);
-		secondView.setHgap(5);
-		secondView.setVgap(10);
+		view.setSide(Side.LEFT);
 	}
 
-	private void configTextFieldForInts(TextField field) {
-		field.setTextFormatter(new TextFormatter<Integer>((Change c) -> {
-			if (c.getControlNewText().matches("-?\\d*")) {
-				return c;
-			}
-			return null;
-		}));
+	private void setActions() {
+		tabTwo.getNextButton().setOnAction(e -> view.getSelectionModel().selectNext());
+		tabThree.getPrevButton().setOnAction(e -> view.getSelectionModel().selectPrevious());
+		tabThree.getNextButton().setOnAction(e -> view.getSelectionModel().selectNext());
+		tabFour.getPrevButton().setOnAction(e -> view.getSelectionModel().selectPrevious());
+		tabFour.getNextButton().setOnAction(e -> view.getSelectionModel().selectNext());
+		tabFive.getPrevButton().setOnAction(e -> view.getSelectionModel().selectPrevious());
+		tabFive.getNextButton().setOnAction(e -> view.getSelectionModel().selectNext());
+		tabSix.getPrevButton().setOnAction(e -> view.getSelectionModel().selectPrevious());
+		// TabSix's next button is "Generate PDF" — wired inside TabSixFxmlController.
+	}
+
+	public void fitWindowToLargestTab() {
+		if (view.getScene() == null) return;
+		Window window = view.getScene().getWindow();
+		if (!(window instanceof Stage)) return;
+		Stage stage = (Stage) window;
+
+		int originalIndex = view.getSelectionModel().getSelectedIndex();
+		double maxWidth = 0;
+		double maxHeight = 0;
+
+		for (int i = 0; i < view.getTabs().size(); i++) {
+			view.getSelectionModel().select(i);
+			view.getScene().getRoot().applyCss();
+			view.getScene().getRoot().layout();
+			stage.sizeToScene();
+			maxWidth = Math.max(maxWidth, stage.getWidth());
+			maxHeight = Math.max(maxHeight, stage.getHeight());
+		}
+
+		view.getSelectionModel().select(originalIndex);
+		stage.setMinWidth(maxWidth);
+		stage.setMinHeight(maxHeight);
+		stage.setWidth(maxWidth);
+		stage.setHeight(maxHeight);
 	}
 }

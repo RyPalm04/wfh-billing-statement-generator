@@ -1,0 +1,227 @@
+/* Wright Funeral Home Theme */
+
+@font-face {
+    src: url('/com/palmer/billingstatementgenerator/fonts/PlayfairDisplay-Regular.ttf');
+    -fx-font-family: "Playfair Display";
+    -fx-font-weight: normal;
+}
+
+@font-face {
+    src: url('/com/palmer/billingstatementgenerator/fonts/PlayfairDisplay-Bold.ttf');
+    -fx-font-family: "Playfair Display";
+    -fx-font-weight: bold;
+}
+
+@font-face {
+    src: url('/com/palmer/billingstatementgenerator/fonts/Lato-Regular.ttf');
+    -fx-font-family: "Lato";
+    -fx-font-weight: normal;
+}
+
+@font-face {
+    src: url('/com/palmer/billingstatementgenerator/fonts/Lato-Bold.ttf');
+    -fx-font-family: "Lato";
+    -fx-font-weight: bold;
+}
+
+@font-face {
+    src: url('/com/palmer/billingstatementgenerator/fonts/Lato-Light.ttf');
+    -fx-font-family: "Lato";
+    -fx-font-weight: 300;
+}
+
+.root {
+    -fx-base: #f7f5f2;
+    -fx-background: #f7f5f2;
+    -fx-control-inner-background: #ffffff;
+    -fx-font-family: "Lato";
+    -fx-font-size: 13px;
+
+    /* Wright Brand Colors */
+    -wfh-green:       #2d6a35;
+    -wfh-green-dark:  #1e4a24;
+    -wfh-green-light: #e8f0e9;
+    -wfh-rose:        #a0522d;
+    -wfh-rose-dark:   #7a3d22;
+
+    /* Neutrals */
+    -wfh-primary:     #2c2c2c;
+    -wfh-secondary:   #555555;
+    -wfh-muted:       #888888;
+    -wfh-border:      #d0ccc7;
+    -wfh-bg:          #f7f5f2;
+}
+
+/* General Text */
+.label {
+    -fx-text-fill: -wfh-primary;
+    -fx-font-size: 13px;
+}
+
+/* Inputs */
+.text-field, .date-picker .text-field, .combo-box .list-cell {
+    -fx-font-family: "Lato";
+    -fx-font-size: 13px;
+    -fx-background-color: white;
+    -fx-border-color: -wfh-border;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-padding: 5 8 5 8;
+}
+
+.text-field:focused, .date-picker:focused .text-field {
+    -fx-border-color: -wfh-green;
+}
+
+.combo-box {
+    -fx-font-family: "Lato";
+    -fx-font-size: 13px;
+    -fx-background-color: white;
+    -fx-border-color: -wfh-border;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+.combo-box:focused {
+    -fx-border-color: -wfh-green;
+}
+
+/* Checkboxes */
+.check-box {
+    -fx-font-family: "Lato";
+    -fx-font-size: 13px;
+    -fx-text-fill: -wfh-primary;
+}
+
+.check-box .box {
+    -fx-background-color: white;
+    -fx-border-color: -wfh-border;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+}
+
+.check-box:selected .box {
+    -fx-background-color: -wfh-green;
+    -fx-border-color: -wfh-green-dark;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+.check-box:hover .box {
+    -fx-border-color: -wfh-green;
+}
+
+/* Buttons */
+.button {
+    -fx-font-family: "Lato";
+    -fx-font-weight: bold;
+    -fx-background-color: -wfh-green;
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-padding: 8 18 8 18;
+    -fx-background-radius: 4;
+    -fx-border-radius: 4;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: -wfh-green-dark;
+}
+
+.button:disabled {
+    -fx-opacity: 0.45;
+}
+
+/* Clear button — subdued, not green */
+.button-clear {
+    -fx-background-color: transparent;
+    -fx-text-fill: -wfh-secondary;
+    -fx-border-color: -wfh-border;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-font-weight: normal;
+}
+
+.button-clear:hover {
+    -fx-background-color: -wfh-border;
+    -fx-text-fill: -wfh-primary;
+}
+
+/* Tab Strip */
+.tab-pane .tab-header-area {
+    -fx-padding: 0;
+}
+
+.tab-pane .tab-header-background {
+    -fx-background-color: -wfh-green-dark;
+}
+
+.tab {
+    -fx-background-color: -wfh-green-dark;
+    -fx-padding: 12 16 12 16;
+}
+
+.tab:selected {
+    -fx-background-color: -wfh-green;
+    -fx-border-color: -wfh-rose transparent transparent transparent;
+    -fx-border-width: 3 0 0 0;
+}
+
+.tab .tab-label {
+    -fx-font-family: "Lato";
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-text-fill: rgba(255, 255, 255, 0.65);
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Price Labels */
+.price-label {
+    -fx-font-family: "Lato";
+    -fx-font-weight: bold;
+    -fx-text-fill: -wfh-rose;
+}
+
+/* Form Layout */
+.form-grid {
+    -fx-padding: 24;
+    -fx-background-color: -wfh-bg;
+}
+
+.field-label {
+    -fx-font-family: "Playfair Display";
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: -wfh-secondary;
+}
+
+/* Splash */
+.splash-container {
+    -fx-background-color: white;
+    -fx-border-color: -wfh-border;
+    -fx-border-width: 1;
+}
+
+.splash-title {
+    -fx-font-family: "Playfair Display";
+    -fx-font-weight: bold;
+    -fx-font-size: 24px;
+    -fx-text-fill: -wfh-green;
+}
+
+.splash-subtitle {
+    -fx-font-family: "Lato";
+    -fx-font-weight: 300;
+    -fx-font-size: 15px;
+    -fx-text-fill: -wfh-secondary;
+}
+
+.progress-bar .bar {
+    -fx-background-color: -wfh-green;
+}

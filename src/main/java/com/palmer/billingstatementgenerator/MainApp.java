@@ -1,24 +1,84 @@
 package com.palmer.billingstatementgenerator;
 
-import com.palmer.billingstatementgenerator.controllers.MainController;
-import com.palmer.billingstatementgenerator.models.MainWindowModel;
+import com.palmer.billingstatementgenerator.db.Database;
+import com.palmer.billingstatementgenerator.models.StatementContext;
 import com.palmer.billingstatementgenerator.views.MainView;
+import com.palmer.billingstatementgenerator.views.SplashView;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class MainApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		MainWindowModel model = new MainWindowModel();
-		MainController controller = new MainController(model);
-		MainView view = new MainView(controller, model);
+		loadFonts();
 
-		Scene scene = new Scene(view.asParent(), 400, 400);
-		primaryStage.setScene(scene);
+		SplashView splashView = new SplashView();
+		Scene splashScene = new Scene(splashView.asParent());
+		splashScene.getStylesheets().add(getClass().getResource("/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
+		primaryStage.setScene(splashScene);
+		primaryStage.initStyle(StageStyle.UNDECORATED);
 		primaryStage.show();
+
+		Task<Void> initTask = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				updateMessage("Connecting to database...");
+				updateProgress(1, 4);
+				Database.init();
+				Thread.sleep(1000); // Simulate some loading time
+
+				updateMessage("Loading statement context...");
+				updateProgress(2, 4);
+				StatementContext.init();
+				Thread.sleep(1000);
+
+				updateMessage("Preparing UI...");
+				updateProgress(3, 4);
+				Thread.sleep(1000);
+
+				updateMessage("Ready!");
+				updateProgress(4, 4);
+				Thread.sleep(1000);
+
+				return null;
+			}
+		};
+
+		splashView.getProgressBar().progressProperty().bind(initTask.progressProperty());
+		splashView.getStatusLabel().textProperty().bind(initTask.messageProperty());
+
+		initTask.setOnSucceeded(e -> {
+			MainView mainView = new MainView();
+			BorderPane root = new BorderPane(mainView.asParent());
+			Scene mainScene = new Scene(root);
+			mainScene.getStylesheets().add(getClass().getResource("/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
+
+			Stage mainStage = new Stage();
+			mainStage.setScene(mainScene);
+			mainStage.setTitle("Wright Funeral Home Billing Statement Generator");
+			mainStage.show();
+
+			mainView.fitWindowToLargestTab();
+			primaryStage.close();
+		});
+
+		new Thread(initTask).start();
+	}
+
+	private void loadFonts() {
+		String base = "/com/palmer/billingstatementgenerator/fonts/";
+		Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Bold.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Regular.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Regular.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Bold.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Light.ttf"), 14);
 	}
 
 	public static void main(String[] args) {

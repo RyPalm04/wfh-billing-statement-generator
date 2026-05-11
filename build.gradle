@@ -1,7 +1,8 @@
-    plugins {
+plugins {
     id 'java'
+    id 'groovy'
     id 'application'
-    id 'org.openjfx.javafxplugin' version '0.0.10'
+    id 'org.openjfx.javafxplugin' version '0.0.14'
 }
 
 group 'com.palmer'
@@ -13,37 +14,40 @@ repositories {
 
 ext {
     junitVersion = '5.7.1'
+    spockVersion = '2.0-groovy-3.0'
 }
 
-sourceCompatibility = '11'
-targetCompatibility = '11'
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
 application {
-    mainModule = 'com.palmer.billingstatementgenerator'
-    mainClass = 'com.palmer.billingstatementgenerator.HelloApplication'
+    mainClass = 'com.palmer.billingstatementgenerator.Launcher'
 }
 
 javafx {
-    version = '11.0.2'
+    version = '17.0.13'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
 dependencies {
-    implementation('com.dlsc.formsfx:formsfx-core:11.3.2') {
-        exclude(group: 'org.openjfx')
-    }
-    implementation('net.synedra:validatorfx:0.1.13') {
-        exclude(group: 'org.openjfx')
-    }
+    implementation('org.apache.commons:commons-lang3:3.14.0')
     implementation('net.sourceforge.dynamicreports:dynamicreports-core:6.12.0')
-// https://mvnrepository.com/artifact/com.lowagie/itext
     implementation('com.lowagie:itext:2.1.7')
-    implementation('org.projectlombok:lombok:1.18.20')
+    implementation('com.h2database:h2:2.2.224')
+    // JAXB — removed from the JDK after Java 8, but JasperReports still needs it
+    implementation('javax.xml.bind:jaxb-api:2.3.1')
+    implementation('org.glassfish.jaxb:jaxb-runtime:2.3.1')
+    implementation('javax.activation:activation:1.1.1')
 
+    testImplementation 'org.codehaus.groovy:groovy-all:3.0.9'
+    testImplementation "org.spockframework:spock-core:${spockVersion}"
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
