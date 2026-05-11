@@ -4,6 +4,8 @@ import com.palmer.billingstatementgenerator.views.tabs.*;
 import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.control.TabPane;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class MainView {
 	private TabPane view;
@@ -42,7 +44,36 @@ public class MainView {
 		tabFive.getPrevButton().setOnAction(e -> view.getSelectionModel().selectPrevious());
 		tabFive.getNextButton().setOnAction(e -> view.getSelectionModel().selectNext());
 		tabSix.getPrevButton().setOnAction(e -> view.getSelectionModel().selectPrevious());
-		tabSix.getNextButton().setOnAction(e -> view.getSelectionModel().selectNext());
+		// TabSix's next button is "Generate PDF" — wired inside TabSix itself.
 	}
 
+	public void fitWindowToLargestTab() {
+		if (view.getScene() == null) {
+			return;
+		}
+		Window window = view.getScene().getWindow();
+		if (!(window instanceof Stage)) {
+			return;
+		}
+		Stage stage = (Stage) window;
+
+		int originalIndex = view.getSelectionModel().getSelectedIndex();
+		double maxWidth = 0;
+		double maxHeight = 0;
+
+		for (int i = 0; i < view.getTabs().size(); i++) {
+			view.getSelectionModel().select(i);
+			view.getScene().getRoot().applyCss();
+			view.getScene().getRoot().layout();
+			stage.sizeToScene();
+			maxWidth = Math.max(maxWidth, stage.getWidth());
+			maxHeight = Math.max(maxHeight, stage.getHeight());
+		}
+
+		view.getSelectionModel().select(originalIndex);
+		stage.setMinWidth(maxWidth);
+		stage.setMinHeight(maxHeight);
+		stage.setWidth(maxWidth);
+		stage.setHeight(maxHeight);
+	}
 }
