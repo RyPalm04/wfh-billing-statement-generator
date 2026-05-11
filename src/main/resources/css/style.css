@@ -1,0 +1,104 @@
+/* Wright Funeral Home Theme */
+
+.root {
+    -fx-base: #ffffff;
+    -fx-background: #ffffff;
+    -fx-control-inner-background: #ffffff;
+
+    /* Main Colors */
+    -wfh-primary: #333333;
+    -wfh-secondary: #666666;
+    -wfh-accent: #555555;
+    -wfh-muted: #888888;
+    -wfh-border: #d3d3d3;
+    -wfh-bg: #ffffff;
+}
+
+/* General Text */
+.label {
+    -fx-text-fill: -wfh-primary;
+}
+
+.text-field, .date-picker, .combo-box {
+    -fx-font-size: 14px;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: -wfh-accent;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 15 8 15;
+    -fx-background-radius: 4;
+}
+
+.button:hover {
+    -fx-background-color: -wfh-primary;
+}
+
+.button:disabled {
+    -fx-opacity: 0.5;
+}
+
+/* TabPane Styling (Side Tabs) */
+.tab-pane .tab-header-area {
+    -fx-padding: 0;
+}
+
+.tab-pane .tab-header-background {
+    -fx-background-color: #f4f4f4;
+    -fx-border-color: transparent -wfh-border transparent transparent;
+}
+
+.tab {
+    -fx-background-color: #f4f4f4;
+    -fx-padding: 10 20 10 20;
+}
+
+.tab:selected {
+    -fx-background-color: white;
+    -fx-border-color: -wfh-border transparent -wfh-border -wfh-accent;
+    -fx-border-width: 1 0 1 5;
+}
+
+.tab .tab-label {
+    -fx-text-fill: -wfh-secondary;
+    -fx-font-weight: normal;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: -wfh-primary;
+    -fx-font-weight: bold;
+}
+
+/* Splash Screen specific (if reused) */
+.splash-container {
+    -fx-background-color: white;
+    -fx-border-color: -wfh-border;
+    -fx-border-width: 1;
+}
+
+.splash-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -wfh-primary;
+}
+
+.splash-subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: -wfh-secondary;
+}
+
+.progress-bar .bar {
+    -fx-background-color: -wfh-accent;
+}
+
+/* Form Styles */
+.form-grid {
+    -fx-padding: 20;
+}
+
+.field-label {
+    -fx-font-weight: bold;
+    -fx-text-fill: -wfh-secondary;
+}
