@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(./gradlew --version)",
-      "Bash(git restore *)",
-      "Bash(/tmp/xlsx_venv/bin/python)"
-    ]
-  }
-}
