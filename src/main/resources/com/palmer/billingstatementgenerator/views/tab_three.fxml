@@ -4,6 +4,6 @@
 <GridPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.palmer.billingstatementgenerator.views.controllers.TabThreeFxmlController" hgap="7" vgap="10">
   <children>
     <ComboBox fx:id="packagesCombo" GridPane.rowIndex="0" GridPane.columnIndex="0" GridPane.columnSpan="2" />
-    <GridPane fx:id="servicesGrid" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" hgap="7" vgap="5" />
+    <GridPane fx:id="itemsGrid" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2" hgap="7" vgap="5" />
   </children>
 </GridPane>
