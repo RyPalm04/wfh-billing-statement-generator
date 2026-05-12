@@ -42,7 +42,10 @@ public class SplashView {
         statusLabel = new Label("Initializing...");
         statusLabel.setStyle("-fx-text-fill: #888888;");
 
-        container.getChildren().addAll(imageView, titleLabel, subtitleLabel, progressBar, statusLabel);
+        Label copyrightLabel = new Label("© " + java.time.Year.now().getValue() + " Ryan Palmer. All rights reserved.");
+        copyrightLabel.getStyleClass().add("splash-copyright");
+
+        container.getChildren().addAll(imageView, titleLabel, subtitleLabel, progressBar, statusLabel, copyrightLabel);
     }
 
     public Parent asParent() {

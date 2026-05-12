@@ -1,11 +1,16 @@
 package com.palmer.billingstatementgenerator.pdf;
 
-import com.palmer.billingstatementgenerator.models.Statement;
+import com.palmer.billingstatementgenerator.models.statement.Statement;
+import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
+import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.models.catalog.ServicePackage;
 import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineItem;
+import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -32,7 +37,8 @@ public final class PdfGenerator {
 
     private static JasperReport compiledReport;
 
-    private PdfGenerator() {}
+    private PdfGenerator() {
+    }
 
     public static void generate(Statement stmt, File outputFile) throws IOException {
         try {
@@ -71,7 +77,6 @@ public final class PdfGenerator {
         ServicePackage pkg = stmt.getSelectedPackage();
         m.put("packagePrice", pkg != null ? toDouble(pkg.getDefaultCost()) : null);
 
-        // Services — by sort_order index → field name
         String[] serviceFields = {
                 "basicServicesPrice", "embalmingPrice", "otherPreparationPrice",
                 "useForVisitationPrice", "useForFuneralPrice", "useForMemorialPrice",
@@ -82,7 +87,6 @@ public final class PdfGenerator {
                 ServiceLineItem::isSelected,
                 s -> toDouble(s.getCatalog().getDefaultCost()));
 
-        // Merchandise — price + (sparse) description fields
         String[] merchPriceFields = {
                 "casketPrice", "urnPrice", "vaultPrice", "serviceAccessoryPrice",
                 "registerBookPrice", "thankYouCardPrice", "memorialFolderPrice",
@@ -102,7 +106,6 @@ public final class PdfGenerator {
                 MerchandiseLineItem::isSelected,
                 MerchandiseLineItem::getDescription);
 
-        // Special Charges — template has slots for 7 of 8 (no "Other" field)
         String[] specialPriceFields = {
                 "graveSetupPrice", "cremationPrice", "mileagePrice",
                 "remainsForwardingPrice", "remainsReceivingPrice", "vaultWeekendPrice",
@@ -119,7 +122,6 @@ public final class PdfGenerator {
                 SpecialChargeLineItem::isSelected,
                 SpecialChargeLineItem::getDescription);
 
-        // Cash Advances — every slot has detail (provider) + price (amount)
         String[] cashDetailFields = {
                 "graveOpeningDetail", "weekendHolidayDetail", "newspaperADetail",
                 "newspaperBDetail", "newspaperCDetail", "newspaperDDetail",
@@ -136,23 +138,25 @@ public final class PdfGenerator {
                 "hairdresserPrice", "deathCertPrice", "outOfTownPrice",
                 "markerDatePrice", "flowerPrice", "cashAdvOtherAPrice", "cashAdvOtherBPrice"
         };
+
         List<CashAdvanceLineItem> cashAdvances = stmt.getCashAdvances();
+
         int cashCount = Math.min(cashDetailFields.length, cashAdvances.size());
+
         for (int i = 0; i < cashCount; i++) {
             CashAdvanceLineItem item = cashAdvances.get(i);
             m.put(cashDetailFields[i], item.isSelected() ? nullSafe(item.getProvider()) : "");
             m.put(cashPriceFields[i], item.isSelected() ? toDouble(item.getAmount()) : null);
         }
 
-        // Totals — not computed yet; pass blanks/nulls so template renders empty
-        m.put("totalServices", null);
-        m.put("totalMerchandise", "");
-        m.put("totalSpecialCharges", "");
-        m.put("totalCashAdv", null);
-        m.put("salesTax", null);
-        m.put("subTotal", null);
-        m.put("downPayment", toDouble(stmt.getPayment()));
-        m.put("finalTotal", "");
+        m.put("totalServices",      StatementCalculator.servicesTotal(stmt).doubleValue());
+        m.put("totalMerchandise",   StatementCalculator.merchandiseTotal(stmt).toString());
+        m.put("totalSpecialCharges",StatementCalculator.specialChargesTotal(stmt).toString());
+        m.put("totalCashAdv",       StatementCalculator.cashAdvancesTotal(stmt).doubleValue());
+        m.put("salesTax",           StatementCalculator.salesTax(stmt).doubleValue());
+        m.put("subTotal",           StatementCalculator.subtotal(stmt).doubleValue());
+        m.put("downPayment",        toDouble(stmt.getPayment()));
+        m.put("finalTotal",         StatementCalculator.finalTotal(stmt).toString());
 
         return m;
     }
@@ -189,5 +193,22 @@ public final class PdfGenerator {
 
     private static String formatDate(LocalDate d) {
         return d == null ? "" : d.format(DATE_FMT);
+    }
+
+    public static void export(Window ownerWindow) {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Save Statement as PDF");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF files", "*.pdf"));
+        fc.setInitialFileName("statement-" + StatementContext.current().getControlNumber() + ".pdf");
+
+        File output = fc.showSaveDialog(ownerWindow);
+        if (output == null) return;
+
+        try {
+            generate(StatementContext.current(), output);
+            new Alert(Alert.AlertType.INFORMATION, "PDF saved to:\n" + output.getAbsolutePath()).showAndWait();
+        } catch (Throwable t) {
+            new Alert(Alert.AlertType.ERROR, "Failed to generate PDF: " + t.getMessage()).showAndWait();
+        }
     }
 }

@@ -1,14 +1,12 @@
-package com.palmer.billingstatementgenerator.models;
+package com.palmer.billingstatementgenerator.models.statement;
 
-import com.palmer.billingstatementgenerator.dao.CashAdvanceDao;
-import com.palmer.billingstatementgenerator.dao.MerchandiseDao;
-import com.palmer.billingstatementgenerator.dao.ServiceDao;
-import com.palmer.billingstatementgenerator.dao.SpecialChargeDao;
+import com.palmer.billingstatementgenerator.dao.*;
 import com.palmer.billingstatementgenerator.db.Database;
 import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineItem;
+import com.palmer.billingstatementgenerator.util.AppConfig;
 
 public final class StatementContext {
     private static Statement current;
@@ -17,6 +15,7 @@ public final class StatementContext {
 
     public static synchronized void init() {
         Statement statement = new Statement();
+        statement.setSalesTaxRate(AppConfig.getSalesTaxRate());
         new ServiceDao(Database.get()).findAll()
                 .forEach(s -> statement.getServices().add(new ServiceLineItem(s)));
         new MerchandiseDao(Database.get()).findAll()

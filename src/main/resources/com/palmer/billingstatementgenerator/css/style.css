@@ -200,3 +200,191 @@
     -fx-font-size: 13px;
     -fx-text-fill: -wfh-secondary;
 }
+
+.app-header {
+    -fx-background-color: -wfh-bg;
+    -fx-border-color: transparent transparent -wfh-border transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.button-bar {
+    -fx-background-color: -wfh-bg;
+    -fx-border-color: -wfh-border transparent transparent transparent;
+    -fx-border-width: 1 0 0 0;
+}
+
+.price-field {
+    -fx-font-family: "Lato";
+    -fx-font-weight: bold;
+    -fx-text-fill: -wfh-rose;
+    -fx-pref-column-count: 10;
+    -fx-border-color: -wfh-border;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+.price-field:focused {
+    -fx-border-color: -wfh-rose;
+}
+
+.splash-copyright {
+    -fx-font-family: "Lato Light";
+    -fx-font-size: 11px;
+    -fx-text-fill: -wfh-muted;
+}
+
+.summary-section-header {
+    -fx-font-family: "Playfair Display";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -wfh-green;
+    -fx-padding: 8 0 4 0;
+}
+
+.summary-label {
+    -fx-font-family: "Lato";
+    -fx-font-size: 13px;
+    -fx-text-fill: -wfh-primary;
+}
+
+.summary-value {
+    -fx-font-family: "Lato";
+    -fx-font-size: 13px;
+    -fx-text-fill: -wfh-secondary;
+}
+
+.summary-total-label {
+    -fx-font-family: "Lato";
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: -wfh-secondary;
+}
+
+.summary-total-value {
+    -fx-font-family: "Lato";
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: -wfh-rose;
+}
+
+.summary-grand-total-label {
+    -fx-font-family: "Playfair Display";
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: -wfh-green;
+}
+
+.summary-grand-total-value {
+    -fx-font-family: "Playfair Display";
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: -wfh-green;
+}
+
+.summary-separator {
+    -fx-background-color: -wfh-border;
+}
+
+.summary-clickable {
+    -fx-cursor: hand;
+}
+
+.summary-clickable:hover {
+    -fx-text-fill: -wfh-green;
+    -fx-underline: true;
+}
+
+.button-reset {
+    -fx-text-fill: -wfh-rose;
+    -fx-border-color: -wfh-rose;
+}
+
+.button-reset:hover {
+    -fx-background-color: -wfh-rose;
+    -fx-text-fill: white;
+}
+
+.instructions-title {
+    -fx-font-family: "Playfair Display";
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+    -fx-text-fill: -wfh-green;
+}
+
+.instructions-subtitle {
+    -fx-font-family: "Lato";
+    -fx-font-size: 13px;
+    -fx-text-fill: -wfh-secondary;
+}
+
+.step-card {
+    -fx-background-color: white;
+    -fx-border-color: -wfh-border;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+}
+
+.step-card:hover {
+    -fx-border-color: -wfh-green;
+}
+
+.step-number {
+    -fx-background-color: -wfh-green;
+    -fx-text-fill: white;
+    -fx-font-family: "Playfair Display";
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-background-radius: 18;
+}
+
+.step-title {
+    -fx-font-family: "Playfair Display";
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: -wfh-primary;
+}
+
+.step-description {
+    -fx-font-family: "Lato";
+    -fx-font-size: 12px;
+    -fx-text-fill: -wfh-secondary;
+}
+
+.button-get-started {
+    -fx-font-family: "Lato";
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-color: -wfh-green;
+    -fx-text-fill: white;
+    -fx-padding: 12 32 12 32;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.button-get-started:hover {
+    -fx-background-color: -wfh-green-dark;
+}
+
+.summary-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.summary-scroll:focused {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.summary-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.tab-total-label {
+    -fx-font-family: "Playfair Display";
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: -wfh-green;
+    -fx-padding: 4 0 0 0;
+}

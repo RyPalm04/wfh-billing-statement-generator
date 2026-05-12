@@ -1,9 +1,16 @@
 package com.palmer.billingstatementgenerator.views.controllers;
 
+import com.palmer.billingstatementgenerator.util.BigDecimalCurrencyConverter;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
-import javafx.scene.control.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.GridPane;
 import javafx.util.converter.NumberStringConverter;
@@ -12,7 +19,6 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class BaseController {
     protected static final NumberFormat DOLLAR_FORMATTER = NumberFormat.getCurrencyInstance();
@@ -30,9 +36,14 @@ public abstract class BaseController {
         onNextButtonSet();
     }
 
-    // Override in subclasses to react when buttons are injected
-    protected void onClearButtonSet() {}
-    protected void onNextButtonSet() {}
+    protected void onClearButtonSet() {
+    }
+
+    protected void onNextButtonSet() {
+    }
+
+    public void reset() {
+    }
 
     protected CheckBox buildCheckBox(String label, int row, GridPane grid) {
         CheckBox cb = new CheckBox(label);
@@ -57,9 +68,11 @@ public abstract class BaseController {
     }
 
     protected void wireTextFieldToCheckBox(TextField tf, CheckBox cb) {
-        tf.textProperty().addListener((obs, oldV, newV) ->
-                cb.setSelected(newV != null && !newV.trim().isEmpty())
-        );
+        tf.textProperty().addListener((obs, oldV, newV) -> {
+            cb.setSelected(newV != null && !newV.trim().isEmpty());
+            refreshTotal();
+        });
+
         if (!tf.getText().trim().isEmpty()) {
             cb.setSelected(true);
         }
@@ -67,14 +80,16 @@ public abstract class BaseController {
 
     protected void wireClearButton(List<CheckBox> checkBoxes) {
         Observable[] deps = checkBoxes.stream()
-                                      .map(CheckBox::selectedProperty)
-                                      .toArray(Observable[]::new);
+                .map(CheckBox::selectedProperty)
+                .toArray(Observable[]::new);
         clearButton.disableProperty().bind(Bindings.createBooleanBinding(
                 () -> checkBoxes.stream().noneMatch(CheckBox::isSelected),
                 deps));
-        clearButton.setOnAction(e -> {
-            checkBoxes.forEach(cb -> cb.setSelected(false));
-        });
+        clearButton.setOnAction(e -> clearAll(checkBoxes));
+    }
+
+    protected void clearAll(List<CheckBox> checkBoxes) {
+        checkBoxes.forEach(cb -> cb.setSelected(false));
     }
 
     protected void configTextFieldForInts(TextField... fields) {
@@ -85,9 +100,54 @@ public abstract class BaseController {
     }
 
     protected void bindIntegerTextField(TextField field, IntegerProperty prop) {
-        Bindings.bindBidirectional(field.textProperty(), prop, new NumberStringConverter());
+        Bindings.bindBidirectional(field.textProperty(), prop, new NumberStringConverter() {
+            @Override
+            public String toString(Number value) {
+                if (value == null || value.intValue() == 0) return "";
+                return value.intValue() + "";
+            }
+
+            @Override
+            public Number fromString(String value) {
+                if (value == null || value.trim().isEmpty()) return 0;
+                try {
+                    return Integer.parseInt(value.trim());
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
+            }
+        });
     }
 
-    public void onShow() {}
-    public void onHide() {}
+    protected TextField buildPriceField(ObjectProperty<BigDecimal> priceProperty, int row, GridPane grid) {
+        TextField priceField = new TextField();
+        priceField.setPrefColumnCount(10);
+        priceField.getStyleClass().add("price-field");
+        priceField.setPromptText("$0.00");
+        priceField.setAlignment(Pos.CENTER_RIGHT);
+        GridPane.setConstraints(priceField, 2, row);
+        grid.getChildren().add(priceField);
+
+        TextFormatter<BigDecimal> formatter = new TextFormatter<>(
+                new BigDecimalCurrencyConverter(),
+                priceProperty.get(),
+                change -> {
+                    String newText = change.getControlNewText().replaceAll("[^\\d.]", "");
+                    return newText.matches("\\d*\\.?\\d{0,2}") ? change : null;
+                }
+        );
+
+        priceField.setTextFormatter(formatter);
+        formatter.valueProperty().bindBidirectional(priceProperty);
+
+        return priceField;
+    }
+
+    protected void refreshTotal() {}
+
+    public void onShow() {
+    }
+
+    public void onHide() {
+    }
 }

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.palmer.billingstatementgenerator.views.controllers.TabTwoFxmlController" hgap="7" vgap="10">
+<GridPane xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="com.palmer.billingstatementgenerator.views.controllers.TabTwoFxmlController"
+          hgap="12" vgap="16"
+          alignment="CENTER">
   <columnConstraints>
-    <ColumnConstraints hgrow="NEVER" halignment="RIGHT" />
-    <ColumnConstraints hgrow="SOMETIMES" />
+    <ColumnConstraints hgrow="NEVER" halignment="RIGHT" minWidth="120" />
+    <ColumnConstraints hgrow="NEVER" minWidth="300" maxWidth="300" prefWidth="300" />
   </columnConstraints>
   <children>
     <Label text="Control Number" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="field-label" />
@@ -14,12 +17,12 @@
     <TextField fx:id="servicesForField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 
     <Label text="Date of Death" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label" />
-    <DatePicker fx:id="dateOfDeathPicker" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+    <DatePicker fx:id="dateOfDeathPicker" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="300" />
 
     <Label text="Place of Death" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="field-label" />
     <TextField fx:id="placeOfDeathField" GridPane.rowIndex="3" GridPane.columnIndex="1" />
 
     <Label text="Service Date" GridPane.rowIndex="4" GridPane.columnIndex="0" styleClass="field-label" />
-    <DatePicker fx:id="serviceDatePicker" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+    <DatePicker fx:id="serviceDatePicker" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="300" />
   </children>
 </GridPane>

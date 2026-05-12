@@ -1,7 +1,7 @@
 package com.palmer.billingstatementgenerator.views.controllers;
 
-import com.palmer.billingstatementgenerator.models.Statement;
-import com.palmer.billingstatementgenerator.models.StatementContext;
+import com.palmer.billingstatementgenerator.models.statement.Statement;
+import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;

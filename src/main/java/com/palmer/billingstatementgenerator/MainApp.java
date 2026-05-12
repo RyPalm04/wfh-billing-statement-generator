@@ -1,7 +1,7 @@
 package com.palmer.billingstatementgenerator;
 
 import com.palmer.billingstatementgenerator.db.Database;
-import com.palmer.billingstatementgenerator.models.StatementContext;
+import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.views.MainView;
 import com.palmer.billingstatementgenerator.views.SplashView;
 

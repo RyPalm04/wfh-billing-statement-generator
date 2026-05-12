@@ -2,7 +2,7 @@ package com.palmer.billingstatementgenerator.views.controllers;
 
 import com.palmer.billingstatementgenerator.dao.ServicePackageDao;
 import com.palmer.billingstatementgenerator.db.Database;
-import com.palmer.billingstatementgenerator.models.StatementContext;
+import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.models.catalog.ServicePackage;
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 
@@ -76,5 +76,11 @@ public class TabThreeFxmlController extends GridTabController<ServiceLineItem> {
             packagesCombo.setValue(null);
             checkBoxes.forEach(cb -> cb.setSelected(false));
         });
+    }
+
+    @Override
+    protected void clearAll(List<CheckBox> checkBoxes) {
+        super.clearAll(checkBoxes);
+        packagesCombo.setValue(null);
     }
 }
