@@ -74,11 +74,17 @@ public class MainApp extends Application {
 
 	private void loadFonts() {
 		String base = "/com/palmer/billingstatementgenerator/fonts/";
-		Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Bold.ttf"), 14);
-		Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Regular.ttf"), 14);
-		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Regular.ttf"), 14);
-		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Bold.ttf"), 14);
-		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Light.ttf"), 14);
+		Font f1 = Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Regular.ttf"), 14);
+		Font f2 = Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Bold.ttf"), 14);
+		Font f3 = Font.loadFont(getClass().getResourceAsStream(base + "Lato-Regular.ttf"), 14);
+		Font f4 = Font.loadFont(getClass().getResourceAsStream(base + "Lato-Bold.ttf"), 14);
+		Font f5 = Font.loadFont(getClass().getResourceAsStream(base + "Lato-Light.ttf"), 14);
+
+		System.out.println(f1.getFamily());
+		System.out.println(f2.getFamily());
+		System.out.println(f3.getFamily());
+		System.out.println(f4.getFamily());
+		System.out.println(f5.getFamily());
 	}
 
 	public static void main(String[] args) {

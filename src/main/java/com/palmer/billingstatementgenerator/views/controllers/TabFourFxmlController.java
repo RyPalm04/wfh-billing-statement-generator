@@ -22,7 +22,7 @@ public class TabFourFxmlController extends GridTabController<MerchandiseLineItem
         cb.selectedProperty().bindBidirectional(item.selectedProperty());
 
         if (item.getCatalog().isDescriptionRequired()) {
-            TextField desc = buildTextField(row, itemsGrid);
+            TextField desc = buildTextField(18, 1, row, itemsGrid);
             desc.textProperty().bindBidirectional(item.descriptionProperty());
             wireTextFieldToCheckBox(desc, cb);
         }

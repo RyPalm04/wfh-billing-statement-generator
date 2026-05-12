@@ -43,10 +43,14 @@ public abstract class GridTabController<T> extends BaseController {
 
         return itemsGrid;
     }
+
     @Override
     protected void onClearButtonSet() {
         if (itemsGrid != null) {
-            wireClear(collectCheckBoxes(itemsGrid));
+            wireClear(itemsGrid.getChildren().stream()
+                    .filter(n -> n instanceof CheckBox)
+                    .map(n -> (CheckBox) n)
+                    .collect(Collectors.toList()));
         }
     }
 
@@ -55,5 +59,6 @@ public abstract class GridTabController<T> extends BaseController {
     }
 
     protected abstract List<T> getItems();
+
     protected abstract CheckBox addItemRow(T item, int row);
 }

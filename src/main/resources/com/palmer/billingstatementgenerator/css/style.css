@@ -1,35 +1,4 @@
 /* Wright Funeral Home Theme */
-
-@font-face {
-    src: url('/com/palmer/billingstatementgenerator/fonts/PlayfairDisplay-Regular.ttf');
-    -fx-font-family: "Playfair Display";
-    -fx-font-weight: normal;
-}
-
-@font-face {
-    src: url('/com/palmer/billingstatementgenerator/fonts/PlayfairDisplay-Bold.ttf');
-    -fx-font-family: "Playfair Display";
-    -fx-font-weight: bold;
-}
-
-@font-face {
-    src: url('/com/palmer/billingstatementgenerator/fonts/Lato-Regular.ttf');
-    -fx-font-family: "Lato";
-    -fx-font-weight: normal;
-}
-
-@font-face {
-    src: url('/com/palmer/billingstatementgenerator/fonts/Lato-Bold.ttf');
-    -fx-font-family: "Lato";
-    -fx-font-weight: bold;
-}
-
-@font-face {
-    src: url('/com/palmer/billingstatementgenerator/fonts/Lato-Light.ttf');
-    -fx-font-family: "Lato";
-    -fx-font-weight: 300;
-}
-
 .root {
     -fx-base: #f7f5f2;
     -fx-background: #f7f5f2;
@@ -216,12 +185,18 @@
 }
 
 .splash-subtitle {
-    -fx-font-family: "Lato";
-    -fx-font-weight: 300;
+    -fx-font-family: "Lato Light";
     -fx-font-size: 15px;
     -fx-text-fill: -wfh-secondary;
 }
 
 .progress-bar .bar {
     -fx-background-color: -wfh-green;
+}
+
+.check-box {
+    -fx-font-family: "Playfair Display";
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: -wfh-secondary;
 }

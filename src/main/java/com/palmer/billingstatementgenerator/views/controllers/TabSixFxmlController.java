@@ -4,6 +4,7 @@ import com.palmer.billingstatementgenerator.models.StatementContext;
 import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem;
 import com.palmer.billingstatementgenerator.pdf.PdfGenerator;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
@@ -23,10 +24,12 @@ public class TabSixFxmlController extends GridTabController<CashAdvanceLineItem>
     @Override
     protected CheckBox addItemRow(CashAdvanceLineItem item, int row) {
         CheckBox cb = buildCheckBox(item.getCatalog().getName(), row, itemsGrid);
-        TextField provider = buildTextField(row, itemsGrid);
+        TextField provider = buildTextField(18, 1, row, itemsGrid);
+        TextField amount = buildTextField(6, 2, row, itemsGrid);
 
         cb.selectedProperty().bindBidirectional(item.selectedProperty());
         provider.textProperty().bindBidirectional(item.providerProperty());
+        amount.textProperty().bindBidirectional(new SimpleStringProperty(item.amountProperty().toString()));
         wireTextFieldToCheckBox(provider, cb);
 
         return cb;
@@ -46,7 +49,11 @@ public class TabSixFxmlController extends GridTabController<CashAdvanceLineItem>
         fc.getExtensionFilters().add(new ExtensionFilter("PDF files", "*.pdf"));
         fc.setInitialFileName("statement-" + StatementContext.current().getControlNumber() + ".pdf");
         File output = fc.showSaveDialog(nextButton.getScene().getWindow());
-        if (output == null) return;
+
+        if (output == null) {
+            return;
+        }
+
         try {
             PdfGenerator.generate(StatementContext.current(), output);
             new Alert(Alert.AlertType.INFORMATION, "PDF saved to:\n" + output.getAbsolutePath()).showAndWait();

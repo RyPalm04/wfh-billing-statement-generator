@@ -8,11 +8,9 @@ import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
-import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
-import javafx.util.StringConverter;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -26,7 +24,7 @@ public class TabThreeFxmlController extends GridTabController<ServiceLineItem> {
         ServicePackageDao dao = new ServicePackageDao(Database.get());
         packagesCombo = new ComboBox<>();
         packagesCombo.getItems().addAll(dao.findAll());
-        packagesCombo.setConverter(new javafx.util.StringConverter<ServicePackage>() {
+        packagesCombo.setConverter(new javafx.util.StringConverter<>() {
             @Override
             public String toString(ServicePackage p) {
                 return p == null ? "" : String.format("%-15s %14s", p.getName(), DOLLAR_FORMATTER.format(p.getDefaultCost()));
@@ -42,7 +40,6 @@ public class TabThreeFxmlController extends GridTabController<ServiceLineItem> {
         GridPane.setColumnSpan(packagesCombo, 2);
         pane.getChildren().add(packagesCombo);
 
-        // now let parent build the itemsGrid rows into a sub-grid
         GridPane itemsPane = super.buildView();
         GridPane.setConstraints(itemsPane, 0, 1);
         GridPane.setColumnSpan(itemsPane, 2);

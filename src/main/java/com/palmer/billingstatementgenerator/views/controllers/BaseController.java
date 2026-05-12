@@ -43,14 +43,15 @@ public abstract class BaseController {
 
     protected void buildPriceLabel(BigDecimal cost, int row, GridPane grid) {
         Label price = new Label(cost != null ? DOLLAR_FORMATTER.format(cost) : "");
+        price.getStyleClass().add("price-label");
         GridPane.setConstraints(price, 2, row);
         grid.getChildren().add(price);
     }
 
-    protected TextField buildTextField(int row, GridPane grid) {
+    protected TextField buildTextField(int columnCount, int column, int row, GridPane grid) {
         TextField tf = new TextField();
-        tf.setPrefColumnCount(18);
-        GridPane.setConstraints(tf, 1, row);
+        tf.setPrefColumnCount(columnCount);
+        GridPane.setConstraints(tf, column, row);
         grid.getChildren().add(tf);
         return tf;
     }
@@ -71,14 +72,9 @@ public abstract class BaseController {
         clearButton.disableProperty().bind(Bindings.createBooleanBinding(
                 () -> checkBoxes.stream().noneMatch(CheckBox::isSelected),
                 deps));
-        clearButton.setOnAction(e -> checkBoxes.forEach(cb -> cb.setSelected(false)));
-    }
-
-    protected List<CheckBox> collectCheckBoxes(GridPane grid) {
-        return grid.getChildren().stream()
-                   .filter(n -> n instanceof CheckBox)
-                   .map(n -> (CheckBox) n)
-                   .collect(Collectors.toList());
+        clearButton.setOnAction(e -> {
+            checkBoxes.forEach(cb -> cb.setSelected(false));
+        });
     }
 
     protected void configTextFieldForInts(TextField... fields) {
