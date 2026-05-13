@@ -171,13 +171,13 @@ public final class PdfGenerator {
         }
 
         m.put("totalServices", StatementCalculator.servicesTotal(stmt).doubleValue());
-        m.put("totalMerchandise", StatementCalculator.merchandiseTotal(stmt).toString());
-        m.put("totalSpecialCharges", StatementCalculator.specialChargesTotal(stmt).toString());
+        m.put("totalMerchandise", StatementCalculator.merchandiseTotal(stmt).doubleValue());
+        m.put("totalSpecialCharges", StatementCalculator.specialChargesTotal(stmt).doubleValue());
         m.put("totalCashAdv", StatementCalculator.cashAdvancesTotal(stmt).doubleValue());
         m.put("salesTax", StatementCalculator.salesTax(stmt).doubleValue());
         m.put("subTotal", StatementCalculator.subtotal(stmt).doubleValue());
         m.put("downPayment", toDouble(stmt.getPayment()));
-        m.put("finalTotal", StatementCalculator.finalTotal(stmt).toString());
+        m.put("finalTotal", StatementCalculator.finalTotal(stmt).doubleValue());
 
         return m;
     }

@@ -53,7 +53,7 @@
     <field name="graveMarkerPrice" class="java.lang.Double"/>
     <field name="otherMerchAPrice" class="java.lang.Double"/>
     <field name="otherMerchBPrice" class="java.lang.Double"/>
-    <field name="totalMerchandise" class="java.lang.String"/>
+    <field name="totalMerchandise" class="java.lang.Double"/>
     <field name="graveSetupPrice" class="java.lang.Double"/>
     <field name="cremationPrice" class="java.lang.Double"/>
     <field name="mileageDescription" class="java.lang.String"/>
@@ -62,7 +62,7 @@
     <field name="remainsReceivingPrice" class="java.lang.Double"/>
     <field name="vaultWeekendPrice" class="java.lang.Double"/>
     <field name="immediateBurialPrice" class="java.lang.Double"/>
-    <field name="totalSpecialCharges" class="java.lang.String"/>
+    <field name="totalSpecialCharges" class="java.lang.Double"/>
     <field name="embalmingReason" class="java.lang.String"/>
     <field name="graveOpeningDetail" class="java.lang.String"/>
     <field name="graveOpeningPrice" class="java.lang.Double"/>
@@ -109,7 +109,7 @@
     <field name="salesTax" class="java.lang.Double"/>
     <field name="subTotal" class="java.lang.Double"/>
     <field name="downPayment" class="java.lang.Double"/>
-    <field name="finalTotal" class="java.lang.String"/>
+    <field name="finalTotal" class="java.lang.Double"/>
     <field name="otherMerchADescription" class="java.lang.String"/>
     <field name="otherMerchBDescription" class="java.lang.String"/>
     <field name="graveDescription" class="java.lang.String"/>
