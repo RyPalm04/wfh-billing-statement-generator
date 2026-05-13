@@ -15,7 +15,7 @@ repositories {
 ext {
     junitVersion = '5.7.1'
     spockVersion = '2.0-groovy-3.0'
-    appVersion = '1.0.1'
+    appVersion = '1.1.0'
 }
 
 java {
