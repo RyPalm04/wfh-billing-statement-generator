@@ -68,7 +68,7 @@ public class MainView {
 	private void createTabs() {
 		InstructionsTabController instructionsController = new InstructionsTabController();
 		ScrollPane instructionsView = instructionsController.buildView(
-				() -> tabPane.getSelectionModel().select(1)
+				i -> tabPane.getSelectionModel().select(i)
 		);
 		GeneratorTabs instructionsTab = GeneratorTabs.fromController(
 				"INSTRUCTIONS", instructionsController, instructionsView);

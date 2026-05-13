@@ -2,6 +2,7 @@ package com.palmer.billingstatementgenerator.views.controllers;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -12,6 +13,7 @@ import javafx.scene.text.TextAlignment;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.IntConsumer;
 
 /**
  * Controller for the Instructions tab, displayed as the first tab in the application.
@@ -43,11 +45,11 @@ public class InstructionsTabController extends BaseController {
     /**
      * Builds the instructions tab view and returns it wrapped in a {@link ScrollPane}.
      *
-     * @param onGetStarted a {@link Runnable} invoked when the Get Started button is clicked,
-     *                     typically navigating to the first data entry tab
+     * @param onNavigate an {@link IntConsumer} invoked with a tab index when the user clicks
+     *                   a step card or the Get Started button
      * @return a {@link ScrollPane} containing the full instructions layout
      */
-    public ScrollPane buildView(Runnable onGetStarted) {
+    public ScrollPane buildView(IntConsumer onNavigate) {
         VBox root = new VBox(24);
         root.setAlignment(Pos.TOP_CENTER);
         root.setPadding(new Insets(32));
@@ -77,12 +79,14 @@ public class InstructionsTabController extends BaseController {
         steps.setMaxWidth(520);
 
         for (int i = 0; i < STEPS.size(); i++) {
-            steps.getChildren().add(buildStep(i + 1, STEPS.get(i)[0], STEPS.get(i)[1]));
+            int tabIndex = i + 1;
+            steps.getChildren().add(buildStep(i + 1, STEPS.get(i)[0], STEPS.get(i)[1],
+                    () -> onNavigate.accept(tabIndex)));
         }
 
         Button getStarted = new Button("Get Started");
         getStarted.getStyleClass().add("button-get-started");
-        getStarted.setOnAction(e -> onGetStarted.run());
+        getStarted.setOnAction(e -> onNavigate.accept(1));
 
         root.getChildren().addAll(logoView, welcome, subtitle, steps, getStarted);
 
@@ -104,9 +108,10 @@ public class InstructionsTabController extends BaseController {
      * @param number      the step number displayed in the circle
      * @param title       the step title
      * @param description a brief description of what the user does in this step
+     * @param onClick     invoked when the user clicks the card
      * @return an {@link HBox} representing the step card
      */
-    private HBox buildStep(int number, String title, String description) {
+    private HBox buildStep(int number, String title, String description, Runnable onClick) {
         Label numberLabel = new Label(String.valueOf(number));
         numberLabel.getStyleClass().add("step-number");
         numberLabel.setMinSize(36, 36);
@@ -128,6 +133,8 @@ public class InstructionsTabController extends BaseController {
         step.setAlignment(Pos.CENTER_LEFT);
         step.setPadding(new Insets(12));
         step.getStyleClass().add("step-card");
+        step.setCursor(Cursor.HAND);
+        step.setOnMouseClicked(e -> onClick.run());
 
         return step;
     }
