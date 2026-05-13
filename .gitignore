@@ -1,7 +1,6 @@
 # Project exclude paths
 /.gradle/
 /.claude/
-/.github/
 /.idea/
 /out/
 /logs/
