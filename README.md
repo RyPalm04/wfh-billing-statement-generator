@@ -1,42 +1,57 @@
 # Wright Funeral Home Billing Statement Generator
 
-A desktop JavaFX application to generate billing statements. Users select packages, services, merchandise, special charges, and cash advances and export a PDF statement.
+A desktop JavaFX application for generating funeral home billing statements. Users enter service information, select packages, services, merchandise, special charges, and cash advances, then export a formatted PDF statement.
 
-## Overview
+## Screenshots
 
-- Stack: Java 11, JavaFX 17, Gradle
-- Data: H2 in-memory DB initialized from SQL scripts
-- PDF: JasperReports / DynamicReports
+| Instructions | Service Information |
+|---|---|
+| ![Instructions tab](docs/screenshots/instructions.png) | ![Service information tab](docs/screenshots/service-information.png) |
+
+| Services | Summary |
+|---|---|
+| ![Services tab](docs/screenshots/services.png) | ![Summary tab](docs/screenshots/summary.png) |
+
+![Generated PDF statement](docs/screenshots/pdf-output.png)
+
+> Place screenshots in `docs/screenshots/` and commit them to replace these placeholders.
+
+## Stack
+
+- Java 11, JavaFX 17
+- Gradle (wrapper included)
+- H2 in-memory database initialized from SQL scripts
+- DynamicReports / iText for PDF generation
+- Groovy / Spock for tests
+- SLF4J + Logback for logging
 
 ## Requirements
 
 - JDK 11 or higher
-- Use the included Gradle wrapper (`./gradlew`) to match CI
+- Use the included Gradle wrapper (`./gradlew`) — do not rely on a globally installed Gradle version
 
 ## Quick start
-
-Clone and enter the repo:
 
 ```bash
 git clone <repository-url>
 cd wfh-billing-statement-generator
-```
-
-Build and run:
-
-```bash
-./gradlew build
 ./gradlew run
 ```
 
-If you encounter UnsupportedClassVersionError, ensure JAVA_HOME points to JDK 11+.
+If you see `UnsupportedClassVersionError`, your `JAVA_HOME` is pointing to a JDK older than 11. Override it for the command:
 
-## Useful commands
+```bash
+JAVA_HOME=/path/to/jdk11 ./gradlew run
+```
 
-- Build: `./gradlew build`
-- Run: `./gradlew run`
-- Test: `./gradlew test`
-- Clean: `./gradlew clean`
+## Common commands
+
+| Task | Command |
+|------|---------|
+| Run the app | `./gradlew run` |
+| Build | `./gradlew build` |
+| Run all tests | `./gradlew test` |
+| Clean build output | `./gradlew clean` |
 
 Run a single test class:
 
@@ -50,32 +65,29 @@ Run a single test method:
 ./gradlew test --tests "com.palmer.billingstatementgenerator.db.DatabaseSpec.someMethod"
 ```
 
-## UI notes
-
-The UI follows an FXML + controller pattern for TabTwo (the only FXML-backed tab); other tabs are built programmatically. Key points:
-
-- GeneratorTabs handles tab wiring: it merges FXML GridPane children when an FXML exists, wires the shared Previous/Next/Clear buttons, and calls controller lifecycle hooks (onShow/onHide).
-- Controllers extend `views.controllers.BaseController` which provides:
-  - addCheckboxRowsWithPrices / addCheckboxRows helpers (stream-based builders)
-  - extractCheckboxesFromGrid convenience method
-  - configTextFieldForInts and bindIntegerTextField helpers
-  - Lifecycle hooks: `onShow()` and `onHide()`
-- Controllers use streams and AtomicInteger to declaratively build rows. Description/provider fields auto-select their row's checkbox when non-empty.
-
-## Tests
-
-Tests use Groovy/Spock. Run with `./gradlew test`. Tests are located under `src/test/groovy` and `src/test/java`.
-
 ## Project layout
 
-- `build.gradle`, `gradlew`
-- `src/main/java` — application code (dao, db, models, pdf, views)
-- `src/main/resources` — SQL, FXML, PDF templates, images, CSS
-- `src/test` — tests
+```
+src/
+  main/
+    java/       application code (dao, db, models, pdf, views)
+    resources/  SQL scripts, FXML, PDF templates, images, CSS
+  test/
+    groovy/     Spock specifications
+    java/       JUnit tests
+build.gradle
+gradlew
+```
 
-## TODOs
+## UI architecture
 
-- Complete Totals calculation in `PdfGenerator.java`.
-- Add more unit tests for UI controllers.
-- Add a lightweight UI smoke test harness for manual verification.
-- Add a project license.
+The UI uses an FXML + controller pattern. Tabs are wired by `GeneratorTabs`, which merges FXML `GridPane` children where an FXML file exists, wires the shared Previous / Next / Clear buttons, and calls controller lifecycle hooks (`onShow` / `onHide`).
+
+All tab controllers extend `BaseController`, which provides:
+
+- `addCheckboxRowsWithPrices` / `addCheckboxRows` — stream-based row builders
+- `extractCheckboxesFromGrid` — convenience method for reading checkbox state
+- `configTextFieldForInts` / `bindIntegerTextField` — integer field helpers
+- `onShow()` / `onHide()` lifecycle hooks
+
+Description and provider fields automatically select their row's checkbox when non-empty.
