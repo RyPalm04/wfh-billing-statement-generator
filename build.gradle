@@ -71,11 +71,14 @@ tasks.register('jpackageApp', Exec) {
         outputDir.mkdirs()
     }
 
+    def iconFile = os.macOsX ? 'packaging/app.icns' : 'packaging/app.ico'
+
     commandLine 'jpackage',
             '--type', os.macOsX ? 'dmg' : 'exe',
             '--name', 'WFH Billing Statement Generator',
             '--app-version', appVersion,
             '--vendor', 'Wright Funeral Home',
+            '--icon', iconFile,
             '--input', libDir.absolutePath,
             '--main-jar', "${rootProject.name}-${project.version}.jar",
             '--main-class', 'com.palmer.billingstatementgenerator.Launcher',
