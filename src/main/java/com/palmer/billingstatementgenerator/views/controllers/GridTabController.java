@@ -31,7 +31,7 @@ public abstract class GridTabController<T> extends BaseController {
         itemsGrid.getColumnConstraints().addAll(buildColumnConstraints());
 
         AtomicInteger row = new AtomicInteger(0);
-        List<CheckBox> checkBoxes = getItems().stream()
+        checkBoxes = getItems().stream()
                 .map(item -> addItemRow(item, row.getAndIncrement()))
                 .collect(Collectors.toList());
 
@@ -84,9 +84,10 @@ public abstract class GridTabController<T> extends BaseController {
     }
 
     @Override
-    protected void clearAll(List<CheckBox> checkBoxes) {
-        super.clearAll(checkBoxes);
+    protected void clearAll() {
+        checkBoxes.forEach(cb -> cb.setSelected(false));
         clearTextFields();
+        super.clearAll();
     }
 
     private void clearTextFields() {
@@ -108,8 +109,7 @@ public abstract class GridTabController<T> extends BaseController {
 
     @Override
     public void reset() {
-        clearAll(checkBoxes);
-        refreshTotal();
+        clearAll();
     }
 
     private Supplier<BigDecimal> totalSupplier;

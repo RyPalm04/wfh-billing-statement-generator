@@ -85,11 +85,10 @@ public abstract class BaseController {
         clearButton.disableProperty().bind(Bindings.createBooleanBinding(
                 () -> checkBoxes.stream().noneMatch(CheckBox::isSelected),
                 clearButtonDependencies));
-        clearButton.setOnAction(e -> clearAll(checkBoxes));
+        clearButton.setOnAction(e -> clearAll());
     }
 
-    protected void clearAll(List<CheckBox> checkBoxes) {
-        checkBoxes.forEach(cb -> cb.setSelected(false));
+    protected void clearAll() {
         refreshTotal();
     }
 

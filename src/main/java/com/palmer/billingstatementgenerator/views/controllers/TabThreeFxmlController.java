@@ -72,12 +72,12 @@ public class TabThreeFxmlController extends GridTabController<ServiceLineItem> {
                 () -> checkBoxes.stream().noneMatch(CheckBox::isSelected) && packagesCombo.getValue() == null,
                 clearButtonDependencies));
 
-        clearButton.setOnAction(e -> clearAll(checkBoxes));
+        clearButton.setOnAction(e -> clearAll());
     }
 
     @Override
-    protected void clearAll(List<CheckBox> checkBoxes) {
-        super.clearAll(checkBoxes);
+    protected void clearAll() {
+        super.clearAll();
         packagesCombo.setValue(null);
     }
 }
