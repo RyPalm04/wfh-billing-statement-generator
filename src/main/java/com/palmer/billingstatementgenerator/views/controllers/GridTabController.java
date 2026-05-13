@@ -1,7 +1,7 @@
 package com.palmer.billingstatementgenerator.views.controllers;
 
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
@@ -28,23 +28,31 @@ import java.util.stream.Collectors;
  * Handles building the item grid, managing checkboxes, wiring the clear button,
  * clearing selections, and displaying a running total at the bottom of the tab.
  *
- * @param <T> the line item type displayed in this tab
+ * @param <T>
+ *         the line item type displayed in this tab
  */
 public abstract class GridTabController<T> extends BaseController {
 
-    /** The grid pane containing the line item rows. */
-    protected GridPane itemsGrid;
-
-    /** The list of checkboxes corresponding to each line item row. */
-    private List<CheckBox> checkBoxes = new ArrayList<>();
-
-    /** Per-row flags that are true when a checkbox is selected but its price is missing or zero. */
+    /**
+     * Per-row flags that are true when a checkbox is selected but its price is missing or zero.
+     */
     private final List<ObservableBooleanValue> invalidFlags = new ArrayList<>();
-
-    /** Supplies the calculated total for this tab's selections. */
+    /**
+     * The grid pane containing the line item rows.
+     */
+    protected GridPane itemsGrid;
+    /**
+     * The list of checkboxes corresponding to each line item row.
+     */
+    private List<CheckBox> checkBoxes = new ArrayList<>();
+    /**
+     * Supplies the calculated total for this tab's selections.
+     */
     private Supplier<BigDecimal> totalSupplier;
 
-    /** Label displayed at the bottom of the tab showing the running total. */
+    /**
+     * Label displayed at the bottom of the tab showing the running total.
+     */
     private Label totalLabel;
 
     /**
@@ -133,7 +141,9 @@ public abstract class GridTabController<T> extends BaseController {
      * their {@link javafx.scene.control.TextFormatter}; plain text fields are set to empty.
      */
     private void clearTextFields() {
-        if (itemsGrid == null) return;
+        if (itemsGrid == null) {
+            return;
+        }
         itemsGrid.getChildren().stream()
                 .filter(n -> n instanceof TextField)
                 .map(n -> (TextField) n)
@@ -158,7 +168,8 @@ public abstract class GridTabController<T> extends BaseController {
      * Sets the supplier used to calculate the tab total.
      * The supplier is called whenever the total label needs to be refreshed.
      *
-     * @param totalSupplier a {@link Supplier} returning the current tab total
+     * @param totalSupplier
+     *         a {@link Supplier} returning the current tab total
      */
     public void setTotalSupplier(Supplier<BigDecimal> totalSupplier) {
         this.totalSupplier = totalSupplier;
@@ -170,7 +181,9 @@ public abstract class GridTabController<T> extends BaseController {
      */
     @Override
     protected void refreshTotal() {
-        if (totalSupplier == null || totalLabel == null) return;
+        if (totalSupplier == null || totalLabel == null) {
+            return;
+        }
         totalLabel.setText("Total: " + DOLLAR_FORMATTER.format(
                 totalSupplier.get() != null ? totalSupplier.get() : BigDecimal.ZERO));
     }
@@ -179,8 +192,10 @@ public abstract class GridTabController<T> extends BaseController {
      * Registers a checkbox/price pair for validation. The nav buttons are disabled
      * while the checkbox is selected but the price is null or zero.
      *
-     * @param cb            the checkbox to observe
-     * @param priceProperty the price property that must be greater than zero when checked
+     * @param cb
+     *         the checkbox to observe
+     * @param priceProperty
+     *         the price property that must be greater than zero when checked
      */
     protected void addValidationPair(CheckBox cb, ObservableValue<BigDecimal> priceProperty) {
         invalidFlags.add(Bindings.createBooleanBinding(
@@ -194,7 +209,9 @@ public abstract class GridTabController<T> extends BaseController {
      */
     @Override
     public BooleanBinding hasInvalidSelections() {
-        if (invalidFlags.isEmpty()) return Bindings.createBooleanBinding(() -> false);
+        if (invalidFlags.isEmpty()) {
+            return Bindings.createBooleanBinding(() -> false);
+        }
         ObservableBooleanValue[] deps = invalidFlags.toArray(new ObservableBooleanValue[0]);
         return Bindings.createBooleanBinding(
                 () -> invalidFlags.stream().anyMatch(ObservableBooleanValue::get), deps);
@@ -210,8 +227,11 @@ public abstract class GridTabController<T> extends BaseController {
     /**
      * Builds and adds a single row to the items grid for the given line item.
      *
-     * @param item the line item to render
-     * @param row  the grid row index
+     * @param item
+     *         the line item to render
+     * @param row
+     *         the grid row index
+     *
      * @return the {@link CheckBox} created for this row
      */
     protected abstract CheckBox addItemRow(T item, int row);

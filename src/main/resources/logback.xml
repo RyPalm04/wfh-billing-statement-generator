@@ -18,11 +18,11 @@
         </encoder>
     </appender>
 
-    <logger name="com.palmer" level="DEBUG" />
+    <logger name="com.palmer" level="DEBUG"/>
 
     <root level="INFO">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
     </root>
 
 </configuration>

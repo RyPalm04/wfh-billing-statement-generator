@@ -23,11 +23,14 @@ public class MerchandiseDao {
     private static final Logger log = LoggerFactory.getLogger(MerchandiseDao.class);
     private static final String SELECT_ALL =
             "SELECT id, sort_order, name, default_cost, requires_description, sales_taxable, pricing_mode " +
-            "FROM merchandise ORDER BY sort_order";
+                    "FROM merchandise ORDER BY sort_order";
 
     private final DataSource dataSource;
 
-    /** @param dataSource the application data source */
+    /**
+     * @param dataSource
+     *         the application data source
+     */
     public MerchandiseDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -36,7 +39,9 @@ public class MerchandiseDao {
      * Returns all merchandise items ordered by {@code sort_order}.
      *
      * @return a non-null, possibly empty list of {@link Merchandise} objects
-     * @throws RuntimeException if the query fails
+     *
+     * @throws RuntimeException
+     *         if the query fails
      */
     public List<Merchandise> findAll() {
         try (Connection c = dataSource.getConnection();

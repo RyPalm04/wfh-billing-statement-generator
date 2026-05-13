@@ -16,13 +16,16 @@ import java.util.Objects;
  */
 public final class StatementCalculator {
 
-    private StatementCalculator() {}
+    private StatementCalculator() {
+    }
 
     /**
      * Calculates the total for services and facilities, including any selected
      * service package cost plus the sum of individually selected service costs.
      *
-     * @param stmt the statement to calculate from
+     * @param stmt
+     *         the statement to calculate from
+     *
      * @return the services total, never null
      */
     public static BigDecimal servicesTotal(Statement stmt) {
@@ -42,7 +45,9 @@ public final class StatementCalculator {
     /**
      * Calculates the total for all selected merchandise items using their effective prices.
      *
-     * @param stmt the statement to calculate from
+     * @param stmt
+     *         the statement to calculate from
+     *
      * @return the merchandise total, never null
      */
     public static BigDecimal merchandiseTotal(Statement stmt) {
@@ -56,7 +61,9 @@ public final class StatementCalculator {
     /**
      * Calculates the total for all selected special charges using their effective prices.
      *
-     * @param stmt the statement to calculate from
+     * @param stmt
+     *         the statement to calculate from
+     *
      * @return the special charges total, never null
      */
     public static BigDecimal specialChargesTotal(Statement stmt) {
@@ -70,7 +77,9 @@ public final class StatementCalculator {
     /**
      * Calculates the total for all selected cash advance items using their entered amounts.
      *
-     * @param stmt the statement to calculate from
+     * @param stmt
+     *         the statement to calculate from
+     *
      * @return the cash advances total, never null
      */
     public static BigDecimal cashAdvancesTotal(Statement stmt) {
@@ -85,7 +94,9 @@ public final class StatementCalculator {
      * Calculates the sales tax on selected merchandise items that are marked as taxable,
      * using the statement's configured sales tax rate.
      *
-     * @param stmt the statement to calculate from
+     * @param stmt
+     *         the statement to calculate from
+     *
      * @return the sales tax amount, never null
      */
     public static BigDecimal salesTax(Statement stmt) {
@@ -104,7 +115,9 @@ public final class StatementCalculator {
      * Calculates the subtotal as the sum of services, merchandise, special charges,
      * cash advances, and sales tax.
      *
-     * @param stmt the statement to calculate from
+     * @param stmt
+     *         the statement to calculate from
+     *
      * @return the subtotal, never null
      */
     public static BigDecimal subtotal(Statement stmt) {
@@ -120,7 +133,9 @@ public final class StatementCalculator {
     /**
      * Calculates the final total as the subtotal minus any down payment.
      *
-     * @param stmt the statement to calculate from
+     * @param stmt
+     *         the statement to calculate from
+     *
      * @return the final total, never null
      */
     public static BigDecimal finalTotal(Statement stmt) {
@@ -133,13 +148,17 @@ public final class StatementCalculator {
      * Safely sums an array of {@link BigDecimal} values, ignoring nulls,
      * and returns the result scaled to two decimal places.
      *
-     * @param values the values to sum
+     * @param values
+     *         the values to sum
+     *
      * @return the sum, never null
      */
     private static BigDecimal safeAdd(BigDecimal... values) {
         BigDecimal total = BigDecimal.ZERO;
         for (BigDecimal v : values) {
-            if (v != null) total = total.add(v);
+            if (v != null) {
+                total = total.add(v);
+            }
         }
         return total.setScale(2, RoundingMode.HALF_UP);
     }

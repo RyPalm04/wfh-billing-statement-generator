@@ -60,8 +60,8 @@ class StatementCalculatorSpec extends Specification {
         given:
         def stmt = new Statement()
         stmt.services.addAll(
-            serviceItem(750.00G, true),
-            serviceItem(300.00G, false)
+                serviceItem(750.00G, true),
+                serviceItem(300.00G, false)
         )
 
         expect:
@@ -72,8 +72,8 @@ class StatementCalculatorSpec extends Specification {
         given:
         def stmt = new Statement()
         stmt.services.addAll(
-            serviceItem(500.00G, true),
-            serviceItem(null, true)
+                serviceItem(500.00G, true),
+                serviceItem(null, true)
         )
 
         expect:
@@ -105,9 +105,9 @@ class StatementCalculatorSpec extends Specification {
         def overridden = merchItem(500.00G, true)
         overridden.price = 450.00G
         stmt.merchandise.addAll(
-            merchItem(3000.00G, true),
-            overridden,
-            merchItem(1200.00G, false)
+                merchItem(3000.00G, true),
+                overridden,
+                merchItem(1200.00G, false)
         )
 
         expect:
@@ -127,8 +127,8 @@ class StatementCalculatorSpec extends Specification {
         given:
         def stmt = new Statement()
         stmt.specialCharges.addAll(
-            chargeItem(50.00G, true),
-            chargeItem(25.00G, false)
+                chargeItem(50.00G, true),
+                chargeItem(25.00G, false)
         )
 
         expect:
@@ -148,9 +148,9 @@ class StatementCalculatorSpec extends Specification {
         given:
         def stmt = new Statement()
         stmt.cashAdvances.addAll(
-            advanceItem(200.00G, true),
-            advanceItem(75.00G, true),
-            advanceItem(150.00G, false)
+                advanceItem(200.00G, true),
+                advanceItem(75.00G, true),
+                advanceItem(150.00G, false)
         )
 
         expect:
@@ -161,8 +161,8 @@ class StatementCalculatorSpec extends Specification {
         given:
         def stmt = new Statement()
         stmt.cashAdvances.addAll(
-            advanceItem(100.00G, true),
-            advanceItem(null, true)
+                advanceItem(100.00G, true),
+                advanceItem(null, true)
         )
 
         expect:
@@ -184,9 +184,9 @@ class StatementCalculatorSpec extends Specification {
         def stmt = new Statement()
         stmt.salesTaxRate = 0.08G
         stmt.merchandise.addAll(
-            merchItem(1000.00G, true, true),    // taxable, selected   → taxable base 1000
-            merchItem(500.00G, true, false),    // non-taxable, selected
-            merchItem(250.00G, false, true)     // taxable, not selected
+                merchItem(1000.00G, true, true),    // taxable, selected   → taxable base 1000
+                merchItem(500.00G, true, false),    // non-taxable, selected
+                merchItem(250.00G, false, true)     // taxable, not selected
         )
 
         expect:

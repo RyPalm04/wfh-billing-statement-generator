@@ -1,15 +1,16 @@
 # Wright Funeral Home Billing Statement Generator
 
-A desktop JavaFX application for generating funeral home billing statements. Users enter service information, select packages, services, merchandise, special charges, and cash advances, then export a formatted PDF statement.
+A desktop JavaFX application for generating funeral home billing statements. Users enter service information, select
+packages, services, merchandise, special charges, and cash advances, then export a formatted PDF statement.
 
 ## Screenshots
 
-| Instructions | Service Information |
-|---|---|
+| Instructions                                           | Service Information                                                  |
+|--------------------------------------------------------|----------------------------------------------------------------------|
 | ![Instructions tab](docs/screenshots/instructions.png) | ![Service information tab](docs/screenshots/service-information.png) |
 
-| Services | Summary |
-|---|---|
+| Services                                       | Summary                                      |
+|------------------------------------------------|----------------------------------------------|
 | ![Services tab](docs/screenshots/services.png) | ![Summary tab](docs/screenshots/summary.png) |
 
 ![Generated PDF statement](docs/screenshots/pdf-output.png)
@@ -38,7 +39,8 @@ cd wfh-billing-statement-generator
 ./gradlew run
 ```
 
-If you see `UnsupportedClassVersionError`, your `JAVA_HOME` is pointing to a JDK older than 11. Override it for the command:
+If you see `UnsupportedClassVersionError`, your `JAVA_HOME` is pointing to a JDK older than 11. Override it for the
+command:
 
 ```bash
 JAVA_HOME=/path/to/jdk11 ./gradlew run
@@ -46,11 +48,11 @@ JAVA_HOME=/path/to/jdk11 ./gradlew run
 
 ## Common commands
 
-| Task | Command |
-|------|---------|
-| Run the app | `./gradlew run` |
-| Build | `./gradlew build` |
-| Run all tests | `./gradlew test` |
+| Task               | Command           |
+|--------------------|-------------------|
+| Run the app        | `./gradlew run`   |
+| Build              | `./gradlew build` |
+| Run all tests      | `./gradlew test`  |
 | Clean build output | `./gradlew clean` |
 
 Run a single test class:
@@ -81,7 +83,9 @@ gradlew
 
 ## UI architecture
 
-The UI uses an FXML + controller pattern. Tabs are wired by `GeneratorTabs`, which merges FXML `GridPane` children where an FXML file exists, wires the shared Previous / Next / Clear buttons, and calls controller lifecycle hooks (`onShow` / `onHide`).
+The UI uses an FXML + controller pattern. Tabs are wired by `GeneratorTabs`, which merges FXML `GridPane` children where
+an FXML file exists, wires the shared Previous / Next / Clear buttons, and calls controller lifecycle hooks (`onShow` /
+`onHide`).
 
 All tab controllers extend `BaseController`, which provides:
 

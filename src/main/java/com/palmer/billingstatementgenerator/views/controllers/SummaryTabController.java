@@ -1,12 +1,11 @@
 package com.palmer.billingstatementgenerator.views.controllers;
 
-import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineItem;
 import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
-
+import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -35,7 +34,9 @@ public class SummaryTabController extends BaseController {
 
     private static final NumberFormat DOLLAR_FORMATTER = NumberFormat.getCurrencyInstance();
 
-    /** The root container for all summary content. */
+    /**
+     * The root container for all summary content.
+     */
     private VBox root;
 
     /**
@@ -47,8 +48,10 @@ public class SummaryTabController extends BaseController {
     /**
      * Builds the summary tab view and returns it wrapped in a {@link ScrollPane}.
      *
-     * @param onJumpToTab a {@link Consumer} accepting a tab index, invoked when
-     *                    the user clicks a clickable label to jump to that tab
+     * @param onJumpToTab
+     *         a {@link Consumer} accepting a tab index, invoked when
+     *         the user clicks a clickable label to jump to that tab
+     *
      * @return a {@link ScrollPane} containing the full summary layout
      */
     public ScrollPane buildView(Consumer<Integer> onJumpToTab) {
@@ -136,8 +139,10 @@ public class SummaryTabController extends BaseController {
     /**
      * Adds a clickable section header to the summary.
      *
-     * @param title    the section title
-     * @param tabIndex the tab index to navigate to when clicked
+     * @param title
+     *         the section title
+     * @param tabIndex
+     *         the tab index to navigate to when clicked
      */
     private void addSectionHeader(String title, int tabIndex) {
         Label header = new Label(title);
@@ -150,12 +155,17 @@ public class SummaryTabController extends BaseController {
      * Adds a clickable key-value info row to the summary. Rows with null or empty
      * values are omitted.
      *
-     * @param label    the field label
-     * @param value    the field value
-     * @param tabIndex the tab index to navigate to when clicked
+     * @param label
+     *         the field label
+     * @param value
+     *         the field value
+     * @param tabIndex
+     *         the tab index to navigate to when clicked
      */
     private void addInfoRow(String label, String value, int tabIndex) {
-        if (value == null || value.isEmpty()) return;
+        if (value == null || value.isEmpty()) {
+            return;
+        }
         GridPane row = buildRow();
         Label lbl = clickableLabel(label, tabIndex);
         lbl.getStyleClass().add("summary-label");
@@ -171,9 +181,12 @@ public class SummaryTabController extends BaseController {
     /**
      * Adds a clickable line item row showing the item name and its price.
      *
-     * @param name     the line item name
-     * @param price    the line item price, or null for a blank price
-     * @param tabIndex the tab index to navigate to when clicked
+     * @param name
+     *         the line item name
+     * @param price
+     *         the line item price, or null for a blank price
+     * @param tabIndex
+     *         the tab index to navigate to when clicked
      */
     private void addLineItem(String name, BigDecimal price, int tabIndex) {
         addLineItem(name, null, price, tabIndex);
@@ -183,10 +196,14 @@ public class SummaryTabController extends BaseController {
      * Adds a clickable line item row showing the item name, an optional subtitle
      * (description or provider), and its price.
      *
-     * @param name     the line item name
-     * @param subtitle an optional description or provider shown below the name, or null to omit
-     * @param price    the line item price, or null for a blank price
-     * @param tabIndex the tab index to navigate to when clicked
+     * @param name
+     *         the line item name
+     * @param subtitle
+     *         an optional description or provider shown below the name, or null to omit
+     * @param price
+     *         the line item price, or null for a blank price
+     * @param tabIndex
+     *         the tab index to navigate to when clicked
      */
     private void addLineItem(String name, String subtitle, BigDecimal price, int tabIndex) {
         GridPane row = buildRow();
@@ -217,8 +234,10 @@ public class SummaryTabController extends BaseController {
     /**
      * Adds a subtotal row showing a label and formatted amount.
      *
-     * @param label  the total label
-     * @param amount the total amount, or null for a blank value
+     * @param label
+     *         the total label
+     * @param amount
+     *         the total amount, or null for a blank value
      */
     private void addTotalRow(String label, BigDecimal amount) {
         GridPane row = buildRow();
@@ -236,8 +255,10 @@ public class SummaryTabController extends BaseController {
     /**
      * Adds a separator followed by the grand total row in a larger, more prominent style.
      *
-     * @param label  the grand total label
-     * @param amount the grand total amount, or null for a blank value
+     * @param label
+     *         the grand total label
+     * @param amount
+     *         the grand total amount, or null for a blank value
      */
     private void addGrandTotalRow(String label, BigDecimal amount) {
         addSeparator();
@@ -287,8 +308,11 @@ public class SummaryTabController extends BaseController {
     /**
      * Creates a {@link Label} that navigates to the specified tab when clicked.
      *
-     * @param text     the label text
-     * @param tabIndex the tab index to navigate to on click
+     * @param text
+     *         the label text
+     * @param tabIndex
+     *         the tab index to navigate to on click
+     *
      * @return a clickable {@link Label}
      */
     private Label clickableLabel(String text, int tabIndex) {

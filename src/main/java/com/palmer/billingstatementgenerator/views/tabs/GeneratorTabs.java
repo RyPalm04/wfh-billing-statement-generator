@@ -2,17 +2,15 @@ package com.palmer.billingstatementgenerator.views.tabs;
 
 import com.palmer.billingstatementgenerator.views.controllers.BaseController;
 import com.palmer.billingstatementgenerator.views.controllers.GridTabController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Tab;
 import javafx.scene.layout.GridPane;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.text.NumberFormat;
 
 /**
  * A {@link Tab} subclass used for all tabs in the billing statement generator.
@@ -23,17 +21,20 @@ import java.text.NumberFormat;
  */
 public class GeneratorTabs extends Tab {
     private static final Logger log = LoggerFactory.getLogger(GeneratorTabs.class);
-
-    /** The controller associated with this tab's content. */
-    private BaseController controller;
-
-    /** The root grid pane that holds the tab's content. */
+    /**
+     * The root grid pane that holds the tab's content.
+     */
     protected GridPane grid = new GridPane();
+    /**
+     * The controller associated with this tab's content.
+     */
+    private BaseController controller;
 
     /**
      * Private constructor. Use the static factory methods to create instances.
      *
-     * @param tabTitle the text label displayed on the tab
+     * @param tabTitle
+     *         the text label displayed on the tab
      */
     private GeneratorTabs(String tabTitle) {
         super(tabTitle);
@@ -44,8 +45,11 @@ public class GeneratorTabs extends Tab {
      * Creates a {@link GeneratorTabs} by loading its content from an FXML file.
      * The FXML's controller must extend {@link BaseController}.
      *
-     * @param title    the tab label text
-     * @param fxmlPath the classpath resource path to the FXML file
+     * @param title
+     *         the tab label text
+     * @param fxmlPath
+     *         the classpath resource path to the FXML file
+     *
      * @return a configured {@link GeneratorTabs} instance
      */
     public static GeneratorTabs fromFxml(String title, String fxmlPath) {
@@ -58,8 +62,11 @@ public class GeneratorTabs extends Tab {
      * Creates a {@link GeneratorTabs} by building its content from a {@link GridTabController}.
      * Calls {@link GridTabController#buildView()} to construct the grid content.
      *
-     * @param title      the tab label text
-     * @param controller the grid tab controller to build the view from
+     * @param title
+     *         the tab label text
+     * @param controller
+     *         the grid tab controller to build the view from
+     *
      * @return a configured {@link GeneratorTabs} instance
      */
     public static GeneratorTabs fromController(String title, GridTabController<?> controller) {
@@ -73,9 +80,13 @@ public class GeneratorTabs extends Tab {
      * Used for tabs whose views are built entirely in code rather than via FXML or a grid controller
      * (e.g. the Instructions and Summary tabs).
      *
-     * @param title      the tab label text
-     * @param controller the controller to associate with this tab
-     * @param view       the pre-built view node to display as tab content
+     * @param title
+     *         the tab label text
+     * @param controller
+     *         the controller to associate with this tab
+     * @param view
+     *         the pre-built view node to display as tab content
+     *
      * @return a configured {@link GeneratorTabs} instance
      */
     public static GeneratorTabs fromController(String title, BaseController controller, javafx.scene.Node view) {
@@ -91,8 +102,11 @@ public class GeneratorTabs extends Tab {
      * Loads the FXML at the given resource path, merges its column constraints and
      * children into the tab's grid, and wires the controller lifecycle.
      *
-     * @param fxmlPath the classpath resource path to the FXML file
-     * @throws RuntimeException if the FXML cannot be loaded
+     * @param fxmlPath
+     *         the classpath resource path to the FXML file
+     *
+     * @throws RuntimeException
+     *         if the FXML cannot be loaded
      */
     private void loadFxml(String fxmlPath) {
         try {
@@ -114,7 +128,8 @@ public class GeneratorTabs extends Tab {
     /**
      * Builds the view from a {@link GridTabController} and adds it to the tab's grid.
      *
-     * @param ctrl the grid tab controller to build from
+     * @param ctrl
+     *         the grid tab controller to build from
      */
     private void loadController(GridTabController<?> ctrl) {
         controller = ctrl;
@@ -130,8 +145,11 @@ public class GeneratorTabs extends Tab {
      */
     private void wireLifecycle() {
         this.selectedProperty().addListener((obs, wasSel, isSel) -> {
-            if (isSel) controller.onShow();
-            else controller.onHide();
+            if (isSel) {
+                controller.onShow();
+            } else {
+                controller.onHide();
+            }
         });
     }
 

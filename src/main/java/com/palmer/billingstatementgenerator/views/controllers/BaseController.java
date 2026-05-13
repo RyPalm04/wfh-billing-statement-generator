@@ -28,19 +28,26 @@ import java.util.List;
  */
 public abstract class BaseController {
 
-    /** Currency formatter for displaying monetary values. */
+    /**
+     * Currency formatter for displaying monetary values.
+     */
     protected static final NumberFormat DOLLAR_FORMATTER = NumberFormat.getCurrencyInstance();
 
-    /** The Clear Selections button, injected by the parent view. */
+    /**
+     * The Clear Selections button, injected by the parent view.
+     */
     protected Button clearButton;
 
-    /** The Next/Generate PDF button, injected by the parent view. */
+    /**
+     * The Next/Generate PDF button, injected by the parent view.
+     */
     protected Button nextButton;
 
     /**
      * Injects the clear button and triggers {@link #onClearButtonSet()}.
      *
-     * @param clearButton the button to use for clearing selections
+     * @param clearButton
+     *         the button to use for clearing selections
      */
     public void setClearButton(Button clearButton) {
         this.clearButton = clearButton;
@@ -50,7 +57,8 @@ public abstract class BaseController {
     /**
      * Injects the next button and triggers {@link #onNextButtonSet()}.
      *
-     * @param nextButton the button to use for advancing to the next tab
+     * @param nextButton
+     *         the button to use for advancing to the next tab
      */
     public void setNextButton(Button nextButton) {
         this.nextButton = nextButton;
@@ -61,26 +69,33 @@ public abstract class BaseController {
      * Called after the clear button is injected. Override to wire
      * clear button behavior specific to the controller.
      */
-    protected void onClearButtonSet() {}
+    protected void onClearButtonSet() {
+    }
 
     /**
      * Called after the next button is injected. Override to wire
      * next button behavior specific to the controller.
      */
-    protected void onNextButtonSet() {}
+    protected void onNextButtonSet() {
+    }
 
     /**
      * Resets the controller to its default state by calling {@link #clearAll()}.
      * Override to add additional reset behavior.
      */
-    public void reset() {}
+    public void reset() {
+    }
 
     /**
      * Builds a {@link CheckBox} and adds it to column 0 of the specified row in the grid.
      *
-     * @param label the display text for the checkbox
-     * @param row   the grid row index
-     * @param grid  the target {@link GridPane}
+     * @param label
+     *         the display text for the checkbox
+     * @param row
+     *         the grid row index
+     * @param grid
+     *         the target {@link GridPane}
+     *
      * @return the constructed {@link CheckBox}
      */
     protected CheckBox buildCheckBox(String label, int row, GridPane grid) {
@@ -94,9 +109,12 @@ public abstract class BaseController {
      * Builds a read-only price {@link Label} and adds it to column 2 of the specified row.
      * Displays a blank label if cost is null.
      *
-     * @param cost the monetary value to display, or null for a blank label
-     * @param row  the grid row index
-     * @param grid the target {@link GridPane}
+     * @param cost
+     *         the monetary value to display, or null for a blank label
+     * @param row
+     *         the grid row index
+     * @param grid
+     *         the target {@link GridPane}
      */
     protected void buildPriceLabel(BigDecimal cost, int row, GridPane grid) {
         Label price = new Label(cost != null ? DOLLAR_FORMATTER.format(cost) : "");
@@ -108,10 +126,15 @@ public abstract class BaseController {
     /**
      * Builds a {@link TextField} and adds it to the specified column and row in the grid.
      *
-     * @param columnCount the preferred column count for sizing
-     * @param column      the grid column index
-     * @param row         the grid row index
-     * @param grid        the target {@link GridPane}
+     * @param columnCount
+     *         the preferred column count for sizing
+     * @param column
+     *         the grid column index
+     * @param row
+     *         the grid row index
+     * @param grid
+     *         the target {@link GridPane}
+     *
      * @return the constructed {@link TextField}
      */
     protected TextField buildTextField(int columnCount, int column, int row, GridPane grid) {
@@ -127,8 +150,10 @@ public abstract class BaseController {
      * selected when the field has a non-empty value, and the tab total is refreshed
      * on every change.
      *
-     * @param tf the text field to observe
-     * @param cb the checkbox to drive
+     * @param tf
+     *         the text field to observe
+     * @param cb
+     *         the checkbox to drive
      */
     protected void wireTextFieldToCheckBox(TextField tf, CheckBox cb) {
         tf.textProperty().addListener((obs, oldV, newV) -> {
@@ -145,7 +170,8 @@ public abstract class BaseController {
      * The button is disabled when no checkboxes are selected.
      * Override in subclasses to add additional dependencies (e.g. a ComboBox).
      *
-     * @param checkBoxes the list of checkboxes the button should observe and clear
+     * @param checkBoxes
+     *         the list of checkboxes the button should observe and clear
      */
     protected void configureClearButton(List<CheckBox> checkBoxes) {
         Observable[] clearButtonDependencies = checkBoxes.stream()
@@ -169,11 +195,14 @@ public abstract class BaseController {
      * Applies an integer-only {@link TextFormatter} to the given text fields,
      * restricting input to digits and an optional leading minus sign.
      *
-     * @param fields one or more text fields to configure
+     * @param fields
+     *         one or more text fields to configure
      */
     protected void configTextFieldForInts(TextField... fields) {
         Arrays.stream(fields).forEach(field -> field.setTextFormatter(new TextFormatter<Integer>((Change c) -> {
-            if (c.getControlNewText().matches("-?\\d*")) return c;
+            if (c.getControlNewText().matches("-?\\d*")) {
+                return c;
+            }
             return null;
         })));
     }
@@ -182,20 +211,26 @@ public abstract class BaseController {
      * Binds a {@link TextField} bidirectionally to an {@link IntegerProperty},
      * displaying a blank field when the value is zero.
      *
-     * @param field the text field to bind
-     * @param prop  the integer property to bind to
+     * @param field
+     *         the text field to bind
+     * @param prop
+     *         the integer property to bind to
      */
     protected void bindIntegerTextField(TextField field, IntegerProperty prop) {
         Bindings.bindBidirectional(field.textProperty(), prop, new NumberStringConverter() {
             @Override
             public String toString(Number value) {
-                if (value == null || value.intValue() == 0) return "";
+                if (value == null || value.intValue() == 0) {
+                    return "";
+                }
                 return value.intValue() + "";
             }
 
             @Override
             public Number fromString(String value) {
-                if (value == null || value.trim().isEmpty()) return 0;
+                if (value == null || value.trim().isEmpty()) {
+                    return 0;
+                }
                 try {
                     return Integer.parseInt(value.trim());
                 } catch (NumberFormatException e) {
@@ -210,9 +245,13 @@ public abstract class BaseController {
      * property. Input is restricted to valid currency format, and the value is
      * formatted as currency via {@link BigDecimalCurrencyConverter}.
      *
-     * @param priceProperty the property to bind the field's value to
-     * @param row           the grid row index
-     * @param grid          the target {@link GridPane}
+     * @param priceProperty
+     *         the property to bind the field's value to
+     * @param row
+     *         the grid row index
+     * @param grid
+     *         the target {@link GridPane}
+     *
      * @return the constructed price {@link TextField}
      */
     protected TextField buildPriceField(ObjectProperty<BigDecimal> priceProperty, int row, GridPane grid) {
@@ -253,17 +292,20 @@ public abstract class BaseController {
      * Refreshes the tab total label. No-op in the base class;
      * overridden in {@link GridTabController} when a total supplier is set.
      */
-    protected void refreshTotal() {}
+    protected void refreshTotal() {
+    }
 
     /**
      * Called when this tab becomes selected. Override to perform
      * any refresh or update logic needed on tab activation.
      */
-    public void onShow() {}
+    public void onShow() {
+    }
 
     /**
      * Called when this tab is deselected. Override to perform
      * any cleanup logic needed on tab deactivation.
      */
-    public void onHide() {}
+    public void onHide() {
+    }
 }

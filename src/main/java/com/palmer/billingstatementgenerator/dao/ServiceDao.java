@@ -20,11 +20,14 @@ public class ServiceDao {
     private static final Logger log = LoggerFactory.getLogger(ServiceDao.class);
     private static final String SELECT_ALL =
             "SELECT id, sort_order, name, default_cost, included_in_package " +
-            "FROM services ORDER BY sort_order";
+                    "FROM services ORDER BY sort_order";
 
     private final DataSource dataSource;
 
-    /** @param dataSource the application data source */
+    /**
+     * @param dataSource
+     *         the application data source
+     */
     public ServiceDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -33,7 +36,9 @@ public class ServiceDao {
      * Returns all services ordered by {@code sort_order}.
      *
      * @return a non-null, possibly empty list of {@link Service} objects
-     * @throws RuntimeException if the query fails
+     *
+     * @throws RuntimeException
+     *         if the query fails
      */
     public List<Service> findAll() {
         try (Connection c = dataSource.getConnection();

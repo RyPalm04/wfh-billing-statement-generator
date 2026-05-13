@@ -1,9 +1,8 @@
 package com.palmer.billingstatementgenerator.views.controllers;
 
 import com.palmer.billingstatementgenerator.models.catalog.Merchandise;
-import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem;
-
+import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
@@ -39,8 +38,11 @@ public class MerchandiseController extends GridTabController<MerchandiseLineItem
      * Builds a row for the given merchandise line item. The price column
      * is rendered differently based on the item's pricing mode and default cost.
      *
-     * @param item the merchandise line item to render
-     * @param row  the grid row index
+     * @param item
+     *         the merchandise line item to render
+     * @param row
+     *         the grid row index
+     *
      * @return the {@link CheckBox} created for this row
      */
     @Override
@@ -75,9 +77,12 @@ public class MerchandiseController extends GridTabController<MerchandiseLineItem
      * as the quantity changes. The checkbox is automatically selected when quantity is greater
      * than zero, and the spinner resets to 1 when the checkbox is deselected.
      *
-     * @param item the per-unit merchandise line item
-     * @param cb   the checkbox for this row
-     * @param row  the grid row index
+     * @param item
+     *         the per-unit merchandise line item
+     * @param cb
+     *         the checkbox for this row
+     * @param row
+     *         the grid row index
      */
     private void addPerUnitRow(MerchandiseLineItem item, CheckBox cb, int row) {
         Spinner<Integer> spinner = new Spinner<>(1, 999, item.getQuantity());
@@ -107,19 +112,25 @@ public class MerchandiseController extends GridTabController<MerchandiseLineItem
         }
 
         cb.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) spinner.getValueFactory().setValue(1);
+            if (!newVal) {
+                spinner.getValueFactory().setValue(1);
+            }
         });
     }
 
     /**
      * Formats the computed total for a per-unit item based on its unit cost and current quantity.
      *
-     * @param item the merchandise line item
+     * @param item
+     *         the merchandise line item
+     *
      * @return a formatted currency string, or an empty string if the unit cost is null
      */
     private String formatUnitTotal(MerchandiseLineItem item) {
         BigDecimal unit = item.getCatalog().getDefaultCost();
-        if (unit == null) return "";
+        if (unit == null) {
+            return "";
+        }
         return DOLLAR_FORMATTER.format(unit.multiply(BigDecimal.valueOf(item.getQuantity())));
     }
 }

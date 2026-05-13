@@ -28,7 +28,8 @@ public final class Database {
     private static final String URL = "jdbc:h2:mem:wfh;DB_CLOSE_DELAY=-1";
     private static DataSource dataSource;
 
-    private Database() {}
+    private Database() {
+    }
 
     /**
      * Initializes the in-memory H2 database and runs the schema and seed scripts.
@@ -54,7 +55,9 @@ public final class Database {
      * Returns the initialized {@link DataSource}.
      *
      * @return the application {@link DataSource}
-     * @throws IllegalStateException if {@link #init()} has not been called
+     *
+     * @throws IllegalStateException
+     *         if {@link #init()} has not been called
      */
     public static DataSource get() {
         if (dataSource == null) {

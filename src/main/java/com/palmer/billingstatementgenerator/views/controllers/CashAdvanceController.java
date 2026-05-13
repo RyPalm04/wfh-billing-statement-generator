@@ -1,8 +1,7 @@
 package com.palmer.billingstatementgenerator.views.controllers;
 
-import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem;
-
+import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
@@ -31,8 +30,11 @@ public class CashAdvanceController extends GridTabController<CashAdvanceLineItem
      * a provider text field, and an editable amount price field. Both the provider
      * and amount fields are wired to auto-select the checkbox when populated.
      *
-     * @param item the cash advance line item to render
-     * @param row  the grid row index
+     * @param item
+     *         the cash advance line item to render
+     * @param row
+     *         the grid row index
+     *
      * @return the {@link CheckBox} created for this row
      */
     @Override

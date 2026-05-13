@@ -23,9 +23,23 @@ public class Service {
         this.includedInPackage = includedInPackage;
     }
 
-    public int getId() { return id; }
-    public int getSortOrder() { return sortOrder; }
-    public String getName() { return name; }
-    public BigDecimal getDefaultCost() { return defaultCost; }
-    public boolean isIncludedInPackage() { return includedInPackage; }
+    public int getId() {
+        return id;
+    }
+
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getDefaultCost() {
+        return defaultCost;
+    }
+
+    public boolean isIncludedInPackage() {
+        return includedInPackage;
+    }
 }

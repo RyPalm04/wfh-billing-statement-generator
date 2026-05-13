@@ -1,13 +1,13 @@
 package com.palmer.billingstatementgenerator.pdf;
 
-import com.palmer.billingstatementgenerator.models.statement.Statement;
-import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
-import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.models.catalog.ServicePackage;
 import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineItem;
+import com.palmer.billingstatementgenerator.models.statement.Statement;
+import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
+import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -18,7 +18,6 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,14 +153,14 @@ public final class PdfGenerator {
             m.put(cashPriceFields[i], item.isSelected() ? toDouble(item.getAmount()) : null);
         }
 
-        m.put("totalServices",      StatementCalculator.servicesTotal(stmt).doubleValue());
-        m.put("totalMerchandise",   StatementCalculator.merchandiseTotal(stmt).toString());
-        m.put("totalSpecialCharges",StatementCalculator.specialChargesTotal(stmt).toString());
-        m.put("totalCashAdv",       StatementCalculator.cashAdvancesTotal(stmt).doubleValue());
-        m.put("salesTax",           StatementCalculator.salesTax(stmt).doubleValue());
-        m.put("subTotal",           StatementCalculator.subtotal(stmt).doubleValue());
-        m.put("downPayment",        toDouble(stmt.getPayment()));
-        m.put("finalTotal",         StatementCalculator.finalTotal(stmt).toString());
+        m.put("totalServices", StatementCalculator.servicesTotal(stmt).doubleValue());
+        m.put("totalMerchandise", StatementCalculator.merchandiseTotal(stmt).toString());
+        m.put("totalSpecialCharges", StatementCalculator.specialChargesTotal(stmt).toString());
+        m.put("totalCashAdv", StatementCalculator.cashAdvancesTotal(stmt).doubleValue());
+        m.put("salesTax", StatementCalculator.salesTax(stmt).doubleValue());
+        m.put("subTotal", StatementCalculator.subtotal(stmt).doubleValue());
+        m.put("downPayment", toDouble(stmt.getPayment()));
+        m.put("finalTotal", StatementCalculator.finalTotal(stmt).toString());
 
         return m;
     }
@@ -207,7 +206,9 @@ public final class PdfGenerator {
         fc.setInitialFileName("statement-" + StatementContext.current().getControlNumber() + ".pdf");
 
         File output = fc.showSaveDialog(ownerWindow);
-        if (output == null) return;
+        if (output == null) {
+            return;
+        }
 
         log.info("Exporting PDF for control number {} to {}", StatementContext.current().getControlNumber(), output.getAbsolutePath());
         try {

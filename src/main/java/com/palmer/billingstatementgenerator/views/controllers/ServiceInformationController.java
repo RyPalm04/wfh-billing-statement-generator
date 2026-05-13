@@ -14,20 +14,35 @@ import javafx.scene.control.TextField;
  */
 public class ServiceInformationController extends BaseController {
 
-    /** Field for entering the statement control number. */
-    @FXML private TextField controlNumberField;
+    /**
+     * Field for entering the statement control number.
+     */
+    @FXML
+    private TextField controlNumberField;
 
-    /** Field for entering the name of the person services are for. */
-    @FXML private TextField servicesForField;
+    /**
+     * Field for entering the name of the person services are for.
+     */
+    @FXML
+    private TextField servicesForField;
 
-    /** Date picker for selecting the date of death. */
-    @FXML private DatePicker dateOfDeathPicker;
+    /**
+     * Date picker for selecting the date of death.
+     */
+    @FXML
+    private DatePicker dateOfDeathPicker;
 
-    /** Field for entering the place of death. */
-    @FXML private TextField placeOfDeathField;
+    /**
+     * Field for entering the place of death.
+     */
+    @FXML
+    private TextField placeOfDeathField;
 
-    /** Date picker for selecting the date of the service. */
-    @FXML private DatePicker serviceDatePicker;
+    /**
+     * Date picker for selecting the date of the service.
+     */
+    @FXML
+    private DatePicker serviceDatePicker;
 
     /**
      * Initializes the form by binding all fields bidirectionally

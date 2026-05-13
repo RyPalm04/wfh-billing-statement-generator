@@ -27,17 +27,43 @@ public class SpecialChargeLineItem {
         this.price = new SimpleObjectProperty<>(catalog.getDefaultCost());
     }
 
-    public SpecialCharge getCatalog() { return catalog; }
+    public SpecialCharge getCatalog() {
+        return catalog;
+    }
 
-    public BooleanProperty selectedProperty() { return selected; }
-    public boolean isSelected() { return selected.get(); }
-    public void setSelected(boolean value) { selected.set(value); }
+    public BooleanProperty selectedProperty() {
+        return selected;
+    }
 
-    public StringProperty descriptionProperty() { return description; }
-    public String getDescription() { return description.get(); }
-    public void setDescription(String value) { description.set(value); }
+    public boolean isSelected() {
+        return selected.get();
+    }
 
-    public ObjectProperty<BigDecimal> priceProperty() { return price; }
-    public BigDecimal getPrice() { return price.get(); }
-    public void setPrice(BigDecimal value) { price.set(value); }
+    public void setSelected(boolean value) {
+        selected.set(value);
+    }
+
+    public StringProperty descriptionProperty() {
+        return description;
+    }
+
+    public String getDescription() {
+        return description.get();
+    }
+
+    public void setDescription(String value) {
+        description.set(value);
+    }
+
+    public ObjectProperty<BigDecimal> priceProperty() {
+        return price;
+    }
+
+    public BigDecimal getPrice() {
+        return price.get();
+    }
+
+    public void setPrice(BigDecimal value) {
+        price.set(value);
+    }
 }

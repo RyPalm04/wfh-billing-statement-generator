@@ -8,7 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
 
 import java.util.List;
@@ -45,8 +47,10 @@ public class InstructionsTabController extends BaseController {
     /**
      * Builds the instructions tab view and returns it wrapped in a {@link ScrollPane}.
      *
-     * @param onNavigate an {@link IntConsumer} invoked with a tab index when the user clicks
-     *                   a step card or the Get Started button
+     * @param onNavigate
+     *         an {@link IntConsumer} invoked with a tab index when the user clicks
+     *         a step card or the Get Started button
+     *
      * @return a {@link ScrollPane} containing the full instructions layout
      */
     public ScrollPane buildView(IntConsumer onNavigate) {
@@ -105,10 +109,15 @@ public class InstructionsTabController extends BaseController {
     /**
      * Builds a single step card containing a numbered circle, step title, and description.
      *
-     * @param number      the step number displayed in the circle
-     * @param title       the step title
-     * @param description a brief description of what the user does in this step
-     * @param onClick     invoked when the user clicks the card
+     * @param number
+     *         the step number displayed in the circle
+     * @param title
+     *         the step title
+     * @param description
+     *         a brief description of what the user does in this step
+     * @param onClick
+     *         invoked when the user clicks the card
+     *
      * @return an {@link HBox} representing the step card
      */
     private HBox buildStep(int number, String title, String description, Runnable onClick) {

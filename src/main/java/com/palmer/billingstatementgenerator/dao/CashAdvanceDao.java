@@ -23,7 +23,10 @@ public class CashAdvanceDao {
 
     private final DataSource dataSource;
 
-    /** @param dataSource the application data source */
+    /**
+     * @param dataSource
+     *         the application data source
+     */
     public CashAdvanceDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -32,7 +35,9 @@ public class CashAdvanceDao {
      * Returns all cash advance items ordered by {@code sort_order}.
      *
      * @return a non-null, possibly empty list of {@link CashAdvance} objects
-     * @throws RuntimeException if the query fails
+     *
+     * @throws RuntimeException
+     *         if the query fails
      */
     public List<CashAdvance> findAll() {
         try (Connection c = dataSource.getConnection();

@@ -26,17 +26,43 @@ public class CashAdvanceLineItem {
         this.catalog = catalog;
     }
 
-    public CashAdvance getCatalog() { return catalog; }
+    public CashAdvance getCatalog() {
+        return catalog;
+    }
 
-    public BooleanProperty selectedProperty() { return selected; }
-    public boolean isSelected() { return selected.get(); }
-    public void setSelected(boolean value) { selected.set(value); }
+    public BooleanProperty selectedProperty() {
+        return selected;
+    }
 
-    public StringProperty providerProperty() { return provider; }
-    public String getProvider() { return provider.get(); }
-    public void setProvider(String value) { provider.set(value); }
+    public boolean isSelected() {
+        return selected.get();
+    }
 
-    public ObjectProperty<BigDecimal> amountProperty() { return amount; }
-    public BigDecimal getAmount() { return amount.get(); }
-    public void setAmount(BigDecimal value) { amount.set(value); }
+    public void setSelected(boolean value) {
+        selected.set(value);
+    }
+
+    public StringProperty providerProperty() {
+        return provider;
+    }
+
+    public String getProvider() {
+        return provider.get();
+    }
+
+    public void setProvider(String value) {
+        provider.set(value);
+    }
+
+    public ObjectProperty<BigDecimal> amountProperty() {
+        return amount;
+    }
+
+    public BigDecimal getAmount() {
+        return amount.get();
+    }
+
+    public void setAmount(BigDecimal value) {
+        amount.set(value);
+    }
 }

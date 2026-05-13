@@ -17,8 +17,19 @@ public class ServiceLineItem {
         this.catalog = catalog;
     }
 
-    public Service getCatalog() { return catalog; }
-    public BooleanProperty selectedProperty() { return selected; }
-    public boolean isSelected() { return selected.get(); }
-    public void setSelected(boolean value) { selected.set(value); }
+    public Service getCatalog() {
+        return catalog;
+    }
+
+    public BooleanProperty selectedProperty() {
+        return selected;
+    }
+
+    public boolean isSelected() {
+        return selected.get();
+    }
+
+    public void setSelected(boolean value) {
+        selected.set(value);
+    }
 }

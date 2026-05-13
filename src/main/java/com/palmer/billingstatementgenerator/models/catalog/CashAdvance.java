@@ -16,7 +16,15 @@ public class CashAdvance {
         this.name = name;
     }
 
-    public int getId() { return id; }
-    public int getSortOrder() { return sortOrder; }
-    public String getName() { return name; }
+    public int getId() {
+        return id;
+    }
+
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

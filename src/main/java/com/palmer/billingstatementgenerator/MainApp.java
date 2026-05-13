@@ -27,90 +27,92 @@ import java.util.prefs.Preferences;
 
 public class MainApp extends Application {
 
-	private static final Logger log = LoggerFactory.getLogger(MainApp.class);
+    private static final Logger log = LoggerFactory.getLogger(MainApp.class);
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		log.info("Application starting");
-		loadFonts();
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-		SplashView splashView = new SplashView();
-		Scene splashScene = new Scene(splashView.asParent());
-		splashScene.getStylesheets().add(getClass().getResource("/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
-		primaryStage.setScene(splashScene);
-		primaryStage.initStyle(StageStyle.UNDECORATED);
-		primaryStage.show();
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        log.info("Application starting");
+        loadFonts();
 
-		Task<Void> initTask = new Task<Void>() {
-			@Override
-			protected Void call() throws Exception {
-				updateMessage("Connecting to database...");
-				updateProgress(1, 4);
-				Database.init();
-				Thread.sleep(new Random().nextInt(601) + 900);
+        SplashView splashView = new SplashView();
+        Scene splashScene = new Scene(splashView.asParent());
+        splashScene.getStylesheets().add(getClass().getResource("/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
+        primaryStage.setScene(splashScene);
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.show();
 
-				updateMessage("Loading statement context...");
-				updateProgress(2, 4);
-				StatementContext.init();
-				Thread.sleep(new Random().nextInt(601) + 900);
+        Task<Void> initTask = new Task<>() {
+            @Override
+            protected Void call() throws Exception {
+                updateMessage("Connecting to database...");
+                updateProgress(1, 4);
+                Database.init();
+                Thread.sleep(new Random().nextInt(601) + 900);
 
-				updateMessage("Preparing UI...");
-				updateProgress(3, 4);
-				Thread.sleep(new Random().nextInt(601) + 900);
+                updateMessage("Loading statement context...");
+                updateProgress(2, 4);
+                StatementContext.init();
+                Thread.sleep(new Random().nextInt(601) + 900);
 
-				updateMessage("Ready!");
-				updateProgress(4, 4);
-				Thread.sleep(new Random().nextInt(401) + 700);
+                updateMessage("Preparing UI...");
+                updateProgress(3, 4);
+                Thread.sleep(new Random().nextInt(601) + 900);
 
-				return null;
-			}
-		};
+                updateMessage("Ready!");
+                updateProgress(4, 4);
+                Thread.sleep(new Random().nextInt(401) + 700);
 
-		splashView.getStatusLabel().textProperty().bind(initTask.messageProperty());
+                return null;
+            }
+        };
 
-		initTask.progressProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> {
-			Timeline tl = new Timeline(new KeyFrame(
-				Duration.millis(400),
-				new KeyValue(splashView.getProgressBar().progressProperty(), newVal.doubleValue(), Interpolator.EASE_BOTH)
-			));
-			tl.play();
-		}));
+        splashView.getStatusLabel().textProperty().bind(initTask.messageProperty());
 
-		initTask.setOnSucceeded(e -> {
-			Preferences prefs = Preferences.userNodeForPackage(MainApp.class);
-			boolean firstLaunch = !prefs.getBoolean("hasLaunched", false);
-			prefs.putBoolean("hasLaunched", true);
-			log.info("Startup complete — firstLaunch={}", firstLaunch);
+        initTask.progressProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> {
+            Timeline tl = new Timeline(new KeyFrame(
+                    Duration.millis(400),
+                    new KeyValue(splashView.getProgressBar().progressProperty(), newVal.doubleValue(), Interpolator.EASE_BOTH)
+            ));
+            tl.play();
+        }));
 
-			MainView mainView = new MainView();
-			BorderPane root = new BorderPane(mainView.asParent());
-			Scene mainScene = new Scene(root);
-			mainScene.getStylesheets().add(getClass().getResource("/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
+        initTask.setOnSucceeded(e -> {
+            Preferences prefs = Preferences.userNodeForPackage(MainApp.class);
+            boolean firstLaunch = !prefs.getBoolean("hasLaunched", false);
+            prefs.putBoolean("hasLaunched", true);
+            log.info("Startup complete — firstLaunch={}", firstLaunch);
 
-			Stage mainStage = new Stage();
-			mainStage.setScene(mainScene);
-			mainStage.setTitle("Wright Funeral Home Billing Statement Generator");
-			mainStage.show();
+            MainView mainView = new MainView();
+            BorderPane root = new BorderPane(mainView.asParent());
+            Scene mainScene = new Scene(root);
+            mainScene.getStylesheets().add(getClass().getResource("/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
 
-			mainView.wireKeyNav(mainScene);
-			mainView.fitWindowToLargestTab();
-			if (!firstLaunch) mainView.skipInstructions();
-			primaryStage.close();
-		});
+            Stage mainStage = new Stage();
+            mainStage.setScene(mainScene);
+            mainStage.setTitle("Wright Funeral Home Billing Statement Generator");
+            mainStage.show();
 
-		new Thread(initTask).start();
-	}
+            mainView.wireKeyNav(mainScene);
+            mainView.fitWindowToLargestTab();
+            if (!firstLaunch) {
+                mainView.skipInstructions();
+            }
+            primaryStage.close();
+        });
 
-	private void loadFonts() {
-		String base = "/com/palmer/billingstatementgenerator/fonts/";
-		Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Regular.ttf"), 14);
-		Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Bold.ttf"), 14);
-		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Regular.ttf"), 14);
-		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Bold.ttf"), 14);
-		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Light.ttf"), 14);
-	}
+        new Thread(initTask).start();
+    }
 
-	public static void main(String[] args) {
-		launch(args);
-	}
+    private void loadFonts() {
+        String base = "/com/palmer/billingstatementgenerator/fonts/";
+        Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Regular.ttf"), 14);
+        Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Bold.ttf"), 14);
+        Font.loadFont(getClass().getResourceAsStream(base + "Lato-Regular.ttf"), 14);
+        Font.loadFont(getClass().getResourceAsStream(base + "Lato-Bold.ttf"), 14);
+        Font.loadFont(getClass().getResourceAsStream(base + "Lato-Light.ttf"), 14);
+    }
 }

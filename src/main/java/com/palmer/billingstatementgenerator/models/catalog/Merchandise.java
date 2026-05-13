@@ -9,8 +9,6 @@ import java.math.BigDecimal;
  * Items with {@link PricingMode#PER_UNIT} display a quantity spinner instead of a price field.
  */
 public class Merchandise {
-    public enum PricingMode { FLAT, PER_UNIT }
-
     private final int id;
     private final int sortOrder;
     private final String name;
@@ -30,11 +28,33 @@ public class Merchandise {
         this.pricingMode = pricingMode;
     }
 
-    public int getId() { return id; }
-    public int getSortOrder() { return sortOrder; }
-    public String getName() { return name; }
-    public BigDecimal getDefaultCost() { return defaultCost; }
-    public boolean isDescriptionRequired() { return descriptionRequired; }
-    public boolean isSalesTaxable() { return salesTaxable; }
-    public PricingMode getPricingMode() { return pricingMode; }
+    public int getId() {
+        return id;
+    }
+
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getDefaultCost() {
+        return defaultCost;
+    }
+
+    public boolean isDescriptionRequired() {
+        return descriptionRequired;
+    }
+
+    public boolean isSalesTaxable() {
+        return salesTaxable;
+    }
+
+    public PricingMode getPricingMode() {
+        return pricingMode;
+    }
+
+    public enum PricingMode {FLAT, PER_UNIT}
 }

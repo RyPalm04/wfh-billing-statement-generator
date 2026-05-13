@@ -1,6 +1,9 @@
 package com.palmer.billingstatementgenerator.models.statement;
 
-import com.palmer.billingstatementgenerator.dao.*;
+import com.palmer.billingstatementgenerator.dao.CashAdvanceDao;
+import com.palmer.billingstatementgenerator.dao.MerchandiseDao;
+import com.palmer.billingstatementgenerator.dao.ServiceDao;
+import com.palmer.billingstatementgenerator.dao.SpecialChargeDao;
 import com.palmer.billingstatementgenerator.db.Database;
 import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem;
@@ -23,7 +26,8 @@ public final class StatementContext {
     private static final Logger log = LoggerFactory.getLogger(StatementContext.class);
     private static Statement current;
 
-    private StatementContext() {}
+    private StatementContext() {
+    }
 
     /**
      * Initializes a new {@link Statement}, loading all catalog data from the database
@@ -52,7 +56,9 @@ public final class StatementContext {
      * Returns the current active {@link Statement}.
      *
      * @return the current statement
-     * @throws IllegalStateException if {@link #init()} has not been called
+     *
+     * @throws IllegalStateException
+     *         if {@link #init()} has not been called
      */
     public static Statement current() {
         if (current == null) {

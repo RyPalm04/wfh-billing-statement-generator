@@ -20,7 +20,9 @@ public class BigDecimalCurrencyConverter extends StringConverter<BigDecimal> {
     /**
      * Converts a {@link BigDecimal} value to a formatted currency string.
      *
-     * @param value the value to format, or null
+     * @param value
+     *         the value to format, or null
+     *
      * @return the formatted currency string, or an empty string if value is null
      */
     @Override
@@ -32,12 +34,16 @@ public class BigDecimalCurrencyConverter extends StringConverter<BigDecimal> {
      * Parses a currency string into a {@link BigDecimal} by stripping non-numeric
      * characters before converting.
      *
-     * @param text the input string, potentially containing currency symbols or commas
+     * @param text
+     *         the input string, potentially containing currency symbols or commas
+     *
      * @return the parsed {@link BigDecimal}, or null if the input is blank or unparseable
      */
     @Override
     public BigDecimal fromString(String text) {
-        if (text == null || text.trim().isEmpty()) return null;
+        if (text == null || text.trim().isEmpty()) {
+            return null;
+        }
         String raw = text.replaceAll("[^\\d.]", "");
         return raw.isEmpty() ? null : new BigDecimal(raw);
     }

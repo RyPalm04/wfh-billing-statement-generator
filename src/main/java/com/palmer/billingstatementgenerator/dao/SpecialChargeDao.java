@@ -20,11 +20,14 @@ public class SpecialChargeDao {
     private static final Logger log = LoggerFactory.getLogger(SpecialChargeDao.class);
     private static final String SELECT_ALL =
             "SELECT id, sort_order, name, default_cost, requires_description " +
-            "FROM special_charges ORDER BY sort_order";
+                    "FROM special_charges ORDER BY sort_order";
 
     private final DataSource dataSource;
 
-    /** @param dataSource the application data source */
+    /**
+     * @param dataSource
+     *         the application data source
+     */
     public SpecialChargeDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
@@ -33,7 +36,9 @@ public class SpecialChargeDao {
      * Returns all special charges ordered by {@code sort_order}.
      *
      * @return a non-null, possibly empty list of {@link SpecialCharge} objects
-     * @throws RuntimeException if the query fails
+     *
+     * @throws RuntimeException
+     *         if the query fails
      */
     public List<SpecialCharge> findAll() {
         try (Connection c = dataSource.getConnection();

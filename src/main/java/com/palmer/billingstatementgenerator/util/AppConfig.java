@@ -30,7 +30,8 @@ public final class AppConfig {
         load();
     }
 
-    private AppConfig() {}
+    private AppConfig() {
+    }
 
     /**
      * Loads the config file from the user's home directory and registers all

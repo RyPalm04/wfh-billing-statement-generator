@@ -20,8 +20,19 @@ public class ServicePackage {
         this.defaultCost = defaultCost;
     }
 
-    public int getId() { return id; }
-    public int getSortOrder() { return sortOrder; }
-    public String getName() { return name; }
-    public BigDecimal getDefaultCost() { return defaultCost; }
+    public int getId() {
+        return id;
+    }
+
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getDefaultCost() {
+        return defaultCost;
+    }
 }

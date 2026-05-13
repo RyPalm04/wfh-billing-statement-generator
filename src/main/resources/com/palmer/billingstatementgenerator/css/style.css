@@ -7,18 +7,18 @@
     -fx-font-size: 13px;
 
     /* Wright Brand Colors */
-    -wfh-green:       #2d6a35;
-    -wfh-green-dark:  #1e4a24;
+    -wfh-green: #2d6a35;
+    -wfh-green-dark: #1e4a24;
     -wfh-green-light: #e8f0e9;
-    -wfh-rose:        #a0522d;
-    -wfh-rose-dark:   #7a3d22;
+    -wfh-rose: #a0522d;
+    -wfh-rose-dark: #7a3d22;
 
     /* Neutrals */
-    -wfh-primary:     #2c2c2c;
-    -wfh-secondary:   #555555;
-    -wfh-muted:       #888888;
-    -wfh-border:      #d0ccc7;
-    -wfh-bg:          #f7f5f2;
+    -wfh-primary: #2c2c2c;
+    -wfh-secondary: #555555;
+    -wfh-muted: #888888;
+    -wfh-border: #d0ccc7;
+    -wfh-bg: #f7f5f2;
 }
 
 /* General Text */

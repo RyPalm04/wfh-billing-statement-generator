@@ -1,8 +1,7 @@
 package com.palmer.billingstatementgenerator.views.controllers;
 
-import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineItem;
-
+import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
@@ -31,8 +30,11 @@ public class SpecialChargesController extends GridTabController<SpecialChargeLin
      * default cost render an editable price field; others render a read-only label.
      * Items marked as requiring a description also render a description text field.
      *
-     * @param item the special charge line item to render
-     * @param row  the grid row index
+     * @param item
+     *         the special charge line item to render
+     * @param row
+     *         the grid row index
+     *
      * @return the {@link CheckBox} created for this row
      */
     @Override

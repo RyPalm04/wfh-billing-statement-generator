@@ -2,10 +2,9 @@ package com.palmer.billingstatementgenerator.views.controllers;
 
 import com.palmer.billingstatementgenerator.dao.ServicePackageDao;
 import com.palmer.billingstatementgenerator.db.Database;
-import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.models.catalog.ServicePackage;
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
-
+import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.CheckBox;
@@ -23,7 +22,9 @@ import java.util.stream.Stream;
  */
 public class ServicesController extends GridTabController<ServiceLineItem> {
 
-    /** Combo box for selecting a pre-defined service package. */
+    /**
+     * Combo box for selecting a pre-defined service package.
+     */
     private ComboBox<ServicePackage> packagesCombo;
 
     /**
@@ -43,8 +44,11 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
             public String toString(ServicePackage p) {
                 return p == null ? "" : String.format("%-15s %14s", p.getName(), DOLLAR_FORMATTER.format(p.getDefaultCost()));
             }
+
             @Override
-            public ServicePackage fromString(String s) { return null; }
+            public ServicePackage fromString(String s) {
+                return null;
+            }
         });
 
         GridPane pane = new GridPane();
@@ -76,8 +80,11 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
      * Builds a row for the given service line item, consisting of a checkbox
      * and a read-only price label.
      *
-     * @param item the service line item to render
-     * @param row  the grid row index
+     * @param item
+     *         the service line item to render
+     * @param row
+     *         the grid row index
+     *
      * @return the {@link CheckBox} created for this row
      */
     @Override
@@ -93,7 +100,8 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
      * The clear button is disabled only when no checkboxes are selected AND no package
      * is selected.
      *
-     * @param checkBoxes the list of service checkboxes to observe
+     * @param checkBoxes
+     *         the list of service checkboxes to observe
      */
     @Override
     protected void configureClearButton(List<CheckBox> checkBoxes) {
