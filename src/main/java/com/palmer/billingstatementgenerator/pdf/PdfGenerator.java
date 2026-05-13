@@ -33,6 +33,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * Generates PDF billing statements from a {@link Statement} using a JasperReports template.
+ * The compiled report is cached after the first call to {@link #generate}.
+ * Use {@link #export} to open a save dialog and write the PDF for the current statement.
+ */
 public final class PdfGenerator {
     private static final Logger log = LoggerFactory.getLogger(PdfGenerator.class);
     private static final String JRXML_RESOURCE = "/com/palmer/billingstatementgenerator/pdf/pdfTemplate.jrxml";
@@ -43,6 +48,18 @@ public final class PdfGenerator {
     private PdfGenerator() {
     }
 
+    /**
+     * Fills the Jasper report template from the given statement and writes the result
+     * to the specified file.
+     *
+     * @param stmt
+     *         the statement to export
+     * @param outputFile
+     *         the destination file to write the PDF to
+     *
+     * @throws IOException
+     *         if the template cannot be loaded or PDF generation fails
+     */
     public static void generate(Statement stmt, File outputFile) throws IOException {
         try {
             JasperReport report = compiledReport();
@@ -199,6 +216,13 @@ public final class PdfGenerator {
         return d == null ? "" : d.format(DATE_FMT);
     }
 
+    /**
+     * Opens a save dialog and exports the current statement as a PDF.
+     * Shows a success or error alert when the operation completes.
+     *
+     * @param ownerWindow
+     *         the owner window for the save dialog and any alerts shown
+     */
     public static void export(Window ownerWindow) {
         FileChooser fc = new FileChooser();
         fc.setTitle("Save Statement as PDF");

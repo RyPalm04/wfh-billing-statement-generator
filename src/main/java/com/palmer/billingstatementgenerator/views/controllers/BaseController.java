@@ -80,8 +80,7 @@ public abstract class BaseController {
     }
 
     /**
-     * Resets the controller to its default state by calling {@link #clearAll()}.
-     * Override to add additional reset behavior.
+     * No-op in the base class. Override to reset the controller to its default state.
      */
     public void reset() {
     }

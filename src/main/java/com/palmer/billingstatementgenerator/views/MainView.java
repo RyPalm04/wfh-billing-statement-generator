@@ -134,7 +134,7 @@ public class MainView {
      * @return the configured button bar {@link HBox}
      */
     private HBox buildButtonBar() {
-        HBox bar = new HBox(prevButton, leftSpacer(), clearButton, rightSpacer(), nextButton);
+        HBox bar = new HBox(prevButton, spacer(), clearButton, spacer(), nextButton);
         bar.setPadding(new Insets(12, 24, 12, 24));
         bar.setAlignment(Pos.CENTER);
         bar.getStyleClass().add("button-bar");
@@ -146,18 +146,7 @@ public class MainView {
      *
      * @return a {@link Region} with horizontal grow priority set to ALWAYS
      */
-    private Region leftSpacer() {
-        Region r = new Region();
-        HBox.setHgrow(r, Priority.ALWAYS);
-        return r;
-    }
-
-    /**
-     * Creates a horizontally growing spacer region for use in the button bar.
-     *
-     * @return a {@link Region} with horizontal grow priority set to ALWAYS
-     */
-    private Region rightSpacer() {
+    private Region spacer() {
         Region r = new Region();
         HBox.setHgrow(r, Priority.ALWAYS);
         return r;

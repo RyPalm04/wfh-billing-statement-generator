@@ -18,7 +18,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -31,8 +30,6 @@ import java.util.stream.Collectors;
  * Refreshes automatically when the tab is shown.
  */
 public class SummaryTabController extends BaseController {
-
-    private static final NumberFormat DOLLAR_FORMATTER = NumberFormat.getCurrencyInstance();
 
     /**
      * The root container for all summary content.

@@ -50,6 +50,7 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
                 return null;
             }
         });
+        packagesCombo.valueProperty().bindBidirectional(StatementContext.current().selectedPackageProperty());
 
         GridPane pane = new GridPane();
         pane.setHgap(7);

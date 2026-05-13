@@ -10,13 +10,14 @@ import java.util.Properties;
 
 /**
  * Utility class for loading application configuration from an external properties file.
- * On startup, loads {@code config.properties} from the user's home directory and
- * registers all entries as system properties, making them available throughout the
- * application via {@link System#getProperty(String)}.
+ * On startup, loads {@code config.properties} from
+ * {@code resources/com/palmer/billingstatementgenerator/properties/} relative to the
+ * working directory and registers all entries as system properties, making them available
+ * throughout the application via {@link System#getProperty(String)}.
  *
  * <p>If the config file does not exist, default values are used for all settings.</p>
  *
- * <p>Example {@code ~/config.properties}:</p>
+ * <p>Example {@code config.properties}:</p>
  * <pre>
  * wfh.sales.tax.rate=0.0825
  * </pre>
