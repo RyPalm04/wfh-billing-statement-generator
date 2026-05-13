@@ -68,6 +68,18 @@ class StatementCalculatorSpec extends Specification {
         StatementCalculator.servicesTotal(stmt) == 750.00G
     }
 
+    def "servicesTotal skips selected services with null defaultCost"() {
+        given:
+        def stmt = new Statement()
+        stmt.services.addAll(
+            serviceItem(500.00G, true),
+            serviceItem(null, true)
+        )
+
+        expect:
+        StatementCalculator.servicesTotal(stmt) == 500.00G
+    }
+
     def "servicesTotal combines package cost with selected services"() {
         given:
         def stmt = new Statement()
@@ -143,6 +155,18 @@ class StatementCalculatorSpec extends Specification {
 
         expect:
         StatementCalculator.cashAdvancesTotal(stmt) == 275.00G
+    }
+
+    def "cashAdvancesTotal skips selected advances with null amount"() {
+        given:
+        def stmt = new Statement()
+        stmt.cashAdvances.addAll(
+            advanceItem(100.00G, true),
+            advanceItem(null, true)
+        )
+
+        expect:
+        StatementCalculator.cashAdvancesTotal(stmt) == 100.00G
     }
 
     def "salesTax is zero when tax rate is zero"() {
