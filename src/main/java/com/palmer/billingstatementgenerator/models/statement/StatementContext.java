@@ -7,6 +7,8 @@ import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineItem;
 import com.palmer.billingstatementgenerator.util.AppConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Singleton context holder for the current billing {@link Statement}.
@@ -18,6 +20,7 @@ import com.palmer.billingstatementgenerator.util.AppConfig;
  */
 public final class StatementContext {
 
+    private static final Logger log = LoggerFactory.getLogger(StatementContext.class);
     private static Statement current;
 
     private StatementContext() {}
@@ -28,6 +31,7 @@ public final class StatementContext {
      * Safe to call multiple times; each call replaces the previous statement.
      */
     public static synchronized void init() {
+        log.info("Initializing statement context");
         Statement statement = new Statement();
         statement.setSalesTaxRate(AppConfig.getSalesTaxRate());
         new ServiceDao(Database.get()).findAll()
@@ -39,6 +43,9 @@ public final class StatementContext {
         new CashAdvanceDao(Database.get()).findAll()
                 .forEach(ca -> statement.getCashAdvances().add(new CashAdvanceLineItem(ca)));
         current = statement;
+        log.debug("Statement context loaded — services={}, merchandise={}, specialCharges={}, cashAdvances={}",
+                statement.getServices().size(), statement.getMerchandise().size(),
+                statement.getSpecialCharges().size(), statement.getCashAdvances().size());
     }
 
     /**

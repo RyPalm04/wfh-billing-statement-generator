@@ -19,13 +19,19 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Random;
 import java.util.prefs.Preferences;
 
 public class MainApp extends Application {
 
+	private static final Logger log = LoggerFactory.getLogger(MainApp.class);
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		log.info("Application starting");
 		loadFonts();
 
 		SplashView splashView = new SplashView();
@@ -74,6 +80,7 @@ public class MainApp extends Application {
 			Preferences prefs = Preferences.userNodeForPackage(MainApp.class);
 			boolean firstLaunch = !prefs.getBoolean("hasLaunched", false);
 			prefs.putBoolean("hasLaunched", true);
+			log.info("Startup complete — firstLaunch={}", firstLaunch);
 
 			MainView mainView = new MainView();
 			BorderPane root = new BorderPane(mainView.asParent());

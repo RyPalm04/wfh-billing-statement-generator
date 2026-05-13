@@ -2,6 +2,8 @@ package com.palmer.billingstatementgenerator.dao;
 
 import com.palmer.billingstatementgenerator.models.catalog.Merchandise;
 import com.palmer.billingstatementgenerator.models.catalog.Merchandise.PricingMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MerchandiseDao {
+    private static final Logger log = LoggerFactory.getLogger(MerchandiseDao.class);
     private static final String SELECT_ALL =
             "SELECT id, sort_order, name, default_cost, requires_description, sales_taxable, pricing_mode " +
             "FROM merchandise ORDER BY sort_order";
@@ -40,6 +43,7 @@ public class MerchandiseDao {
             }
             return result;
         } catch (SQLException e) {
+            log.error("Failed to load merchandise", e);
             throw new RuntimeException("Failed to load merchandise", e);
         }
     }

@@ -19,6 +19,9 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +35,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public final class PdfGenerator {
+    private static final Logger log = LoggerFactory.getLogger(PdfGenerator.class);
     private static final String JRXML_RESOURCE = "/com/palmer/billingstatementgenerator/pdf/pdfTemplate.jrxml";
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("M/d/yyyy");
 
@@ -54,6 +58,7 @@ public final class PdfGenerator {
 
     private static synchronized JasperReport compiledReport() throws JRException, IOException {
         if (compiledReport == null) {
+            log.debug("Compiling Jasper report template");
             try (InputStream in = PdfGenerator.class.getResourceAsStream(JRXML_RESOURCE)) {
                 if (in == null) {
                     throw new IOException("Missing template resource: " + JRXML_RESOURCE);
@@ -204,10 +209,13 @@ public final class PdfGenerator {
         File output = fc.showSaveDialog(ownerWindow);
         if (output == null) return;
 
+        log.info("Exporting PDF for control number {} to {}", StatementContext.current().getControlNumber(), output.getAbsolutePath());
         try {
             generate(StatementContext.current(), output);
+            log.info("PDF export successful: {}", output.getAbsolutePath());
             new Alert(Alert.AlertType.INFORMATION, "PDF saved to:\n" + output.getAbsolutePath()).showAndWait();
         } catch (Throwable t) {
+            log.error("PDF export failed", t);
             new Alert(Alert.AlertType.ERROR, "Failed to generate PDF: " + t.getMessage()).showAndWait();
         }
     }

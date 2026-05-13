@@ -1,6 +1,8 @@
 package com.palmer.billingstatementgenerator.dao;
 
 import com.palmer.billingstatementgenerator.models.catalog.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ServiceDao {
+    private static final Logger log = LoggerFactory.getLogger(ServiceDao.class);
     private static final String SELECT_ALL =
             "SELECT id, sort_order, name, default_cost, included_in_package " +
             "FROM services ORDER BY sort_order";
@@ -36,6 +39,7 @@ public class ServiceDao {
             }
             return result;
         } catch (SQLException e) {
+            log.error("Failed to load services", e);
             throw new RuntimeException("Failed to load services", e);
         }
     }

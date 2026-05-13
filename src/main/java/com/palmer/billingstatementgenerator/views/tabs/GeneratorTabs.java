@@ -2,6 +2,8 @@ package com.palmer.billingstatementgenerator.views.tabs;
 
 import com.palmer.billingstatementgenerator.views.controllers.BaseController;
 import com.palmer.billingstatementgenerator.views.controllers.GridTabController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -20,6 +22,8 @@ import java.text.NumberFormat;
  * and {@link BaseController#onHide()} lifecycle methods.
  */
 public class GeneratorTabs extends Tab {
+    private static final Logger log = LoggerFactory.getLogger(GeneratorTabs.class);
+
     /** The controller associated with this tab's content. */
     private BaseController controller;
 
@@ -102,6 +106,7 @@ public class GeneratorTabs extends Tab {
                 wireLifecycle();
             }
         } catch (IOException e) {
+            log.error("Failed to load FXML: {}", fxmlPath, e);
             throw new RuntimeException(e);
         }
     }

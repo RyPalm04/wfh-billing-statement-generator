@@ -1,6 +1,8 @@
 package com.palmer.billingstatementgenerator.dao;
 
 import com.palmer.billingstatementgenerator.models.catalog.CashAdvance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CashAdvanceDao {
+    private static final Logger log = LoggerFactory.getLogger(CashAdvanceDao.class);
     private static final String SELECT_ALL =
             "SELECT id, sort_order, name FROM cash_advances ORDER BY sort_order";
 
@@ -33,6 +36,7 @@ public class CashAdvanceDao {
             }
             return result;
         } catch (SQLException e) {
+            log.error("Failed to load cash advances", e);
             throw new RuntimeException("Failed to load cash advances", e);
         }
     }

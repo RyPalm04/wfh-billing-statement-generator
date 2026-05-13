@@ -7,6 +7,8 @@ import com.palmer.billingstatementgenerator.views.controllers.*;
 import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
 
 import javafx.beans.binding.BooleanBinding;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -33,6 +35,7 @@ import java.util.Objects;
  * reactively as the user navigates between tabs.
  */
 public class MainView {
+	private static final Logger log = LoggerFactory.getLogger(MainView.class);
 	private static final String FXML_BASE = "/com/palmer/billingstatementgenerator/views/";
 
 	private BorderPane root;
@@ -382,6 +385,7 @@ public class MainView {
 	 * Used by the Clear Selections option in the reset dialog.
 	 */
 	private void clearAllSelections() {
+		log.info("Clearing all selections");
 		tabPane.getTabs().stream()
 				.filter(t -> t instanceof GeneratorTabs)
 				.map(t -> ((GeneratorTabs) t).getController())
@@ -396,6 +400,7 @@ public class MainView {
 	 * the layout, and rewiring tab selection behavior.
 	 */
 	private void rebuildView() {
+		log.info("Rebuilding view after full reset");
 		createTabs();
 		root.setCenter(tabPane);
 		wireTabs();
