@@ -3,6 +3,8 @@ package com.palmer.billingstatementgenerator.views.controllers;
 import com.palmer.billingstatementgenerator.models.statement.Statement;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -59,5 +61,19 @@ public class ServiceInformationController extends BaseController {
         dateOfDeathPicker.valueProperty().bindBidirectional(stmt.dateOfDeathProperty());
         placeOfDeathField.textProperty().bindBidirectional(stmt.placeOfDeathProperty());
         serviceDatePicker.valueProperty().bindBidirectional(stmt.serviceDateProperty());
+    }
+
+    /**
+     * Returns a binding that is {@code true} while the control number or services-for
+     * name is missing, preventing navigation past this tab until both are provided.
+     *
+     * @return a {@link BooleanBinding} that is {@code true} when required fields are incomplete
+     */
+    @Override
+    public BooleanBinding hasInvalidSelections() {
+        Statement stmt = StatementContext.current();
+        return Bindings.createBooleanBinding(
+                () -> stmt.getControlNumber() == 0 || stmt.getServicesForName().trim().isEmpty(),
+                stmt.controlNumberProperty(), stmt.servicesForNameProperty());
     }
 }

@@ -1,51 +1,60 @@
 INSERT INTO service_packages (sort_order, name, default_cost)
-VALUES (1, 'Traditional One', 0),
-       (2, 'Traditional Two', 0),
-       (3, 'Cremation One', 0),
-       (4, 'Cremation Two', 0),
-       (5, 'Cremation Three', 0),
-       (6, 'Cremation Four', 0),
-       (7, 'Cremation Five', 0);
+VALUES (1, 'Traditional One', 5995.00),
+       (2, 'Traditional Two', 7495.00),
+       (3, 'Cremation One', 1995.00),
+       (4, 'Cremation Two', 2495.00),
+       (5, 'Cremation Three', 3495.00),
+       (6, 'Cremation Four', 3995.00),
+       (7, 'Cremation Five', 4495.00);
 
 INSERT INTO services (sort_order, name, default_cost, included_in_package)
-VALUES (1, 'Basic Services of Funeral Director & Staff', 0, FALSE),
-       (2, 'Embalming', 0, TRUE),
-       (3, 'Other Preparation of Body', 0, FALSE),
-       (4, 'Use of Facilities & Staff for Visitation', 0, TRUE),
-       (5, 'Use of Facilities & Staff for Funeral Service', 0, TRUE),
-       (6, 'Use of Facilities & Staff for Memorial Service', 0, FALSE),
-       (7, 'Use of Equipment & Staff for Graveside Service', 0, TRUE),
-       (8, 'Funeral Coach', 0, FALSE),
-       (9, 'Pallbearer Car', 0, TRUE),
-       (10, 'Service Car', 0, FALSE),
-       (11, 'Transfer of Remains to Funeral Home', 0, FALSE),
-       (12, 'Other', 0, FALSE),
-       (13, 'Other', 0, TRUE);
+VALUES (1, 'Basic Services of Funeral Director & Staff', 1895.00, FALSE),
+       (2, 'Embalming', 695.00, TRUE),
+       (3, 'Other Preparation of Body', 250.00, FALSE),
+       (4, 'Use of Facilities & Staff for Visitation', 495.00, TRUE),
+       (5, 'Use of Facilities & Staff for Funeral Service', 595.00, TRUE),
+       (6, 'Use of Facilities & Staff for Memorial Service', 495.00, FALSE),
+       (7, 'Use of Equipment & Staff for Graveside Service', 395.00, TRUE),
+       (8, 'Funeral Coach', 395.00, FALSE),
+       (9, 'Pallbearer Car', 195.00, TRUE),
+       (10, 'Service Car', 195.00, FALSE),
+       (11, 'Transfer of Remains to Funeral Home', 395.00, FALSE),
+       (12, 'Other', 0.00, FALSE),
+       (13, 'Other', 0.00, TRUE);
 
 INSERT INTO merchandise (sort_order, name, default_cost, requires_description, sales_taxable, pricing_mode)
 VALUES (1, 'Casket or (alternative container)', NULL, TRUE, TRUE, 'flat'),
        (2, 'Cremation Urn', NULL, TRUE, TRUE, 'flat'),
        (3, 'Outer Burial Container', NULL, TRUE, FALSE, 'flat'),
-       (4, 'Service Accessory Package', 0, FALSE, FALSE, 'flat'),
-       (5, 'Register Book', 0, TRUE, FALSE, 'flat'),
-       (6, 'Thank You Cards', 0, FALSE, FALSE, 'flat'),
-       (7, 'Memorial Folders', 0, TRUE, FALSE, 'flat'),
+       (4, 'Service Accessory Package', 295.00, FALSE, FALSE, 'flat'),
+       (5, 'Register Book', 75.00, TRUE, FALSE, 'flat'),
+       (6, 'Thank You Cards', 45.00, FALSE, FALSE, 'flat'),
+       (7, 'Memorial Folders', 125.00, TRUE, FALSE, 'flat'),
        (8, 'Memorial Video', 15.00, FALSE, FALSE, 'per_unit'),
        (9, 'Jewelry', NULL, TRUE, TRUE, 'flat'),
-       (10, 'Supervision of Burial', 0, FALSE, FALSE, 'flat'),
-       (11, 'Temporary Grave Marker', 0, FALSE, FALSE, 'flat'),
+       (10, 'Supervision of Burial', 195.00, FALSE, FALSE, 'flat'),
+       (11, 'Temporary Grave Marker', 85.00, FALSE, FALSE, 'flat'),
        (12, 'Other Merchandise', NULL, TRUE, TRUE, 'flat'),
        (13, 'Other Merchandise', NULL, TRUE, TRUE, 'flat');
 
 INSERT INTO special_charges (sort_order, name, default_cost, requires_description)
 VALUES (1, 'Grave Service Setup/Delivery', NULL, TRUE),
-       (2, 'Direct Cremation', 0, FALSE),
+       (2, 'Direct Cremation', 595.00, FALSE),
        (3, 'Mileage', NULL, TRUE),
-       (4, 'Forward of remains to (funeral home)', 0, FALSE),
-       (5, 'Receiving of remains from (funeral home)', 0, FALSE),
-       (6, 'Vault Company Weekend/Holiday Charge', 0, FALSE),
-       (7, 'Immediate Burial', 0, FALSE),
+       (4, 'Forward of remains to (funeral home)', 395.00, FALSE),
+       (5, 'Receiving of remains from (funeral home)', 395.00, FALSE),
+       (6, 'Vault Company Weekend/Holiday Charge', 195.00, FALSE),
+       (7, 'Immediate Burial', 895.00, FALSE),
        (8, 'Other', NULL, TRUE);
+
+INSERT INTO package_services (package_id, service_id)
+VALUES (1, 1), (1, 2), (1, 4), (1, 5), (1, 7), (1, 8), (1, 9), (1, 11),
+       (2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 7), (2, 8), (2, 9), (2, 10), (2, 11),
+       (3, 1), (3, 11),
+       (4, 1), (4, 3), (4, 11),
+       (5, 1), (5, 3), (5, 6), (5, 11),
+       (6, 1), (6, 4), (6, 6), (6, 11),
+       (7, 1), (7, 4), (7, 5), (7, 7), (7, 11);
 
 INSERT INTO cash_advances (sort_order, name)
 VALUES (1, 'Grave Opening'),

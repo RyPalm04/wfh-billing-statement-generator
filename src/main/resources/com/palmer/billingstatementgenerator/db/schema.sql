@@ -41,3 +41,10 @@ CREATE TABLE cash_advances
     sort_order INT         NOT NULL,
     name       VARCHAR(80) NOT NULL
 );
+
+CREATE TABLE package_services
+(
+    package_id INT NOT NULL REFERENCES service_packages (id),
+    service_id INT NOT NULL REFERENCES services (id),
+    PRIMARY KEY (package_id, service_id)
+);

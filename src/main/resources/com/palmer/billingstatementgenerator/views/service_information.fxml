@@ -4,6 +4,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="com.palmer.billingstatementgenerator.views.controllers.ServiceInformationController"
@@ -21,10 +22,18 @@
             <Label text="Enter the service details below to get started." styleClass="instructions-subtitle"/>
         </VBox>
 
-        <Label text="Control Number" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
+        <HBox alignment="CENTER_RIGHT" spacing="2"
+              GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.halignment="RIGHT">
+            <Label text="Control Number" styleClass="field-label"/>
+            <Label text="*" styleClass="required-asterisk"/>
+        </HBox>
         <TextField fx:id="controlNumberField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-        <Label text="Services For" GridPane.rowIndex="2" GridPane.columnIndex="0" styleClass="field-label"/>
+        <HBox alignment="CENTER_RIGHT" spacing="2"
+              GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.halignment="RIGHT">
+            <Label text="Services For" styleClass="field-label"/>
+            <Label text="*" styleClass="required-asterisk"/>
+        </HBox>
         <TextField fx:id="servicesForField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
         <Label text="Date of Death" GridPane.rowIndex="3" GridPane.columnIndex="0" styleClass="field-label"/>
