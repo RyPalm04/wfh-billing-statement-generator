@@ -62,20 +62,17 @@ public class TabThreeFxmlController extends GridTabController<ServiceLineItem> {
     }
 
     @Override
-    protected void wireClear(List<CheckBox> checkBoxes) {
-        Observable[] deps = Stream.concat(
+    protected void configureClearButton(List<CheckBox> checkBoxes) {
+        Observable[] clearButtonDependencies = Stream.concat(
                 checkBoxes.stream().map(CheckBox::selectedProperty),
                 Stream.of(packagesCombo.valueProperty())
         ).toArray(Observable[]::new);
 
         clearButton.disableProperty().bind(Bindings.createBooleanBinding(
                 () -> checkBoxes.stream().noneMatch(CheckBox::isSelected) && packagesCombo.getValue() == null,
-                deps));
+                clearButtonDependencies));
 
-        clearButton.setOnAction(e -> {
-            packagesCombo.setValue(null);
-            checkBoxes.forEach(cb -> cb.setSelected(false));
-        });
+        clearButton.setOnAction(e -> clearAll(checkBoxes));
     }
 
     @Override

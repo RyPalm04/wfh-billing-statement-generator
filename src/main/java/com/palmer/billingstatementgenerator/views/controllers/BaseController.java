@@ -78,18 +78,19 @@ public abstract class BaseController {
         }
     }
 
-    protected void wireClearButton(List<CheckBox> checkBoxes) {
-        Observable[] deps = checkBoxes.stream()
+    protected void configureClearButton(List<CheckBox> checkBoxes) {
+        Observable[] clearButtonDependencies = checkBoxes.stream()
                 .map(CheckBox::selectedProperty)
                 .toArray(Observable[]::new);
         clearButton.disableProperty().bind(Bindings.createBooleanBinding(
                 () -> checkBoxes.stream().noneMatch(CheckBox::isSelected),
-                deps));
+                clearButtonDependencies));
         clearButton.setOnAction(e -> clearAll(checkBoxes));
     }
 
     protected void clearAll(List<CheckBox> checkBoxes) {
         checkBoxes.forEach(cb -> cb.setSelected(false));
+        refreshTotal();
     }
 
     protected void configTextFieldForInts(TextField... fields) {

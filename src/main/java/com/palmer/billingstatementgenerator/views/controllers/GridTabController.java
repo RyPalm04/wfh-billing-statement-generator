@@ -35,8 +35,12 @@ public abstract class GridTabController<T> extends BaseController {
                 .map(item -> addItemRow(item, row.getAndIncrement()))
                 .collect(Collectors.toList());
 
+        checkBoxes.forEach(cb ->
+                cb.selectedProperty().addListener((obs, oldVal, newVal) -> refreshTotal())
+        );
+
         if (clearButton != null) {
-            wireClear(checkBoxes);
+            configureClearButton(checkBoxes);
         }
 
         totalLabel = new Label("Total: $0.00");
@@ -72,20 +76,16 @@ public abstract class GridTabController<T> extends BaseController {
     @Override
     protected void onClearButtonSet() {
         if (itemsGrid != null) {
-            wireClear(itemsGrid.getChildren().stream()
+            configureClearButton(itemsGrid.getChildren().stream()
                     .filter(n -> n instanceof CheckBox)
                     .map(n -> (CheckBox) n)
                     .collect(Collectors.toList()));
         }
     }
 
-    protected void wireClear(List<CheckBox> checkBoxes) {
-        wireClearButton(checkBoxes);
-    }
-
     @Override
     protected void clearAll(List<CheckBox> checkBoxes) {
-        checkBoxes.forEach(cb -> cb.setSelected(false));
+        super.clearAll(checkBoxes);
         clearTextFields();
     }
 
