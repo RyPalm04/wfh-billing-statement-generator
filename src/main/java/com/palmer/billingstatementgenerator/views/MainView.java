@@ -64,6 +64,7 @@ public class MainView {
     private Button nextButton;
     private Button clearButton;
     private Button saveButton;
+    private Button resetButton;
 
     /**
      * Controller for the summary tab, held for refresh and reset operations.
@@ -135,11 +136,19 @@ public class MainView {
      */
     private void createButtonBar() {
         prevButton = new Button("Previous");
+        prevButton.setId("prevButton");
         clearButton = new Button("Clear Selections");
+        clearButton.setId("clearButton");
         saveButton = new Button("Save");
+        saveButton.setId("saveButton");
         nextButton = new Button("Next");
+        nextButton.setId("nextButton");
+        resetButton = new Button("Reset");
+        resetButton.setId("resetButton");
         clearButton.getStyleClass().add("button-clear");
         saveButton.getStyleClass().add("button-save");
+        resetButton.getStyleClass().add("button-reset");
+        resetButton.setVisible(false);
     }
 
     /**
@@ -149,7 +158,7 @@ public class MainView {
      * @return the configured button bar {@link HBox}
      */
     private HBox buildButtonBar() {
-        HBox rightGroup = new HBox(8, saveButton, nextButton);
+        HBox rightGroup = new HBox(8, resetButton, saveButton, nextButton);
         HBox bar = new HBox(prevButton, spacer(), clearButton, spacer(), rightGroup);
         bar.setPadding(new Insets(12, 24, 12, 24));
         bar.setAlignment(Pos.CENTER);
@@ -180,7 +189,22 @@ public class MainView {
         logoView.setPreserveRatio(true);
         logoView.setOpacity(0.9);
 
-        HBox header = new HBox(logoView);
+        Button closeBtn = new Button("✕");
+        closeBtn.setId("closeButton");
+        closeBtn.getStyleClass().add("button-close");
+        closeBtn.setOnAction(e -> {
+            Stage stage = (Stage) root.getScene().getWindow();
+            if (StatementContext.isDirty()) {
+                showUnsavedChangesOnClose(stage);
+            } else {
+                stage.close();
+            }
+        });
+
+        Region headerSpacer = new Region();
+        HBox.setHgrow(headerSpacer, Priority.ALWAYS);
+
+        HBox header = new HBox(logoView, headerSpacer, closeBtn);
         header.setPadding(new Insets(10, 16, 10, 16));
         header.setAlignment(Pos.CENTER_LEFT);
         header.getStyleClass().add("app-header");
@@ -247,10 +271,9 @@ public class MainView {
                 }
             });
             clearButton.disableProperty().unbind();
-            clearButton.setDisable(false);
-            clearButton.setText("Reset");
-            clearButton.getStyleClass().add("button-reset");
-            clearButton.setOnAction(e -> showResetDialog());
+            clearButton.setDisable(true);
+            resetButton.setVisible(true);
+            resetButton.setOnAction(e -> showResetDialog());
         } else {
             nextButton.setText("Next");
             nextButton.setOnAction(e -> {
@@ -260,8 +283,7 @@ public class MainView {
                     tabPane.getSelectionModel().selectNext();
                 }
             });
-            clearButton.setText("Clear Selections");
-            clearButton.getStyleClass().remove("button-reset");
+            resetButton.setVisible(false);
             tab.getController().setClearButton(clearButton);
         }
     }
@@ -293,6 +315,13 @@ public class MainView {
                 }
             }
         });
+    }
+
+    private Scene buildDialogScene(javafx.scene.Parent content) {
+        Scene scene = new Scene(content);
+        scene.getStylesheets().add(getClass().getResource(
+                "/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
+        return scene;
     }
 
     /**
@@ -352,6 +381,7 @@ public class MainView {
         message.setMaxWidth(320);
 
         Button ok = new Button("Got It");
+        ok.setId("okButton");
         ok.setOnAction(e -> dialog.close());
 
         VBox content = new VBox(20, title, message, ok);
@@ -359,9 +389,7 @@ public class MainView {
         content.setAlignment(Pos.CENTER);
         content.getStyleClass().add("splash-container");
 
-        Scene scene = new Scene(content);
-        scene.getStylesheets().add(getClass().getResource(
-                "/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
+        Scene scene = buildDialogScene(content);
         dialog.setScene(scene);
         dialog.setResizable(false);
         dialog.showAndWait();
@@ -391,24 +419,28 @@ public class MainView {
             boolean[] choseClear = {false};
 
             Button newStatement = new Button("New Statement");
+            newStatement.setId("newStatementButton");
             newStatement.setOnAction(e -> {
                 choseNew[0] = true;
                 dialog.close();
             });
 
             Button openExisting = new Button("Open Existing");
+            openExisting.setId("openExistingButton");
             openExisting.setOnAction(e -> {
                 choseOpen[0] = true;
                 dialog.close();
             });
 
             Button clearSelections = new Button("Clear Selections");
+            clearSelections.setId("clearSelectionsButton");
             clearSelections.setOnAction(e -> {
                 choseClear[0] = true;
                 dialog.close();
             });
 
             Button cancel = new Button("Cancel");
+            cancel.setId("cancelButton");
             cancel.getStyleClass().add("button-clear");
             cancel.setOnAction(e -> dialog.close());
 
@@ -520,6 +552,7 @@ public class MainView {
         boolean[] opened = {false};
 
         Button open = new Button("Open");
+        open.setId("openButton");
         open.setDisable(true);
         list.getSelectionModel().selectedItemProperty().addListener(
                 (obs, o, n) -> open.setDisable(n == null));
@@ -539,6 +572,7 @@ public class MainView {
         });
 
         Button cancel = new Button("Cancel");
+        cancel.setId("cancelButton");
         cancel.getStyleClass().add("button-clear");
         cancel.setOnAction(e -> dialog.close());
 
@@ -550,9 +584,7 @@ public class MainView {
         content.setAlignment(Pos.CENTER);
         content.getStyleClass().add("splash-container");
 
-        Scene scene = new Scene(content);
-        scene.getStylesheets().add(getClass().getResource(
-                "/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
+        Scene scene = buildDialogScene(content);
         dialog.setScene(scene);
         dialog.setResizable(false);
         dialog.showAndWait();
@@ -579,6 +611,7 @@ public class MainView {
         message.getStyleClass().add("splash-subtitle");
 
         Button save = new Button("Save & Continue");
+        save.setId("saveContinueButton");
         save.setOnAction(e -> {
             dialog.close();
             saveCurrentStatement();
@@ -586,6 +619,7 @@ public class MainView {
         });
 
         Button discard = new Button("Discard");
+        discard.setId("discardButton");
         discard.getStyleClass().add("button-reset");
         discard.setOnAction(e -> {
             dialog.close();
@@ -593,6 +627,7 @@ public class MainView {
         });
 
         Button cancel = new Button("Cancel");
+        cancel.setId("cancelButton");
         cancel.getStyleClass().add("button-clear");
         cancel.setOnAction(e -> dialog.close());
 
@@ -604,9 +639,7 @@ public class MainView {
         content.setAlignment(Pos.CENTER);
         content.getStyleClass().add("splash-container");
 
-        Scene scene = new Scene(content);
-        scene.getStylesheets().add(getClass().getResource(
-                "/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
+        Scene scene = buildDialogScene(content);
         dialog.setScene(scene);
         dialog.setResizable(false);
         dialog.showAndWait();
@@ -639,12 +672,14 @@ public class MainView {
             boolean[] choseOpen = {false};
 
             Button newStatement = new Button("New Statement");
+            newStatement.setId("newStatementButton");
             newStatement.setOnAction(e -> {
                 choseNew[0] = true;
                 dialog.close();
             });
 
             Button openExisting = new Button("Open Existing");
+            openExisting.setId("openExistingButton");
             openExisting.setDisable(saved.isEmpty());
             openExisting.setOnAction(e -> {
                 choseOpen[0] = true;

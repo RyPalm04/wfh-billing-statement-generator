@@ -1,6 +1,7 @@
 package com.palmer.billingstatementgenerator;
 
 import com.palmer.billingstatementgenerator.db.Database;
+import com.palmer.billingstatementgenerator.db.DatabaseLockedException;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.views.MainView;
 import com.palmer.billingstatementgenerator.views.SplashView;
@@ -108,6 +109,29 @@ public class MainApp extends Application {
             });
 
             primaryStage.close();
+        });
+
+        initTask.setOnFailed(e -> {
+            Throwable ex = initTask.getException();
+            primaryStage.close();
+            if (ex instanceof DatabaseLockedException) {
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                        javafx.scene.control.Alert.AlertType.ERROR);
+                alert.setTitle("Already Running");
+                alert.setHeaderText("Wright Funeral Home Billing is already open.");
+                alert.setContentText(
+                        "Only one instance can run at a time. Close the existing window and try again.");
+                alert.showAndWait();
+            } else {
+                log.error("Startup failed", ex);
+                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                        javafx.scene.control.Alert.AlertType.ERROR);
+                alert.setTitle("Startup Error");
+                alert.setHeaderText("The application failed to start.");
+                alert.setContentText(ex != null ? ex.getMessage() : "Unknown error");
+                alert.showAndWait();
+            }
+            Platform.exit();
         });
 
         new Thread(initTask).start();

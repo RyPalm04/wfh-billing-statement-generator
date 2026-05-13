@@ -346,6 +346,22 @@
     -fx-text-fill: white;
 }
 
+.button-close {
+    -fx-background-color: transparent;
+    -fx-text-fill: -wfh-muted;
+    -fx-border-color: transparent;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8 2 8;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.button-close:hover {
+    -fx-background-color: -wfh-rose;
+    -fx-text-fill: white;
+}
+
 .instructions-title {
     -fx-font-family: "Playfair Display";
     -fx-font-weight: bold;

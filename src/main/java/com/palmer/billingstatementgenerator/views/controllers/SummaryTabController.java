@@ -254,6 +254,7 @@ public class SummaryTabController extends BaseController {
         lbl.getStyleClass().add("summary-total-label");
 
         TextField field = new TextField();
+        field.setId("paymentField");
         field.setPrefColumnCount(10);
         field.getStyleClass().add("price-field");
         field.setPromptText("$0.00");

@@ -89,6 +89,7 @@ public class InstructionsTabController extends BaseController {
         }
 
         Button getStarted = new Button("Get Started");
+        getStarted.setId("getStartedButton");
         getStarted.getStyleClass().add("button-get-started");
         getStarted.setOnAction(e -> onNavigate.accept(1));
 

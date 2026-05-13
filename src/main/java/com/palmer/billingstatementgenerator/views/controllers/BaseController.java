@@ -99,9 +99,14 @@ public abstract class BaseController {
      */
     protected CheckBox buildCheckBox(String label, int row, GridPane grid) {
         CheckBox cb = new CheckBox(label);
+        cb.setId(toId(label) + "_cb");
         GridPane.setConstraints(cb, 0, row);
         grid.getChildren().add(cb);
         return cb;
+    }
+
+    protected static String toId(String name) {
+        return name.toLowerCase().replaceAll("[^a-z0-9]+", "_").replaceAll("^_|_$", "");
     }
 
     /**
