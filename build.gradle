@@ -5,9 +5,6 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.14'
 }
 
-group 'com.palmer'
-version '1.0-SNAPSHOT'
-
 repositories {
     mavenCentral()
 }
@@ -17,6 +14,8 @@ ext {
     spockVersion = '2.0-groovy-3.0'
     appVersion = '1.1.0'
 }
+
+version = appVersion
 
 java {
     toolchain {
@@ -62,8 +61,8 @@ test {
 tasks.register('jpackageApp', Exec) {
     dependsOn installDist
 
-    def outputDir = file("${buildDir}/jpackage")
-    def libDir = file("${buildDir}/install/${rootProject.name}/lib")
+    def outputDir = layout.buildDirectory.dir('jpackage').get().asFile
+    def libDir = layout.buildDirectory.dir("install/${rootProject.name}/lib").get().asFile
     def os = org.gradle.internal.os.OperatingSystem.current()
 
     doFirst {
