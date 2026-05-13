@@ -20,6 +20,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.util.Random;
+import java.util.prefs.Preferences;
 
 public class MainApp extends Application {
 
@@ -70,6 +71,10 @@ public class MainApp extends Application {
 		}));
 
 		initTask.setOnSucceeded(e -> {
+			Preferences prefs = Preferences.userNodeForPackage(MainApp.class);
+			boolean firstLaunch = !prefs.getBoolean("hasLaunched", false);
+			prefs.putBoolean("hasLaunched", true);
+
 			MainView mainView = new MainView();
 			BorderPane root = new BorderPane(mainView.asParent());
 			Scene mainScene = new Scene(root);
@@ -82,6 +87,7 @@ public class MainApp extends Application {
 
 			mainView.wireKeyNav(mainScene);
 			mainView.fitWindowToLargestTab();
+			if (!firstLaunch) mainView.skipInstructions();
 			primaryStage.close();
 		});
 

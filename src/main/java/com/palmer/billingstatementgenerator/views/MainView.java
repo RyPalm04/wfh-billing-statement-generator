@@ -231,6 +231,14 @@ public class MainView {
 	}
 
 	/**
+	 * Skips the Instructions tab and selects the Service Information tab directly.
+	 * Called on non-first launches.
+	 */
+	public void skipInstructions() {
+		tabPane.getSelectionModel().select(1);
+	}
+
+	/**
 	 * Wires Alt+Left / Alt+Right to navigate between tabs at the scene level,
 	 * so the shortcuts work regardless of which control has focus.
 	 *
@@ -389,7 +397,7 @@ public class MainView {
 	 */
 	private void rebuildView() {
 		createTabs();
-		createLayout();
+		root.setCenter(tabPane);
 		wireTabs();
 	}
 }
