@@ -40,8 +40,7 @@ dependencies {
     implementation('org.slf4j:slf4j-api:2.0.9')
     implementation('ch.qos.logback:logback-classic:1.4.14')
     implementation("org.apache.commons:commons-lang3:3.18.0")
-    implementation('net.sourceforge.dynamicreports:dynamicreports-core:6.12.0')
-    implementation('com.lowagie:itext:2.1.7')
+    implementation('net.sf.jasperreports:jasperreports:6.21.5')
     implementation('com.h2database:h2:2.2.224')
     // JAXB — removed from the JDK after Java 8, but JasperReports still needs it
     implementation('javax.xml.bind:jaxb-api:2.3.1')

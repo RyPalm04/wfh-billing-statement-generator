@@ -294,7 +294,7 @@ public class MainView {
                 if (invalid.get()) {
                     showIncompleteAlert();
                 } else {
-                    PdfGenerator.export(root.getScene().getWindow());
+                    showPdfDialog();
                 }
             });
             clearButton.disableProperty().unbind();
@@ -518,6 +518,53 @@ public class MainView {
                 done = true;
             }
         }
+    }
+
+    /**
+     * Displays a modal dialog offering Save to Computer or Print for the current statement.
+     */
+    private void showPdfDialog() {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(root.getScene().getWindow());
+        dialog.setTitle("Generate PDF");
+
+        Label title = new Label("Generate PDF");
+        title.getStyleClass().add("splash-title");
+
+        Label message = new Label("How would you like to output this statement?");
+        message.getStyleClass().add("splash-subtitle");
+
+        Button saveButton = new Button("Save to Computer");
+        saveButton.setId("pdfSaveButton");
+        saveButton.setOnAction(e -> {
+            dialog.close();
+            PdfGenerator.export(root.getScene().getWindow());
+        });
+
+        Button printButton = new Button("Print");
+        printButton.setId("pdfPrintButton");
+        printButton.setOnAction(e -> {
+            dialog.close();
+            PdfGenerator.print(root.getScene().getWindow());
+        });
+
+        Button cancel = new Button("Cancel");
+        cancel.setId("pdfCancelButton");
+        cancel.getStyleClass().add("button-clear");
+        cancel.setOnAction(e -> dialog.close());
+
+        HBox buttons = new HBox(12, saveButton, printButton, cancel);
+        buttons.setAlignment(Pos.CENTER);
+
+        VBox content = new VBox(20, title, message, buttons);
+        content.setPadding(new Insets(32));
+        content.setAlignment(Pos.CENTER);
+        content.getStyleClass().add("splash-container");
+
+        dialog.setScene(buildDialogScene(content));
+        dialog.setResizable(false);
+        dialog.showAndWait();
     }
 
     /**

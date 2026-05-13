@@ -8,14 +8,18 @@ import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineIt
 import com.palmer.billingstatementgenerator.models.statement.Statement;
 import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+
+import javax.swing.SwingUtilities;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
 import org.slf4j.Logger;
@@ -62,14 +66,47 @@ public final class PdfGenerator {
      */
     public static void generate(Statement stmt, File outputFile) throws IOException {
         try {
-            JasperReport report = compiledReport();
-            Map<String, Object> row = buildFieldMap(stmt);
-            JRMapArrayDataSource ds = new JRMapArrayDataSource(new Map[]{row});
-            JasperPrint print = JasperFillManager.fillReport(report, new HashMap<>(), ds);
+            JasperPrint print = fill(stmt);
             JasperExportManager.exportReportToPdfFile(print, outputFile.getAbsolutePath());
         } catch (JRException e) {
             throw new IOException("PDF generation failed: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Opens the system print dialog and prints the current statement directly.
+     * Filling the report happens on the calling thread; the AWT print dialog is
+     * dispatched to the AWT EDT to avoid the JavaFX/AWT thread conflict on macOS.
+     * Shows an error alert on the JavaFX thread if printing fails.
+     *
+     * @param ownerWindow
+     *         the owner window for any alerts shown
+     */
+    public static void print(Window ownerWindow) {
+        log.info("Printing statement for control number {}", StatementContext.current().getControlNumber());
+        try {
+            JasperPrint jasperPrint = fill(StatementContext.current());
+            SwingUtilities.invokeLater(() -> {
+                try {
+                    JasperPrintManager.printReport(jasperPrint, true);
+                    log.info("Print job submitted for control number {}", StatementContext.current().getControlNumber());
+                } catch (JRException e) {
+                    log.error("Print failed", e);
+                    Platform.runLater(() ->
+                            new Alert(Alert.AlertType.ERROR, "Failed to print: " + e.getMessage()).showAndWait());
+                }
+            });
+        } catch (Throwable t) {
+            log.error("Print failed during report fill", t);
+            new Alert(Alert.AlertType.ERROR, "Failed to print: " + t.getMessage()).showAndWait();
+        }
+    }
+
+    private static JasperPrint fill(Statement stmt) throws JRException, IOException {
+        JasperReport report = compiledReport();
+        Map<String, Object> row = buildFieldMap(stmt);
+        JRMapArrayDataSource ds = new JRMapArrayDataSource(new Map[]{row});
+        return JasperFillManager.fillReport(report, new HashMap<>(), ds);
     }
 
     private static synchronized JasperReport compiledReport() throws JRException, IOException {
