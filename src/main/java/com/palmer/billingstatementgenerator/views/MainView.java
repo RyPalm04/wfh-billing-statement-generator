@@ -23,6 +23,12 @@ import javafx.stage.Window;
 
 import java.util.Objects;
 
+/**
+ * The main application view, responsible for assembling the full UI layout.
+ * Manages the tab pane, header, button bar, and navigation between tabs.
+ * Owns the shared Previous, Clear, and Next buttons and rewires them
+ * reactively as the user navigates between tabs.
+ */
 public class MainView {
 	private static final String FXML_BASE = "/com/palmer/billingstatementgenerator/views/";
 
@@ -32,9 +38,13 @@ public class MainView {
 	private Button nextButton;
 	private Button clearButton;
 
-	private GeneratorTabs tabTwo;
+    /** Controller for the summary tab, held for refresh and reset operations. */
 	private SummaryTabController summaryController;
 
+	/**
+	 * Constructs the main view by creating tabs, the button bar, the layout,
+	 * and wiring tab selection behavior.
+	 */
 	public MainView() {
 		createTabs();
 		createButtonBar();
@@ -42,44 +52,57 @@ public class MainView {
 		wireTabs();
 	}
 
+	/**
+	 * Returns the root node of the main view for embedding in a {@link javafx.scene.Scene}.
+	 *
+	 * @return the root {@link Parent} node
+	 */
 	public Parent asParent() {
 		return root;
 	}
 
+	/**
+	 * Creates and configures all tabs, wiring total suppliers to the grid tab controllers
+	 * and assembling the tab pane.
+	 */
 	private void createTabs() {
 		InstructionsTabController instructionsController = new InstructionsTabController();
 		ScrollPane instructionsView = instructionsController.buildView(
 				() -> tabPane.getSelectionModel().select(1)
 		);
-		GeneratorTabs tabInstructions = GeneratorTabs.fromController(
+		GeneratorTabs instructionsTab = GeneratorTabs.fromController(
 				"INSTRUCTIONS", instructionsController, instructionsView);
 
-		tabTwo = GeneratorTabs.fromFxml("SERVICE INFORMATION", FXML_BASE + "service_information.fxml");
-		ServicesController threeCtrl = new ServicesController();
-		threeCtrl.setTotalSupplier(() -> StatementCalculator.servicesTotal(StatementContext.current()));
+        GeneratorTabs serviceInformationTab = GeneratorTabs.fromFxml("SERVICE INFORMATION", FXML_BASE + "service_information.fxml");
 
-		MerchandiseController fourCtrl = new MerchandiseController();
-		fourCtrl.setTotalSupplier(() -> StatementCalculator.merchandiseTotal(StatementContext.current()));
+		ServicesController servicesController = new ServicesController();
+		servicesController.setTotalSupplier(() -> StatementCalculator.servicesTotal(StatementContext.current()));
 
-		SpecialChargesController fiveCtrl = new SpecialChargesController();
-		fiveCtrl.setTotalSupplier(() -> StatementCalculator.specialChargesTotal(StatementContext.current()));
+		MerchandiseController merchandiseController = new MerchandiseController();
+		merchandiseController.setTotalSupplier(() -> StatementCalculator.merchandiseTotal(StatementContext.current()));
 
-		CashAdvanceController sixCtrl = new CashAdvanceController();
-		sixCtrl.setTotalSupplier(() -> StatementCalculator.cashAdvancesTotal(StatementContext.current()));
+		SpecialChargesController specialChargesController = new SpecialChargesController();
+		specialChargesController.setTotalSupplier(() -> StatementCalculator.specialChargesTotal(StatementContext.current()));
 
-		GeneratorTabs tabThree = GeneratorTabs.fromController("SERVICES, FACILITIES & TRANSPORTATION", threeCtrl);
-		GeneratorTabs tabFour  = GeneratorTabs.fromController("MERCHANDISE", fourCtrl);
-		GeneratorTabs tabFive  = GeneratorTabs.fromController("SPECIAL CHARGES", fiveCtrl);
-		GeneratorTabs tabSix   = GeneratorTabs.fromController("CASH ADVANCE ITEMS", sixCtrl);
+		CashAdvanceController cashAdvanceController = new CashAdvanceController();
+		cashAdvanceController.setTotalSupplier(() -> StatementCalculator.cashAdvancesTotal(StatementContext.current()));
+
+		GeneratorTabs servicesTab = GeneratorTabs.fromController("SERVICES, FACILITIES & TRANSPORTATION", servicesController);
+		GeneratorTabs merchandiseTab  = GeneratorTabs.fromController("MERCHANDISE", merchandiseController);
+		GeneratorTabs specialChargesTab  = GeneratorTabs.fromController("SPECIAL CHARGES", specialChargesController);
+		GeneratorTabs cashAdvanceTab   = GeneratorTabs.fromController("CASH ADVANCE ITEMS", cashAdvanceController);
 
 		summaryController = new SummaryTabController();
 		ScrollPane summaryView = summaryController.buildView(i -> tabPane.getSelectionModel().select(i));
 		GeneratorTabs summaryTab = GeneratorTabs.fromController("SUMMARY", summaryController, summaryView);
 
-		tabPane = new TabPane(tabInstructions, tabTwo, tabThree, tabFour, tabFive, tabSix, summaryTab);
+		tabPane = new TabPane(instructionsTab, serviceInformationTab, servicesTab, merchandiseTab, specialChargesTab, cashAdvanceTab, summaryTab);
 		tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 	}
 
+	/**
+	 * Creates the shared navigation buttons and applies their base style classes.
+	 */
 	private void createButtonBar() {
 		prevButton  = new Button("Previous");
 		clearButton = new Button("Clear Selections");
@@ -87,6 +110,12 @@ public class MainView {
 		clearButton.getStyleClass().add("button-clear");
 	}
 
+	/**
+	 * Builds the bottom button bar HBox with Previous, Clear, and Next buttons
+	 * separated by flexible spacers.
+	 *
+	 * @return the configured button bar {@link HBox}
+	 */
 	private HBox buildButtonBar() {
 		HBox bar = new HBox(prevButton, leftSpacer(), clearButton, rightSpacer(), nextButton);
 		bar.setPadding(new Insets(12, 24, 12, 24));
@@ -95,18 +124,32 @@ public class MainView {
 		return bar;
 	}
 
+	/**
+	 * Creates a horizontally growing spacer region for use in the button bar.
+	 *
+	 * @return a {@link Region} with horizontal grow priority set to ALWAYS
+	 */
 	private Region leftSpacer() {
 		Region r = new Region();
 		HBox.setHgrow(r, Priority.ALWAYS);
 		return r;
 	}
 
+	/**
+	 * Creates a horizontally growing spacer region for use in the button bar.
+	 *
+	 * @return a {@link Region} with horizontal grow priority set to ALWAYS
+	 */
 	private Region rightSpacer() {
 		Region r = new Region();
 		HBox.setHgrow(r, Priority.ALWAYS);
 		return r;
 	}
 
+	/**
+	 * Assembles the main layout with the logo header at the top,
+	 * tab pane in the center, and button bar at the bottom.
+	 */
 	private void createLayout() {
 		Image logo = new Image(Objects.requireNonNull(
 				getClass().getResourceAsStream("/com/palmer/billingstatementgenerator/img/wfh splash logo.jpg")));
@@ -126,6 +169,10 @@ public class MainView {
 		root.setBottom(buildButtonBar());
 	}
 
+	/**
+	 * Wires the tab selection listener to update the button bar whenever
+	 * the selected tab changes, and sets the initial button bar state.
+	 */
 	private void wireTabs() {
 		updateButtonBar((GeneratorTabs) tabPane.getTabs().get(0));
 		tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
@@ -135,8 +182,15 @@ public class MainView {
 		});
 	}
 
+	/**
+	 * Updates the button bar state for the given tab. Hides the button bar on the
+	 * instructions tab, disables Previous on the first data tab, and switches the
+	 * Next button to "Generate PDF" and the Clear button to "Reset" on the last tab.
+	 *
+	 * @param tab the currently selected {@link GeneratorTabs}
+	 */
 	private void updateButtonBar(GeneratorTabs tab) {
-		int index   = tabPane.getTabs().indexOf(tab);
+		int index    = tabPane.getTabs().indexOf(tab);
 		boolean isFirst = index == 0;
 		boolean isLast  = index == tabPane.getTabs().size() - 1;
 
@@ -160,6 +214,11 @@ public class MainView {
 		}
 	}
 
+	/**
+	 * Sizes the application window to fit the largest tab by iterating through
+	 * all tabs, measuring their rendered size, and setting the stage dimensions
+	 * to the maximum observed width and height.
+	 */
 	public void fitWindowToLargestTab() {
 		if (root.getScene() == null) return;
 		Window window = root.getScene().getWindow();
@@ -186,6 +245,12 @@ public class MainView {
 		stage.setHeight(maxHeight);
 	}
 
+	/**
+	 * Displays a modal reset dialog offering three options: Full Reset,
+	 * Clear Selections, or Cancel. Full Reset reinitializes the statement
+	 * context and rebuilds the entire view. Clear Selections resets all
+	 * tab controllers without affecting service information.
+	 */
 	private void showResetDialog() {
 		Stage dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
@@ -231,6 +296,10 @@ public class MainView {
 		dialog.showAndWait();
 	}
 
+	/**
+	 * Resets all tab controllers except the summary, then refreshes the summary.
+	 * Used by the Clear Selections option in the reset dialog.
+	 */
 	private void clearAllSelections() {
 		tabPane.getTabs().stream()
 				.filter(t -> t instanceof GeneratorTabs)
@@ -241,6 +310,10 @@ public class MainView {
 		summaryController.refresh();
 	}
 
+	/**
+	 * Rebuilds the entire view after a full reset by recreating tabs,
+	 * the layout, and rewiring tab selection behavior.
+	 */
 	private void rebuildView() {
 		createTabs();
 		createLayout();

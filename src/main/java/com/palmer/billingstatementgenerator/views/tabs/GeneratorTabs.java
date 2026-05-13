@@ -12,29 +12,68 @@ import javafx.scene.layout.GridPane;
 import java.io.IOException;
 import java.text.NumberFormat;
 
+/**
+ * A {@link Tab} subclass used for all tabs in the billing statement generator.
+ * Supports two construction modes: loading content from an FXML file, or
+ * accepting a pre-built {@link GridTabController} or arbitrary view node.
+ * Wires the tab's selected state to the controller's {@link BaseController#onShow()}
+ * and {@link BaseController#onHide()} lifecycle methods.
+ */
 public class GeneratorTabs extends Tab {
-    protected static final NumberFormat DOLLAR_FORMATTER = NumberFormat.getCurrencyInstance();
-
+    /** The controller associated with this tab's content. */
     private BaseController controller;
+
+    /** The root grid pane that holds the tab's content. */
     protected GridPane grid = new GridPane();
 
+    /**
+     * Private constructor. Use the static factory methods to create instances.
+     *
+     * @param tabTitle the text label displayed on the tab
+     */
     private GeneratorTabs(String tabTitle) {
         super(tabTitle);
         configureGrid();
     }
 
+    /**
+     * Creates a {@link GeneratorTabs} by loading its content from an FXML file.
+     * The FXML's controller must extend {@link BaseController}.
+     *
+     * @param title    the tab label text
+     * @param fxmlPath the classpath resource path to the FXML file
+     * @return a configured {@link GeneratorTabs} instance
+     */
     public static GeneratorTabs fromFxml(String title, String fxmlPath) {
         GeneratorTabs tab = new GeneratorTabs(title);
         tab.loadFxml(fxmlPath);
         return tab;
     }
 
+    /**
+     * Creates a {@link GeneratorTabs} by building its content from a {@link GridTabController}.
+     * Calls {@link GridTabController#buildView()} to construct the grid content.
+     *
+     * @param title      the tab label text
+     * @param controller the grid tab controller to build the view from
+     * @return a configured {@link GeneratorTabs} instance
+     */
     public static GeneratorTabs fromController(String title, GridTabController<?> controller) {
         GeneratorTabs tab = new GeneratorTabs(title);
         tab.loadController(controller);
         return tab;
     }
 
+    /**
+     * Creates a {@link GeneratorTabs} from a pre-built view node and a {@link BaseController}.
+     * Used for tabs whose views are built entirely in code rather than via FXML or a grid controller
+     * (e.g. the Instructions and Summary tabs).
+     *
+     * @param title      the tab label text
+     * @param controller the controller to associate with this tab
+     * @param view       the pre-built view node to display as tab content
+     * @return a configured {@link GeneratorTabs} instance
+     */
     public static GeneratorTabs fromController(String title, BaseController controller, javafx.scene.Node view) {
         GeneratorTabs tab = new GeneratorTabs(title);
         tab.controller = controller;
@@ -44,6 +83,13 @@ public class GeneratorTabs extends Tab {
         return tab;
     }
 
+    /**
+     * Loads the FXML at the given resource path, merges its column constraints and
+     * children into the tab's grid, and wires the controller lifecycle.
+     *
+     * @param fxmlPath the classpath resource path to the FXML file
+     * @throws RuntimeException if the FXML cannot be loaded
+     */
     private void loadFxml(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -60,6 +106,11 @@ public class GeneratorTabs extends Tab {
         }
     }
 
+    /**
+     * Builds the view from a {@link GridTabController} and adds it to the tab's grid.
+     *
+     * @param ctrl the grid tab controller to build from
+     */
     private void loadController(GridTabController<?> ctrl) {
         controller = ctrl;
         GridPane built = ctrl.buildView();
@@ -68,6 +119,10 @@ public class GeneratorTabs extends Tab {
         wireLifecycle();
     }
 
+    /**
+     * Wires the tab's selected property to the controller's
+     * {@link BaseController#onShow()} and {@link BaseController#onHide()} methods.
+     */
     private void wireLifecycle() {
         this.selectedProperty().addListener((obs, wasSel, isSel) -> {
             if (isSel) controller.onShow();
@@ -75,6 +130,9 @@ public class GeneratorTabs extends Tab {
         });
     }
 
+    /**
+     * Configures the tab's root grid pane with standard alignment, spacing, and padding.
+     */
     private void configureGrid() {
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(12);
@@ -83,6 +141,11 @@ public class GeneratorTabs extends Tab {
         this.setContent(grid);
     }
 
+    /**
+     * Returns the controller associated with this tab.
+     *
+     * @return the {@link BaseController} for this tab
+     */
     public BaseController getController() {
         return controller;
     }

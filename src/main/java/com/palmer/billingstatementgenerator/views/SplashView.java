@@ -10,15 +10,27 @@ import javafx.scene.layout.VBox;
 
 import java.util.Objects;
 
+/**
+ * The splash screen view displayed while the application initializes.
+ * Shows the Wright Funeral Home logo, application title, a progress bar,
+ * a status message label, and a copyright notice.
+ */
 public class SplashView {
     private VBox container;
     private ProgressBar progressBar;
     private Label statusLabel;
 
+    /**
+     * Constructs the splash view and builds its content.
+     */
     public SplashView() {
         createContent();
     }
 
+    /**
+     * Builds the splash screen layout including the logo, title, subtitle,
+     * progress bar, status label, and copyright notice.
+     */
     private void createContent() {
         container = new VBox(20);
         container.getStyleClass().add("splash-container");
@@ -48,14 +60,29 @@ public class SplashView {
         container.getChildren().addAll(imageView, titleLabel, subtitleLabel, progressBar, statusLabel, copyrightLabel);
     }
 
+    /**
+     * Returns the root node of the splash view for embedding in a {@link javafx.scene.Scene}.
+     *
+     * @return the root {@link Parent} node
+     */
     public Parent asParent() {
         return container;
     }
 
+    /**
+     * Returns the progress bar for binding to an initialization task's progress property.
+     *
+     * @return the {@link ProgressBar}
+     */
     public ProgressBar getProgressBar() {
         return progressBar;
     }
 
+    /**
+     * Returns the status label for binding to an initialization task's message property.
+     *
+     * @return the status {@link Label}
+     */
     public Label getStatusLabel() {
         return statusLabel;
     }

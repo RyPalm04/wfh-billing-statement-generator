@@ -8,11 +8,25 @@ import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineItem;
 import com.palmer.billingstatementgenerator.util.AppConfig;
 
+/**
+ * Singleton context holder for the current billing {@link Statement}.
+ * Manages the lifecycle of the active statement, including initialization
+ * from the database and reinitialization on full reset.
+ *
+ * <p>Must be initialized via {@link #init()} before {@link #current()} is called.
+ * Calling {@link #init()} again creates a fresh statement, replacing any existing one.</p>
+ */
 public final class StatementContext {
+
     private static Statement current;
 
     private StatementContext() {}
 
+    /**
+     * Initializes a new {@link Statement}, loading all catalog data from the database
+     * and applying the configured sales tax rate from {@link AppConfig}.
+     * Safe to call multiple times; each call replaces the previous statement.
+     */
     public static synchronized void init() {
         Statement statement = new Statement();
         statement.setSalesTaxRate(AppConfig.getSalesTaxRate());
@@ -27,6 +41,12 @@ public final class StatementContext {
         current = statement;
     }
 
+    /**
+     * Returns the current active {@link Statement}.
+     *
+     * @return the current statement
+     * @throws IllegalStateException if {@link #init()} has not been called
+     */
     public static Statement current() {
         if (current == null) {
             throw new IllegalStateException("StatementContext.init() has not been called");

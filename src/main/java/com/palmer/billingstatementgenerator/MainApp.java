@@ -5,13 +5,21 @@ import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.views.MainView;
 import com.palmer.billingstatementgenerator.views.SplashView;
 
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
+
+import java.util.Random;
 
 public class MainApp extends Application {
 
@@ -32,27 +40,34 @@ public class MainApp extends Application {
 				updateMessage("Connecting to database...");
 				updateProgress(1, 4);
 				Database.init();
-				Thread.sleep(1000); // Simulate some loading time
+				Thread.sleep(new Random().nextInt(601) + 900);
 
 				updateMessage("Loading statement context...");
 				updateProgress(2, 4);
 				StatementContext.init();
-				Thread.sleep(1000);
+				Thread.sleep(new Random().nextInt(601) + 900);
 
 				updateMessage("Preparing UI...");
 				updateProgress(3, 4);
-				Thread.sleep(1000);
+				Thread.sleep(new Random().nextInt(601) + 900);
 
 				updateMessage("Ready!");
 				updateProgress(4, 4);
-				Thread.sleep(1000);
+				Thread.sleep(new Random().nextInt(401) + 700);
 
 				return null;
 			}
 		};
 
-		splashView.getProgressBar().progressProperty().bind(initTask.progressProperty());
 		splashView.getStatusLabel().textProperty().bind(initTask.messageProperty());
+
+		initTask.progressProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> {
+			Timeline tl = new Timeline(new KeyFrame(
+				Duration.millis(400),
+				new KeyValue(splashView.getProgressBar().progressProperty(), newVal.doubleValue(), Interpolator.EASE_BOTH)
+			));
+			tl.play();
+		}));
 
 		initTask.setOnSucceeded(e -> {
 			MainView mainView = new MainView();
@@ -74,17 +89,11 @@ public class MainApp extends Application {
 
 	private void loadFonts() {
 		String base = "/com/palmer/billingstatementgenerator/fonts/";
-		Font f1 = Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Regular.ttf"), 14);
-		Font f2 = Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Bold.ttf"), 14);
-		Font f3 = Font.loadFont(getClass().getResourceAsStream(base + "Lato-Regular.ttf"), 14);
-		Font f4 = Font.loadFont(getClass().getResourceAsStream(base + "Lato-Bold.ttf"), 14);
-		Font f5 = Font.loadFont(getClass().getResourceAsStream(base + "Lato-Light.ttf"), 14);
-
-		System.out.println(f1.getFamily());
-		System.out.println(f2.getFamily());
-		System.out.println(f3.getFamily());
-		System.out.println(f4.getFamily());
-		System.out.println(f5.getFamily());
+		Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Regular.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream(base + "PlayfairDisplay-Bold.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Regular.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Bold.ttf"), 14);
+		Font.loadFont(getClass().getResourceAsStream(base + "Lato-Light.ttf"), 14);
 	}
 
 	public static void main(String[] args) {
