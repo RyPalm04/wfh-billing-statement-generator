@@ -15,6 +15,14 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Manages the application's single in-memory H2 database instance.
+ * The database is kept alive for the lifetime of the JVM via {@code DB_CLOSE_DELAY=-1}.
+ *
+ * <p>Call {@link #init()} once at startup before any DAO is used.
+ * {@link #init()} is idempotent — subsequent calls are no-ops.
+ * {@link #get()} throws {@link IllegalStateException} if called before {@link #init()}.</p>
+ */
 public final class Database {
     private static final Logger log = LoggerFactory.getLogger(Database.class);
     private static final String URL = "jdbc:h2:mem:wfh;DB_CLOSE_DELAY=-1";
@@ -22,6 +30,10 @@ public final class Database {
 
     private Database() {}
 
+    /**
+     * Initializes the in-memory H2 database and runs the schema and seed scripts.
+     * Safe to call multiple times; only the first call has any effect.
+     */
     public static synchronized void init() {
         if (dataSource != null) {
             log.debug("Database already initialized, skipping");
@@ -38,6 +50,12 @@ public final class Database {
         log.info("Database initialized");
     }
 
+    /**
+     * Returns the initialized {@link DataSource}.
+     *
+     * @return the application {@link DataSource}
+     * @throws IllegalStateException if {@link #init()} has not been called
+     */
     public static DataSource get() {
         if (dataSource == null) {
             throw new IllegalStateException("Database.init() has not been called");

@@ -12,6 +12,13 @@ import javafx.beans.property.StringProperty;
 
 import java.math.BigDecimal;
 
+/**
+ * Mutable line item wrapping a {@link Merchandise} catalog entry. Adds JavaFX properties
+ * for selection state, optional description, quantity, and effective price.
+ * The price defaults to the catalog's {@code defaultCost} but can be overridden by the user
+ * for items that have no default cost. For per-unit items the price is recomputed from
+ * {@code quantity × defaultCost} whenever the spinner value changes.
+ */
 public class MerchandiseLineItem {
     private final Merchandise catalog;
     private final BooleanProperty selected = new SimpleBooleanProperty(false);

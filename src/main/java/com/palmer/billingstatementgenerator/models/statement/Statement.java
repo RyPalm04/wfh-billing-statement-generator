@@ -17,6 +17,14 @@ import javafx.collections.ObservableList;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * Aggregate root for a billing statement. Holds all user-entered service information
+ * and observable collections of line items for each billing category.
+ *
+ * <p>A single instance is managed by {@link StatementContext} for the lifetime of the
+ * application session. Financial totals are computed on demand by {@link StatementCalculator}
+ * rather than stored here.</p>
+ */
 public class Statement {
     private final IntegerProperty controlNumber = new SimpleIntegerProperty();
     private final StringProperty servicesForName = new SimpleStringProperty("");

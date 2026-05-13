@@ -12,6 +12,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DAO for loading {@link com.palmer.billingstatementgenerator.models.catalog.SpecialCharge} records
+ * from the database. Results are returned in {@code sort_order} sequence.
+ */
 public class SpecialChargeDao {
     private static final Logger log = LoggerFactory.getLogger(SpecialChargeDao.class);
     private static final String SELECT_ALL =
@@ -20,10 +24,17 @@ public class SpecialChargeDao {
 
     private final DataSource dataSource;
 
+    /** @param dataSource the application data source */
     public SpecialChargeDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Returns all special charges ordered by {@code sort_order}.
+     *
+     * @return a non-null, possibly empty list of {@link SpecialCharge} objects
+     * @throws RuntimeException if the query fails
+     */
     public List<SpecialCharge> findAll() {
         try (Connection c = dataSource.getConnection();
              PreparedStatement ps = c.prepareStatement(SELECT_ALL);

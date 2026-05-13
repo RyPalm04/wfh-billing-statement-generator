@@ -4,6 +4,11 @@ import com.palmer.billingstatementgenerator.models.catalog.Service;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
+/**
+ * Mutable line item wrapping a {@link Service} catalog entry with a JavaFX
+ * {@code selected} property. One instance exists per service for the lifetime
+ * of the current {@link com.palmer.billingstatementgenerator.models.statement.Statement}.
+ */
 public class ServiceLineItem {
     private final Service catalog;
     private final BooleanProperty selected = new SimpleBooleanProperty(false);

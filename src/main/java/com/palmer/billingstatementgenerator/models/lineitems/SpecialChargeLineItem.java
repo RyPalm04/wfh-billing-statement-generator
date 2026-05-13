@@ -10,6 +10,12 @@ import javafx.beans.property.StringProperty;
 
 import java.math.BigDecimal;
 
+/**
+ * Mutable line item wrapping a {@link SpecialCharge} catalog entry. Adds JavaFX properties
+ * for selection state, optional description, and effective price. The price defaults to
+ * the catalog's {@code defaultCost}; items with no default cost require the user to enter
+ * a value before the statement can proceed.
+ */
 public class SpecialChargeLineItem {
     private final SpecialCharge catalog;
     private final BooleanProperty selected = new SimpleBooleanProperty(false);

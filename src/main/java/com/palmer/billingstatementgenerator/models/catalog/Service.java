@@ -2,6 +2,12 @@ package com.palmer.billingstatementgenerator.models.catalog;
 
 import java.math.BigDecimal;
 
+/**
+ * Immutable catalog record representing a funeral service or facility offering
+ * (e.g. embalming, transfer, graveside service). Loaded from the database at startup
+ * and wrapped in a {@link com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem}
+ * for user selection.
+ */
 public class Service {
     private final int id;
     private final int sortOrder;

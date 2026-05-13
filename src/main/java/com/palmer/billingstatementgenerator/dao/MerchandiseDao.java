@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * DAO for loading {@link com.palmer.billingstatementgenerator.models.catalog.Merchandise} records
+ * from the database. Results are returned in {@code sort_order} sequence.
+ * The {@code pricing_mode} column is mapped to {@link com.palmer.billingstatementgenerator.models.catalog.Merchandise.PricingMode}.
+ */
 public class MerchandiseDao {
     private static final Logger log = LoggerFactory.getLogger(MerchandiseDao.class);
     private static final String SELECT_ALL =
@@ -22,10 +27,17 @@ public class MerchandiseDao {
 
     private final DataSource dataSource;
 
+    /** @param dataSource the application data source */
     public MerchandiseDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Returns all merchandise items ordered by {@code sort_order}.
+     *
+     * @return a non-null, possibly empty list of {@link Merchandise} objects
+     * @throws RuntimeException if the query fails
+     */
     public List<Merchandise> findAll() {
         try (Connection c = dataSource.getConnection();
              PreparedStatement ps = c.prepareStatement(SELECT_ALL);
