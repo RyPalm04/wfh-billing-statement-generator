@@ -242,6 +242,8 @@ public abstract class BaseController {
     /**
      * Returns a binding that is {@code true} when any checked item is missing a required price.
      * Always {@code false} in the base class; overridden in {@link GridTabController}.
+     *
+     * @return a {@link BooleanBinding} indicating whether any checked item is missing a required price
      */
     public BooleanBinding hasInvalidSelections() {
         return Bindings.createBooleanBinding(() -> false);
