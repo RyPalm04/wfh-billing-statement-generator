@@ -101,7 +101,9 @@ public class SummaryTabController extends BaseController {
                 .collect(Collectors.toList());
 
         addSectionHeader("Merchandise", 3);
-        selectedMerch.forEach(m -> addLineItem(m.getCatalog().getName(), m.getPrice(), 3));
+        selectedMerch.forEach(m -> addLineItem(m.getCatalog().getName(),
+                m.getCatalog().isDescriptionRequired() ? m.getDescription() : null,
+                m.getPrice(), 3));
         addTotalRow("Merchandise Total", StatementCalculator.merchandiseTotal(stmt));
 
         List<SpecialChargeLineItem> selectedCharges = stmt.getSpecialCharges().stream()
@@ -109,7 +111,9 @@ public class SummaryTabController extends BaseController {
                 .collect(Collectors.toList());
 
         addSectionHeader("Special Charges", 4);
-        selectedCharges.forEach(sc -> addLineItem(sc.getCatalog().getName(), sc.getPrice(), 4));
+        selectedCharges.forEach(sc -> addLineItem(sc.getCatalog().getName(),
+                sc.getCatalog().isDescriptionRequired() ? sc.getDescription() : null,
+                sc.getPrice(), 4));
         addTotalRow("Special Charges Total", StatementCalculator.specialChargesTotal(stmt));
 
         List<CashAdvanceLineItem> selectedCash = stmt.getCashAdvances().stream()
@@ -117,7 +121,9 @@ public class SummaryTabController extends BaseController {
                 .collect(Collectors.toList());
 
         addSectionHeader("Cash Advance Items", 5);
-        selectedCash.forEach(ca -> addLineItem(ca.getCatalog().getName(), ca.getAmount(), 5));
+        selectedCash.forEach(ca -> addLineItem(ca.getCatalog().getName(),
+                ca.getProvider().isEmpty() ? null : ca.getProvider(),
+                ca.getAmount(), 5));
         addTotalRow("Cash Advances Total", StatementCalculator.cashAdvancesTotal(stmt));
 
         addSeparator();
@@ -170,15 +176,41 @@ public class SummaryTabController extends BaseController {
      * @param tabIndex the tab index to navigate to when clicked
      */
     private void addLineItem(String name, BigDecimal price, int tabIndex) {
+        addLineItem(name, null, price, tabIndex);
+    }
+
+    /**
+     * Adds a clickable line item row showing the item name, an optional subtitle
+     * (description or provider), and its price.
+     *
+     * @param name     the line item name
+     * @param subtitle an optional description or provider shown below the name, or null to omit
+     * @param price    the line item price, or null for a blank price
+     * @param tabIndex the tab index to navigate to when clicked
+     */
+    private void addLineItem(String name, String subtitle, BigDecimal price, int tabIndex) {
         GridPane row = buildRow();
-        Label lbl = clickableLabel(name, tabIndex);
-        lbl.getStyleClass().add("summary-label");
+
+        Label nameLbl = clickableLabel(name, tabIndex);
+        nameLbl.getStyleClass().add("summary-label");
+
+        javafx.scene.Node nameNode;
+        if (subtitle != null && !subtitle.isBlank()) {
+            Label subLbl = new Label(subtitle);
+            subLbl.getStyleClass().add("summary-subtitle");
+            VBox nameBox = new VBox(2, nameLbl, subLbl);
+            nameNode = nameBox;
+        } else {
+            nameNode = nameLbl;
+        }
+
         Label val = new Label(price != null ? DOLLAR_FORMATTER.format(price) : "");
         val.getStyleClass().add("price-label");
-        GridPane.setConstraints(lbl, 0, 0);
+        GridPane.setConstraints(nameNode, 0, 0);
         GridPane.setConstraints(val, 1, 0);
         GridPane.setHalignment(val, HPos.RIGHT);
-        row.getChildren().addAll(lbl, val);
+        GridPane.setValignment(val, javafx.geometry.VPos.TOP);
+        row.getChildren().addAll(nameNode, val);
         root.getChildren().add(row);
     }
 

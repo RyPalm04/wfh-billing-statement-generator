@@ -3,6 +3,7 @@ package com.palmer.billingstatementgenerator.views.controllers;
 import com.palmer.billingstatementgenerator.util.BigDecimalCurrencyConverter;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Pos;
@@ -236,6 +237,14 @@ public abstract class BaseController {
         formatter.valueProperty().bindBidirectional(priceProperty);
         formatter.valueProperty().addListener((obs, oldVal, newVal) -> refreshTotal());
         return priceField;
+    }
+
+    /**
+     * Returns a binding that is {@code true} when any checked item is missing a required price.
+     * Always {@code false} in the base class; overridden in {@link GridTabController}.
+     */
+    public BooleanBinding hasInvalidSelections() {
+        return Bindings.createBooleanBinding(() -> false);
     }
 
     /**

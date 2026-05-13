@@ -45,6 +45,7 @@ public class CashAdvanceController extends GridTabController<CashAdvanceLineItem
         provider.textProperty().bindBidirectional(item.providerProperty());
         wireTextFieldToCheckBox(provider, cb);
         wireTextFieldToCheckBox(amount, cb);
+        addValidationPair(cb, item.amountProperty());
 
         return cb;
     }

@@ -49,6 +49,7 @@ public class SpecialChargesController extends GridTabController<SpecialChargeLin
         if (item.getCatalog().getDefaultCost() == null) {
             TextField priceField = buildPriceField(item.priceProperty(), row, itemsGrid);
             wireTextFieldToCheckBox(priceField, cb);
+            addValidationPair(cb, item.priceProperty());
         } else {
             buildPriceLabel(item.getCatalog().getDefaultCost(), row, itemsGrid);
         }

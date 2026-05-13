@@ -265,6 +265,12 @@
     -fx-text-fill: -wfh-secondary;
 }
 
+.summary-subtitle {
+    -fx-font-family: "Lato";
+    -fx-font-size: 11px;
+    -fx-text-fill: -wfh-secondary;
+}
+
 .summary-total-label {
     -fx-font-family: "Lato";
     -fx-font-weight: bold;

@@ -1,5 +1,9 @@
 package com.palmer.billingstatementgenerator.views.controllers;
 
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ObservableBooleanValue;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -33,6 +37,9 @@ public abstract class GridTabController<T> extends BaseController {
 
     /** The list of checkboxes corresponding to each line item row. */
     private List<CheckBox> checkBoxes = new ArrayList<>();
+
+    /** Per-row flags that are true when a checkbox is selected but its price is missing or zero. */
+    private final List<ObservableBooleanValue> invalidFlags = new ArrayList<>();
 
     /** Supplies the calculated total for this tab's selections. */
     private Supplier<BigDecimal> totalSupplier;
@@ -166,6 +173,31 @@ public abstract class GridTabController<T> extends BaseController {
         if (totalSupplier == null || totalLabel == null) return;
         totalLabel.setText("Total: " + DOLLAR_FORMATTER.format(
                 totalSupplier.get() != null ? totalSupplier.get() : BigDecimal.ZERO));
+    }
+
+    /**
+     * Registers a checkbox/price pair for validation. The nav buttons are disabled
+     * while the checkbox is selected but the price is null or zero.
+     *
+     * @param cb            the checkbox to observe
+     * @param priceProperty the price property that must be greater than zero when checked
+     */
+    protected void addValidationPair(CheckBox cb, ObservableValue<BigDecimal> priceProperty) {
+        invalidFlags.add(Bindings.createBooleanBinding(
+                () -> cb.isSelected() && (priceProperty.getValue() == null
+                        || priceProperty.getValue().compareTo(BigDecimal.ZERO) <= 0),
+                cb.selectedProperty(), priceProperty));
+    }
+
+    /**
+     * Returns a binding that is {@code true} when any checked item is missing a required price.
+     */
+    @Override
+    public BooleanBinding hasInvalidSelections() {
+        if (invalidFlags.isEmpty()) return Bindings.createBooleanBinding(() -> false);
+        ObservableBooleanValue[] deps = invalidFlags.toArray(new ObservableBooleanValue[0]);
+        return Bindings.createBooleanBinding(
+                () -> invalidFlags.stream().anyMatch(ObservableBooleanValue::get), deps);
     }
 
     /**

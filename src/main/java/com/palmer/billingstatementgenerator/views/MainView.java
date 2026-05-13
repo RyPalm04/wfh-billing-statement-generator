@@ -6,6 +6,7 @@ import com.palmer.billingstatementgenerator.pdf.PdfGenerator;
 import com.palmer.billingstatementgenerator.views.controllers.*;
 import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -198,18 +199,31 @@ public class MainView {
 
 		root.setBottom(isFirst ? null : buildButtonBar());
 
-		prevButton.setDisable(index == 0);
-		prevButton.setOnAction(e -> tabPane.getSelectionModel().selectPrevious());
+		prevButton.disableProperty().unbind();
+		nextButton.disableProperty().unbind();
+
+		BooleanBinding invalid = tab.getController().hasInvalidSelections();
+
+		prevButton.setOnAction(e -> {
+			if (invalid.get()) showIncompleteAlert();
+			else tabPane.getSelectionModel().selectPrevious();
+		});
 
 		if (isLast) {
 			nextButton.setText("Generate PDF");
-			nextButton.setOnAction(e -> PdfGenerator.export(root.getScene().getWindow()));
+			nextButton.setOnAction(e -> {
+				if (invalid.get()) showIncompleteAlert();
+				else PdfGenerator.export(root.getScene().getWindow());
+			});
 			clearButton.setText("Reset");
 			clearButton.getStyleClass().add("button-reset");
 			clearButton.setOnAction(e -> showResetDialog());
 		} else {
 			nextButton.setText("Next");
-			nextButton.setOnAction(e -> tabPane.getSelectionModel().selectNext());
+			nextButton.setOnAction(e -> {
+				if (invalid.get()) showIncompleteAlert();
+				else tabPane.getSelectionModel().selectNext();
+			});
 			clearButton.setText("Clear Selections");
 			clearButton.getStyleClass().remove("button-reset");
 			tab.getController().setClearButton(clearButton);
@@ -265,6 +279,43 @@ public class MainView {
 		stage.setMinHeight(maxHeight);
 		stage.setWidth(maxWidth);
 		stage.setHeight(maxHeight);
+	}
+
+	/**
+	 * Displays a modal alert when the user attempts to navigate away from a tab
+	 * that has checked items missing a required price or description.
+	 */
+	private void showIncompleteAlert() {
+		Stage dialog = new Stage();
+		dialog.initModality(Modality.APPLICATION_MODAL);
+		dialog.initOwner(root.getScene().getWindow());
+		dialog.setTitle("Incomplete Items");
+
+		Label title = new Label("Incomplete Items");
+		title.getStyleClass().add("splash-title");
+
+		Label message = new Label(
+				"One or more selected items are missing a required price or description.\n" +
+				"Please complete all selections before continuing.");
+		message.getStyleClass().add("splash-subtitle");
+		message.setWrapText(true);
+		message.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+		message.setMaxWidth(320);
+
+		Button ok = new Button("Got It");
+		ok.setOnAction(e -> dialog.close());
+
+		VBox content = new VBox(20, title, message, ok);
+		content.setPadding(new Insets(32));
+		content.setAlignment(Pos.CENTER);
+		content.getStyleClass().add("splash-container");
+
+		Scene scene = new Scene(content);
+		scene.getStylesheets().add(getClass().getResource(
+				"/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
+		dialog.setScene(scene);
+		dialog.setResizable(false);
+		dialog.showAndWait();
 	}
 
 	/**
