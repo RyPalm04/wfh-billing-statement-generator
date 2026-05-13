@@ -78,7 +78,7 @@
     -fx-background-color: white;
 }
 
-.check-box:hover .box {
+.check-box:hover .box, .check-box:focused .box {
     -fx-border-color: -wfh-green;
 }
 

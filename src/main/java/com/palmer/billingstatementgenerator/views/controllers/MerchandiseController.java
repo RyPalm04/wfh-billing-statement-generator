@@ -50,17 +50,19 @@ public class MerchandiseController extends GridTabController<MerchandiseLineItem
 
         if (item.getCatalog().getPricingMode() == Merchandise.PricingMode.PER_UNIT) {
             addPerUnitRow(item, cb, row);
-        } else if (item.getCatalog().getDefaultCost() == null) {
-            TextField priceField = buildPriceField(item.priceProperty(), row, itemsGrid);
-            wireTextFieldToCheckBox(priceField, cb);
         } else {
-            buildPriceLabel(item.getCatalog().getDefaultCost(), row, itemsGrid);
-        }
+            if (item.getCatalog().isDescriptionRequired()) {
+                TextField desc = buildTextField(18, 1, row, itemsGrid);
+                desc.textProperty().bindBidirectional(item.descriptionProperty());
+                wireTextFieldToCheckBox(desc, cb);
+            }
 
-        if (item.getCatalog().isDescriptionRequired()) {
-            TextField desc = buildTextField(18, 1, row, itemsGrid);
-            desc.textProperty().bindBidirectional(item.descriptionProperty());
-            wireTextFieldToCheckBox(desc, cb);
+            if (item.getCatalog().getDefaultCost() == null) {
+                TextField priceField = buildPriceField(item.priceProperty(), row, itemsGrid);
+                wireTextFieldToCheckBox(priceField, cb);
+            } else {
+                buildPriceLabel(item.getCatalog().getDefaultCost(), row, itemsGrid);
+            }
         }
 
         return cb;
