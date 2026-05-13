@@ -2,6 +2,7 @@ package com.palmer.billingstatementgenerator;
 
 import com.palmer.billingstatementgenerator.db.Database;
 import com.palmer.billingstatementgenerator.db.DatabaseLockedException;
+import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.views.MainView;
 import com.palmer.billingstatementgenerator.views.SplashView;
@@ -98,6 +99,7 @@ public class MainApp extends Application {
             mainStage.show();
 
             mainView.wireKeyNav(mainScene);
+            mainView.setEventTracker(new WorkflowEventTracker(mainStage, mainView.getTabPane()));
             mainView.fitWindowToLargestTab();
             mainView.onAppReady(firstLaunch);
 

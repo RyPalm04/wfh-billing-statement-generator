@@ -14,6 +14,7 @@ import com.palmer.billingstatementgenerator.views.controllers.MerchandiseControl
 import com.palmer.billingstatementgenerator.views.controllers.ServicesController;
 import com.palmer.billingstatementgenerator.views.controllers.SpecialChargesController;
 import com.palmer.billingstatementgenerator.views.controllers.SummaryTabController;
+import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
 import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -72,6 +73,11 @@ public class MainView {
     private SummaryTabController summaryController;
 
     /**
+     * Event tracker used to extend logging to modal dialog scenes.
+     */
+    private WorkflowEventTracker eventTracker;
+
+    /**
      * Constructs the main view by creating tabs, the button bar, the layout,
      * and wiring tab selection behavior.
      */
@@ -90,6 +96,27 @@ public class MainView {
      */
     public Parent asParent() {
         return root;
+    }
+
+    /**
+     * Returns the workflow tab pane, used by external components to observe
+     * or pass tab context to loggers and other coordinators.
+     *
+     * @return the main {@link TabPane}
+     */
+    public TabPane getTabPane() {
+        return tabPane;
+    }
+
+    /**
+     * Sets the event tracker so that modal dialog scenes created by this view
+     * are also covered by UI activity logging.
+     *
+     * @param eventTracker
+     *         the active {@link WorkflowEventTracker}
+     */
+    public void setEventTracker(WorkflowEventTracker eventTracker) {
+        this.eventTracker = eventTracker;
     }
 
     /**
@@ -271,7 +298,7 @@ public class MainView {
                 }
             });
             clearButton.disableProperty().unbind();
-            clearButton.setDisable(true);
+            clearButton.setVisible(false);
             resetButton.setVisible(true);
             resetButton.setOnAction(e -> showResetDialog());
         } else {
@@ -321,6 +348,9 @@ public class MainView {
         Scene scene = new Scene(content);
         scene.getStylesheets().add(getClass().getResource(
                 "/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
+        if (eventTracker != null) {
+            eventTracker.attachTo(scene);
+        }
         return scene;
     }
 
@@ -452,10 +482,7 @@ public class MainView {
             content.setAlignment(Pos.CENTER);
             content.getStyleClass().add("splash-container");
 
-            Scene scene = new Scene(content);
-            scene.getStylesheets().add(getClass().getResource(
-                    "/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
-            dialog.setScene(scene);
+            dialog.setScene(buildDialogScene(content));
             dialog.setResizable(false);
             dialog.showAndWait();
 
@@ -694,10 +721,7 @@ public class MainView {
             content.setAlignment(Pos.CENTER);
             content.getStyleClass().add("splash-container");
 
-            Scene scene = new Scene(content);
-            scene.getStylesheets().add(getClass().getResource(
-                    "/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
-            dialog.setScene(scene);
+            dialog.setScene(buildDialogScene(content));
             dialog.setResizable(false);
             dialog.showAndWait();
 
@@ -751,6 +775,9 @@ public class MainView {
         root.setCenter(tabPane);
         wireTabs();
         wireTabDisabling();
+        if (eventTracker != null) {
+            eventTracker.onTabPaneReplaced(tabPane);
+        }
     }
 
     /**
