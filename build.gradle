@@ -15,6 +15,7 @@ repositories {
 ext {
     junitVersion = '5.7.1'
     spockVersion = '2.0-groovy-3.0'
+    appVersion = '1.0.1'
 }
 
 java {
@@ -56,6 +57,29 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+tasks.register('jpackageApp', Exec) {
+    dependsOn installDist
+
+    def outputDir = file("${buildDir}/jpackage")
+    def libDir = file("${buildDir}/install/${rootProject.name}/lib")
+    def os = org.gradle.internal.os.OperatingSystem.current()
+
+    doFirst {
+        delete outputDir
+        outputDir.mkdirs()
+    }
+
+    commandLine 'jpackage',
+            '--type', os.macOsX ? 'dmg' : 'exe',
+            '--name', 'WFH Billing Statement Generator',
+            '--app-version', appVersion,
+            '--vendor', 'Wright Funeral Home',
+            '--input', libDir.absolutePath,
+            '--main-jar', "${rootProject.name}-${project.version}.jar",
+            '--main-class', 'com.palmer.billingstatementgenerator.Launcher',
+            '--dest', outputDir.absolutePath
 }
 
 javadoc {
