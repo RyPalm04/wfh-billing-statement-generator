@@ -234,6 +234,7 @@ public abstract class BaseController {
 
         priceField.setTextFormatter(formatter);
         formatter.valueProperty().bindBidirectional(priceProperty);
+        formatter.valueProperty().addListener((obs, oldVal, newVal) -> refreshTotal());
         return priceField;
     }
 

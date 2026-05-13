@@ -80,6 +80,7 @@ public class MainApp extends Application {
 			mainStage.setTitle("Wright Funeral Home Billing Statement Generator");
 			mainStage.show();
 
+			mainView.wireKeyNav(mainScene);
 			mainView.fitWindowToLargestTab();
 			primaryStage.close();
 		});

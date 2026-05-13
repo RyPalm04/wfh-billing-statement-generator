@@ -16,6 +16,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -212,6 +214,26 @@ public class MainView {
 			clearButton.getStyleClass().remove("button-reset");
 			tab.getController().setClearButton(clearButton);
 		}
+	}
+
+	/**
+	 * Wires Alt+Left / Alt+Right to navigate between tabs at the scene level,
+	 * so the shortcuts work regardless of which control has focus.
+	 *
+	 * @param scene the main application {@link Scene}
+	 */
+	public void wireKeyNav(Scene scene) {
+		scene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+			if (e.isAltDown()) {
+				if (e.getCode() == KeyCode.RIGHT) {
+					tabPane.getSelectionModel().selectNext();
+					e.consume();
+				} else if (e.getCode() == KeyCode.LEFT) {
+					tabPane.getSelectionModel().selectPrevious();
+					e.consume();
+				}
+			}
+		});
 	}
 
 	/**
