@@ -190,8 +190,20 @@
     -fx-text-fill: -wfh-secondary;
 }
 
+.progress-bar {
+    -fx-pref-height: 16px;
+    -fx-background-radius: 8;
+}
+
+.progress-bar .track {
+    -fx-background-color: -wfh-border;
+    -fx-background-radius: 8;
+}
+
 .progress-bar .bar {
     -fx-background-color: -wfh-green;
+    -fx-background-radius: 8;
+    -fx-background-insets: 0;
 }
 
 .check-box {
