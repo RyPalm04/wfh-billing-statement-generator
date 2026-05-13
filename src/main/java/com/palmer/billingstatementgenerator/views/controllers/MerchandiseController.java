@@ -13,13 +13,36 @@ import javafx.scene.layout.GridPane;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class TabFourFxmlController extends GridTabController<MerchandiseLineItem> {
+/**
+ * Controller for the Merchandise tab.
+ * Renders a grid of merchandise line items, supporting three display modes:
+ * <ul>
+ *   <li>Per-unit items (e.g. Memorial Video) — shown with a quantity spinner and computed total</li>
+ *   <li>Items with no default cost — shown with an editable price field</li>
+ *   <li>Items with a default cost — shown with a read-only price label</li>
+ * </ul>
+ * Items with a description requirement also render an additional text field.
+ */
+public class MerchandiseController extends GridTabController<MerchandiseLineItem> {
 
+    /**
+     * Returns the list of merchandise line items from the current statement.
+     *
+     * @return the list of {@link MerchandiseLineItem} objects
+     */
     @Override
     protected List<MerchandiseLineItem> getItems() {
         return StatementContext.current().getMerchandise();
     }
 
+    /**
+     * Builds a row for the given merchandise line item. The price column
+     * is rendered differently based on the item's pricing mode and default cost.
+     *
+     * @param item the merchandise line item to render
+     * @param row  the grid row index
+     * @return the {@link CheckBox} created for this row
+     */
     @Override
     protected CheckBox addItemRow(MerchandiseLineItem item, int row) {
         CheckBox cb = buildCheckBox(item.getCatalog().getName(), row, itemsGrid);
@@ -43,6 +66,16 @@ public class TabFourFxmlController extends GridTabController<MerchandiseLineItem
         return cb;
     }
 
+    /**
+     * Adds a quantity spinner and computed total price label for a per-unit merchandise item.
+     * The spinner is bound to the item's quantity, and the price label updates reactively
+     * as the quantity changes. The checkbox is automatically selected when quantity is greater
+     * than zero, and the spinner resets to 1 when the checkbox is deselected.
+     *
+     * @param item the per-unit merchandise line item
+     * @param cb   the checkbox for this row
+     * @param row  the grid row index
+     */
     private void addPerUnitRow(MerchandiseLineItem item, CheckBox cb, int row) {
         Spinner<Integer> spinner = new Spinner<>(1, 999, item.getQuantity());
         spinner.setPrefWidth(70);
@@ -55,7 +88,6 @@ public class TabFourFxmlController extends GridTabController<MerchandiseLineItem
         GridPane.setConstraints(totalPrice, 2, row);
         itemsGrid.getChildren().add(totalPrice);
 
-        // bind quantity
         spinner.valueProperty().addListener((obs, oldVal, newVal) -> {
             item.setQuantity(newVal);
             BigDecimal unit = item.getCatalog().getDefaultCost();
@@ -72,12 +104,16 @@ public class TabFourFxmlController extends GridTabController<MerchandiseLineItem
         }
 
         cb.selectedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) {
-                spinner.getValueFactory().setValue(1);
-            }
+            if (!newVal) spinner.getValueFactory().setValue(1);
         });
     }
 
+    /**
+     * Formats the computed total for a per-unit item based on its unit cost and current quantity.
+     *
+     * @param item the merchandise line item
+     * @return a formatted currency string, or an empty string if the unit cost is null
+     */
     private String formatUnitTotal(MerchandiseLineItem item) {
         BigDecimal unit = item.getCatalog().getDefaultCost();
         if (unit == null) return "";

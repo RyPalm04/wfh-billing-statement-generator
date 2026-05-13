@@ -15,10 +15,24 @@ import javafx.scene.layout.GridPane;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class TabThreeFxmlController extends GridTabController<ServiceLineItem> {
+/**
+ * Controller for the Services, Facilities &amp; Transportation tab.
+ * Extends {@link GridTabController} with an additional service package {@link ComboBox}
+ * above the services grid. Overrides clear button configuration to account for the
+ * combo box selection, and overrides {@link #clearAll()} to also reset the combo box.
+ */
+public class ServicesController extends GridTabController<ServiceLineItem> {
 
+    /** Combo box for selecting a pre-defined service package. */
     private ComboBox<ServicePackage> packagesCombo;
 
+    /**
+     * Builds the tab view by first populating the packages combo box,
+     * then delegating to the parent to build the services grid.
+     * The combo and grid are arranged vertically in a wrapper {@link GridPane}.
+     *
+     * @return a {@link GridPane} containing the combo box and services grid
+     */
     @Override
     public GridPane buildView() {
         ServicePackageDao dao = new ServicePackageDao(Database.get());
@@ -48,11 +62,24 @@ public class TabThreeFxmlController extends GridTabController<ServiceLineItem> {
         return pane;
     }
 
+    /**
+     * Returns the list of service line items from the current statement.
+     *
+     * @return the list of {@link ServiceLineItem} objects
+     */
     @Override
     protected List<ServiceLineItem> getItems() {
         return StatementContext.current().getServices();
     }
 
+    /**
+     * Builds a row for the given service line item, consisting of a checkbox
+     * and a read-only price label.
+     *
+     * @param item the service line item to render
+     * @param row  the grid row index
+     * @return the {@link CheckBox} created for this row
+     */
     @Override
     protected CheckBox addItemRow(ServiceLineItem item, int row) {
         CheckBox cb = buildCheckBox(item.getCatalog().getName(), row, itemsGrid);
@@ -61,6 +88,13 @@ public class TabThreeFxmlController extends GridTabController<ServiceLineItem> {
         return cb;
     }
 
+    /**
+     * Overrides clear button configuration to also observe the packages combo box value.
+     * The clear button is disabled only when no checkboxes are selected AND no package
+     * is selected.
+     *
+     * @param checkBoxes the list of service checkboxes to observe
+     */
     @Override
     protected void configureClearButton(List<CheckBox> checkBoxes) {
         Observable[] clearButtonDependencies = Stream.concat(
@@ -75,6 +109,9 @@ public class TabThreeFxmlController extends GridTabController<ServiceLineItem> {
         clearButton.setOnAction(e -> clearAll());
     }
 
+    /**
+     * Clears all service checkboxes and resets the packages combo box selection.
+     */
     @Override
     protected void clearAll() {
         super.clearAll();

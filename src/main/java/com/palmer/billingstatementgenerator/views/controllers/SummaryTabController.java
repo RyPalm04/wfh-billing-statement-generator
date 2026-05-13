@@ -24,12 +24,33 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for the Summary tab, displayed as the final tab before PDF generation.
+ * Presents a read-only overview of all selected line items grouped by category,
+ * along with calculated totals. Each section header and line item is clickable,
+ * navigating the user back to the corresponding data entry tab.
+ * Refreshes automatically when the tab is shown.
+ */
 public class SummaryTabController extends BaseController {
+
     private static final NumberFormat DOLLAR_FORMATTER = NumberFormat.getCurrencyInstance();
 
+    /** The root container for all summary content. */
     private VBox root;
+
+    /**
+     * Callback invoked when the user clicks a section header or line item,
+     * receiving the tab index to navigate to.
+     */
     private Consumer<Integer> onJumpToTab;
 
+    /**
+     * Builds the summary tab view and returns it wrapped in a {@link ScrollPane}.
+     *
+     * @param onJumpToTab a {@link Consumer} accepting a tab index, invoked when
+     *                    the user clicks a clickable label to jump to that tab
+     * @return a {@link ScrollPane} containing the full summary layout
+     */
     public ScrollPane buildView(Consumer<Integer> onJumpToTab) {
         this.onJumpToTab = onJumpToTab;
 
@@ -46,12 +67,15 @@ public class SummaryTabController extends BaseController {
         return scrollPane;
     }
 
+    /**
+     * Rebuilds the summary content from the current {@link StatementContext}.
+     * Called on tab activation via {@link #onShow()} and after a reset.
+     */
     public void refresh() {
         root.getChildren().clear();
 
         var stmt = StatementContext.current();
 
-        // Service Information header
         addSectionHeader("Service Information", 1);
         addInfoRow("Control Number", String.valueOf(stmt.getControlNumber()), 1);
         addInfoRow("Services For", stmt.getServicesForName(), 1);
@@ -59,52 +83,43 @@ public class SummaryTabController extends BaseController {
         addInfoRow("Place of Death", stmt.getPlaceOfDeath(), 1);
         addInfoRow("Service Date", stmt.getServiceDate() != null ? stmt.getServiceDate().toString() : "", 1);
 
-        // Services
         List<ServiceLineItem> selectedServices = stmt.getServices().stream()
-            .filter(ServiceLineItem::isSelected)
-            .collect(Collectors.toList());
+                .filter(ServiceLineItem::isSelected)
+                .collect(Collectors.toList());
 
         addSectionHeader("Services, Facilities & Transportation", 2);
         if (stmt.getSelectedPackage() != null) {
             addLineItem(stmt.getSelectedPackage().getName(),
-                stmt.getSelectedPackage().getDefaultCost(), 2);
+                    stmt.getSelectedPackage().getDefaultCost(), 2);
         }
         selectedServices.forEach(s ->
-            addLineItem(s.getCatalog().getName(),
-                s.getCatalog().getDefaultCost(), 2));
+                addLineItem(s.getCatalog().getName(), s.getCatalog().getDefaultCost(), 2));
         addTotalRow("Services Total", StatementCalculator.servicesTotal(stmt));
 
-        // Merchandise
         List<MerchandiseLineItem> selectedMerch = stmt.getMerchandise().stream()
-            .filter(MerchandiseLineItem::isSelected)
-            .collect(Collectors.toList());
+                .filter(MerchandiseLineItem::isSelected)
+                .collect(Collectors.toList());
 
         addSectionHeader("Merchandise", 3);
-        selectedMerch.forEach(m ->
-            addLineItem(m.getCatalog().getName(), m.getPrice(), 3));
+        selectedMerch.forEach(m -> addLineItem(m.getCatalog().getName(), m.getPrice(), 3));
         addTotalRow("Merchandise Total", StatementCalculator.merchandiseTotal(stmt));
 
-        // Special Charges
         List<SpecialChargeLineItem> selectedCharges = stmt.getSpecialCharges().stream()
-            .filter(SpecialChargeLineItem::isSelected)
-            .collect(Collectors.toList());
+                .filter(SpecialChargeLineItem::isSelected)
+                .collect(Collectors.toList());
 
         addSectionHeader("Special Charges", 4);
-        selectedCharges.forEach(sc ->
-            addLineItem(sc.getCatalog().getName(), sc.getPrice(), 4));
+        selectedCharges.forEach(sc -> addLineItem(sc.getCatalog().getName(), sc.getPrice(), 4));
         addTotalRow("Special Charges Total", StatementCalculator.specialChargesTotal(stmt));
 
-        // Cash Advances
         List<CashAdvanceLineItem> selectedCash = stmt.getCashAdvances().stream()
-            .filter(CashAdvanceLineItem::isSelected)
-            .collect(Collectors.toList());
+                .filter(CashAdvanceLineItem::isSelected)
+                .collect(Collectors.toList());
 
         addSectionHeader("Cash Advance Items", 5);
-        selectedCash.forEach(ca ->
-            addLineItem(ca.getCatalog().getName(), ca.getAmount(), 5));
+        selectedCash.forEach(ca -> addLineItem(ca.getCatalog().getName(), ca.getAmount(), 5));
         addTotalRow("Cash Advances Total", StatementCalculator.cashAdvancesTotal(stmt));
 
-        // Totals
         addSeparator();
         addTotalRow("Sales Tax", StatementCalculator.salesTax(stmt));
         addTotalRow("Subtotal", StatementCalculator.subtotal(stmt));
@@ -112,14 +127,27 @@ public class SummaryTabController extends BaseController {
         addGrandTotalRow("Total", StatementCalculator.finalTotal(stmt));
     }
 
+    /**
+     * Adds a clickable section header to the summary.
+     *
+     * @param title    the section title
+     * @param tabIndex the tab index to navigate to when clicked
+     */
     private void addSectionHeader(String title, int tabIndex) {
         Label header = new Label(title);
-        header.getStyleClass().add("summary-section-header");
+        header.getStyleClass().addAll("summary-section-header", "summary-clickable");
         header.setOnMouseClicked(e -> onJumpToTab.accept(tabIndex));
-        header.getStyleClass().add("summary-clickable");
         root.getChildren().add(header);
     }
 
+    /**
+     * Adds a clickable key-value info row to the summary. Rows with null or empty
+     * values are omitted.
+     *
+     * @param label    the field label
+     * @param value    the field value
+     * @param tabIndex the tab index to navigate to when clicked
+     */
     private void addInfoRow(String label, String value, int tabIndex) {
         if (value == null || value.isEmpty()) return;
         GridPane row = buildRow();
@@ -134,6 +162,13 @@ public class SummaryTabController extends BaseController {
         root.getChildren().add(row);
     }
 
+    /**
+     * Adds a clickable line item row showing the item name and its price.
+     *
+     * @param name     the line item name
+     * @param price    the line item price, or null for a blank price
+     * @param tabIndex the tab index to navigate to when clicked
+     */
     private void addLineItem(String name, BigDecimal price, int tabIndex) {
         GridPane row = buildRow();
         Label lbl = clickableLabel(name, tabIndex);
@@ -147,6 +182,12 @@ public class SummaryTabController extends BaseController {
         root.getChildren().add(row);
     }
 
+    /**
+     * Adds a subtotal row showing a label and formatted amount.
+     *
+     * @param label  the total label
+     * @param amount the total amount, or null for a blank value
+     */
     private void addTotalRow(String label, BigDecimal amount) {
         GridPane row = buildRow();
         Label lbl = new Label(label);
@@ -160,6 +201,12 @@ public class SummaryTabController extends BaseController {
         root.getChildren().add(row);
     }
 
+    /**
+     * Adds a separator followed by the grand total row in a larger, more prominent style.
+     *
+     * @param label  the grand total label
+     * @param amount the grand total amount, or null for a blank value
+     */
     private void addGrandTotalRow(String label, BigDecimal amount) {
         addSeparator();
         GridPane row = buildRow();
@@ -174,12 +221,21 @@ public class SummaryTabController extends BaseController {
         root.getChildren().add(row);
     }
 
+    /**
+     * Adds a horizontal separator line to the summary.
+     */
     private void addSeparator() {
         Separator sep = new Separator();
         sep.getStyleClass().add("summary-separator");
         root.getChildren().add(sep);
     }
 
+    /**
+     * Builds a two-column {@link GridPane} row for displaying label-value pairs.
+     * The label column grows to fill available space; the value column is right-aligned.
+     *
+     * @return a configured {@link GridPane} row
+     */
     private GridPane buildRow() {
         GridPane row = new GridPane();
         row.setMaxWidth(600);
@@ -196,6 +252,13 @@ public class SummaryTabController extends BaseController {
         return row;
     }
 
+    /**
+     * Creates a {@link Label} that navigates to the specified tab when clicked.
+     *
+     * @param text     the label text
+     * @param tabIndex the tab index to navigate to on click
+     * @return a clickable {@link Label}
+     */
     private Label clickableLabel(String text, int tabIndex) {
         Label lbl = new Label(text);
         lbl.getStyleClass().add("summary-clickable");
@@ -203,6 +266,9 @@ public class SummaryTabController extends BaseController {
         return lbl;
     }
 
+    /**
+     * Refreshes the summary content when the tab becomes active.
+     */
     @Override
     public void onShow() {
         refresh();

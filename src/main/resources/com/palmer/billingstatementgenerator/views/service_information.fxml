@@ -2,7 +2,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1"
-          fx:controller="com.palmer.billingstatementgenerator.views.controllers.TabTwoFxmlController"
+          fx:controller="com.palmer.billingstatementgenerator.views.controllers.ServiceInformationController"
           hgap="12" vgap="16"
           alignment="CENTER">
   <columnConstraints>

@@ -54,17 +54,17 @@ public class MainView {
 		GeneratorTabs tabInstructions = GeneratorTabs.fromController(
 				"INSTRUCTIONS", instructionsController, instructionsView);
 
-		tabTwo = GeneratorTabs.fromFxml("SERVICE INFORMATION", FXML_BASE + "tab_two.fxml");
-		TabThreeFxmlController threeCtrl = new TabThreeFxmlController();
+		tabTwo = GeneratorTabs.fromFxml("SERVICE INFORMATION", FXML_BASE + "service_information.fxml");
+		ServicesController threeCtrl = new ServicesController();
 		threeCtrl.setTotalSupplier(() -> StatementCalculator.servicesTotal(StatementContext.current()));
 
-		TabFourFxmlController fourCtrl = new TabFourFxmlController();
+		MerchandiseController fourCtrl = new MerchandiseController();
 		fourCtrl.setTotalSupplier(() -> StatementCalculator.merchandiseTotal(StatementContext.current()));
 
-		TabFiveFxmlController fiveCtrl = new TabFiveFxmlController();
+		SpecialChargesController fiveCtrl = new SpecialChargesController();
 		fiveCtrl.setTotalSupplier(() -> StatementCalculator.specialChargesTotal(StatementContext.current()));
 
-		TabSixFxmlController sixCtrl = new TabSixFxmlController();
+		CashAdvanceController sixCtrl = new CashAdvanceController();
 		sixCtrl.setTotalSupplier(() -> StatementCalculator.cashAdvancesTotal(StatementContext.current()));
 
 		GeneratorTabs tabThree = GeneratorTabs.fromController("SERVICES, FACILITIES & TRANSPORTATION", threeCtrl);
