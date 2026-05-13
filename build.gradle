@@ -23,7 +23,7 @@ java {
     }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
@@ -37,7 +37,9 @@ javafx {
 }
 
 dependencies {
-    implementation('org.apache.commons:commons-lang3:3.14.0')
+    implementation('org.slf4j:slf4j-api:2.0.9')
+    implementation('ch.qos.logback:logback-classic:1.4.14')
+    implementation("org.apache.commons:commons-lang3:3.18.0")
     implementation('net.sourceforge.dynamicreports:dynamicreports-core:6.12.0')
     implementation('com.lowagie:itext:2.1.7')
     implementation('com.h2database:h2:2.2.224')
@@ -54,4 +56,12 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+javadoc {
+    title = 'WFH Billing Statement Generator'
+    options.encoding = 'UTF-8'
+    options.memberLevel = JavadocMemberLevel.PROTECTED
+    options.links 'https://docs.oracle.com/en/java/docs/jdk/api/java.base/module-summary.html'
+    options.addStringOption('Xdoclint:none', '-quiet')
 }

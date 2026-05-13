@@ -1,108 +1,97 @@
 # Wright Funeral Home Billing Statement Generator
 
-A desktop application built with JavaFX for generating billing statements for Wright Funeral Home. The application allows users to select service packages, individual services, merchandise, special charges, and cash advances to generate a professional PDF billing statement.
+A desktop JavaFX application for generating funeral home billing statements. Users enter service information, select
+packages, services, merchandise, special charges, and cash advances, then export a formatted PDF statement.
 
-## Overview
+## Screenshots
 
-- **Stack:** Java 11, JavaFX 17, Gradle.
-- **Data Storage:** H2 in-memory database (initialized from SQL scripts).
-- **PDF Generation:** JasperReports / DynamicReports.
-- **Key Features:**
-  - Multi-tab interface for step-by-step billing.
-  - PDF export using JasperReports templates.
-  - FXML + controller pattern for UI: controllers live under `views/controllers` and are backed by FXML in `resources/views`.
-  - Shared BaseController helpers (checkbox builders, formatters) and lifecycle hooks (onShow/onHide).
-  - Stream-based UI builders for concise, maintainable code.
+| Instructions                                           | Service Information                                                  |
+|--------------------------------------------------------|----------------------------------------------------------------------|
+| ![Instructions tab](docs/screenshots/instructions.png) | ![Service information tab](docs/screenshots/service-information.png) |
+
+| Services                                       | Summary                                      |
+|------------------------------------------------|----------------------------------------------|
+| ![Services tab](docs/screenshots/services.png) | ![Summary tab](docs/screenshots/summary.png) |
+
+![Generated PDF statement](docs/screenshots/pdf-output.png)
+
+> Place screenshots in `docs/screenshots/` and commit them to replace these placeholders.
+
+## Stack
+
+- Java 11, JavaFX 17
+- Gradle (wrapper included)
+- H2 in-memory database initialized from SQL scripts
+- DynamicReports / iText for PDF generation
+- Groovy / Spock for tests
+- SLF4J + Logback for logging
 
 ## Requirements
 
-- **Java Development Kit (JDK):** Version 11 or higher (required for JavaFX Gradle plugin).
-- **Gradle:** 7.x or higher (or use the provided `gradlew` wrapper).
+- JDK 11 or higher
+- Use the included Gradle wrapper (`./gradlew`) — do not rely on a globally installed Gradle version
 
-## Setup & Run
+## Quick start
 
-### Clone the repository
 ```bash
 git clone <repository-url>
 cd wfh-billing-statement-generator
-```
-
-### Build the project
-```bash
-./gradlew build
-```
-
-### Run the application
-```bash
 ./gradlew run
 ```
 
-Notes:
-- Use the Gradle wrapper (`./gradlew`) to match CI's toolchain.
-- Local compilation and running require JDK 11+; if you see UnsupportedClassVersionErrors, switch your JAVA_HOME to a JDK 11+ installation.
+If you see `UnsupportedClassVersionError`, your `JAVA_HOME` is pointing to a JDK older than 11. Override it for the
+command:
 
-## Commands (quick)
+```bash
+JAVA_HOME=/path/to/jdk11 ./gradlew run
+```
 
-- Build: `./gradlew build`
-- Run: `./gradlew run`
-- Test: `./gradlew test`
-- Clean: `./gradlew clean`
+## Common commands
+
+| Task               | Command           |
+|--------------------|-------------------|
+| Run the app        | `./gradlew run`   |
+| Build              | `./gradlew build` |
+| Run all tests      | `./gradlew test`  |
+| Clean build output | `./gradlew clean` |
 
 Run a single test class:
+
 ```bash
 ./gradlew test --tests "com.palmer.billingstatementgenerator.db.DatabaseSpec"
 ```
+
 Run a single test method:
+
 ```bash
 ./gradlew test --tests "com.palmer.billingstatementgenerator.db.DatabaseSpec.someMethod"
 ```
 
-## UI architecture notes
+## Project layout
 
-- GeneratorTabs is the central tab wrapper that loads FXML content (when present), merges GridPane children, wires the shared clear/next buttons, and registers controller lifecycle hooks.
-- Controllers extend `views.controllers.BaseController` which exposes helpers:
-  - addCheckboxRowsWithPrices / addCheckboxRows — stream-based helpers that build rows, optional description fields, and price labels.
-  - extractCheckboxesFromGrid — convenience to collect CheckBoxes for wiring.
-  - configTextFieldForInts, bindIntegerTextField — common binding helpers.
-  - Lifecycle hooks: `onShow()` and `onHide()` — called by GeneratorTabs when a tab gains/loses selection.
-- Controllers use streams and AtomicInteger to lay out rows while keeping the code declarative and concise.
-- Description/provider text fields auto-select their row's checkbox when non-empty.
-
-## Tests
-
-The project uses Groovy/Spock for tests. To run the test suite:
-```bash
-./gradlew test
+```
+src/
+  main/
+    java/       application code (dao, db, models, pdf, views)
+    resources/  SQL scripts, FXML, PDF templates, images, CSS
+  test/
+    groovy/     Spock specifications
+    java/       JUnit tests
+build.gradle
+gradlew
 ```
 
-Tests live under `src/test/groovy` and `src/test/java`.
+## UI architecture
 
-## Project Structure
+The UI uses an FXML + controller pattern. Tabs are wired by `GeneratorTabs`, which merges FXML `GridPane` children where
+an FXML file exists, wires the shared Previous / Next / Clear buttons, and calls controller lifecycle hooks (`onShow` /
+`onHide`).
 
-```text
-.
-├── build.gradle            # Gradle build configuration
-├── gradlew                 # Gradle wrapper script
-├── src
-│   ├── main
-│   │   ├── java
-│   │   │   └── com/palmer/billingstatementgenerator
-│   │   │       ├── dao/                # Data Access Objects (H2)
-│   │   │       ├── db/                 # Database initialization
-│   │   │       ├── models/             # Business logic models
-│   │   │       ├── pdf/                # PDF generation logic (PdfGenerator)
-│   │   │       └── views/              # JavaFX UI components and controllers
-│   │   │           └── controllers     # FXML controllers and BaseController
-│   │   └── resources
-│   │       ├── db/         # SQL schema and seed data
-│   │       └── views/      # FXML files for tabs under com/palmer/.../views
-│   └── test                 # Tests
-└── settings.gradle         # Gradle project settings
-```
+All tab controllers extend `BaseController`, which provides:
 
-## TODOs
+- `addCheckboxRowsWithPrices` / `addCheckboxRows` — stream-based row builders
+- `extractCheckboxesFromGrid` — convenience method for reading checkbox state
+- `configTextFieldForInts` / `bindIntegerTextField` — integer field helpers
+- `onShow()` / `onHide()` lifecycle hooks
 
-- [ ] Complete the "Totals" calculation logic in `PdfGenerator.java`.
-- [ ] Add more comprehensive unit tests for UI controllers.
-- [ ] Consider a small UI smoke test harness for JavaFX.
-- [ ] Define the official license for the project.
+Description and provider fields automatically select their row's checkbox when non-empty.

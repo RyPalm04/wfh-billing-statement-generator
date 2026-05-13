@@ -12,6 +12,13 @@ import javafx.beans.property.StringProperty;
 
 import java.math.BigDecimal;
 
+/**
+ * Mutable line item wrapping a {@link Merchandise} catalog entry. Adds JavaFX properties
+ * for selection state, optional description, quantity, and effective price.
+ * The price defaults to the catalog's {@code defaultCost} but can be overridden by the user
+ * for items that have no default cost. For per-unit items the price is recomputed from
+ * {@code quantity × defaultCost} whenever the spinner value changes.
+ */
 public class MerchandiseLineItem {
     private final Merchandise catalog;
     private final BooleanProperty selected = new SimpleBooleanProperty(false);
@@ -24,21 +31,55 @@ public class MerchandiseLineItem {
         this.price = new SimpleObjectProperty<>(catalog.getDefaultCost());
     }
 
-    public Merchandise getCatalog() { return catalog; }
+    public Merchandise getCatalog() {
+        return catalog;
+    }
 
-    public BooleanProperty selectedProperty() { return selected; }
-    public boolean isSelected() { return selected.get(); }
-    public void setSelected(boolean value) { selected.set(value); }
+    public BooleanProperty selectedProperty() {
+        return selected;
+    }
 
-    public StringProperty descriptionProperty() { return description; }
-    public String getDescription() { return description.get(); }
-    public void setDescription(String value) { description.set(value); }
+    public boolean isSelected() {
+        return selected.get();
+    }
 
-    public ObjectProperty<BigDecimal> priceProperty() { return price; }
-    public BigDecimal getPrice() { return price.get(); }
-    public void setPrice(BigDecimal value) { price.set(value); }
+    public void setSelected(boolean value) {
+        selected.set(value);
+    }
 
-    public IntegerProperty quantityProperty() { return quantity; }
-    public int getQuantity() { return quantity.get(); }
-    public void setQuantity(int value) { quantity.set(value); }
+    public StringProperty descriptionProperty() {
+        return description;
+    }
+
+    public String getDescription() {
+        return description.get();
+    }
+
+    public void setDescription(String value) {
+        description.set(value);
+    }
+
+    public ObjectProperty<BigDecimal> priceProperty() {
+        return price;
+    }
+
+    public BigDecimal getPrice() {
+        return price.get();
+    }
+
+    public void setPrice(BigDecimal value) {
+        price.set(value);
+    }
+
+    public IntegerProperty quantityProperty() {
+        return quantity;
+    }
+
+    public int getQuantity() {
+        return quantity.get();
+    }
+
+    public void setQuantity(int value) {
+        quantity.set(value);
+    }
 }

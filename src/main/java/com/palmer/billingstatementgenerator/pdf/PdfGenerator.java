@@ -1,11 +1,16 @@
 package com.palmer.billingstatementgenerator.pdf;
 
-import com.palmer.billingstatementgenerator.models.Statement;
 import com.palmer.billingstatementgenerator.models.catalog.ServicePackage;
 import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineItem;
+import com.palmer.billingstatementgenerator.models.statement.Statement;
+import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
+import com.palmer.billingstatementgenerator.models.statement.StatementContext;
+import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -13,6 +18,8 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,14 +33,33 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * Generates PDF billing statements from a {@link Statement} using a JasperReports template.
+ * The compiled report is cached after the first call to {@link #generate}.
+ * Use {@link #export} to open a save dialog and write the PDF for the current statement.
+ */
 public final class PdfGenerator {
+    private static final Logger log = LoggerFactory.getLogger(PdfGenerator.class);
     private static final String JRXML_RESOURCE = "/com/palmer/billingstatementgenerator/pdf/pdfTemplate.jrxml";
     private static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("M/d/yyyy");
 
     private static JasperReport compiledReport;
 
-    private PdfGenerator() {}
+    private PdfGenerator() {
+    }
 
+    /**
+     * Fills the Jasper report template from the given statement and writes the result
+     * to the specified file.
+     *
+     * @param stmt
+     *         the statement to export
+     * @param outputFile
+     *         the destination file to write the PDF to
+     *
+     * @throws IOException
+     *         if the template cannot be loaded or PDF generation fails
+     */
     public static void generate(Statement stmt, File outputFile) throws IOException {
         try {
             JasperReport report = compiledReport();
@@ -48,6 +74,7 @@ public final class PdfGenerator {
 
     private static synchronized JasperReport compiledReport() throws JRException, IOException {
         if (compiledReport == null) {
+            log.debug("Compiling Jasper report template");
             try (InputStream in = PdfGenerator.class.getResourceAsStream(JRXML_RESOURCE)) {
                 if (in == null) {
                     throw new IOException("Missing template resource: " + JRXML_RESOURCE);
@@ -71,7 +98,6 @@ public final class PdfGenerator {
         ServicePackage pkg = stmt.getSelectedPackage();
         m.put("packagePrice", pkg != null ? toDouble(pkg.getDefaultCost()) : null);
 
-        // Services — by sort_order index → field name
         String[] serviceFields = {
                 "basicServicesPrice", "embalmingPrice", "otherPreparationPrice",
                 "useForVisitationPrice", "useForFuneralPrice", "useForMemorialPrice",
@@ -82,7 +108,6 @@ public final class PdfGenerator {
                 ServiceLineItem::isSelected,
                 s -> toDouble(s.getCatalog().getDefaultCost()));
 
-        // Merchandise — price + (sparse) description fields
         String[] merchPriceFields = {
                 "casketPrice", "urnPrice", "vaultPrice", "serviceAccessoryPrice",
                 "registerBookPrice", "thankYouCardPrice", "memorialFolderPrice",
@@ -102,7 +127,6 @@ public final class PdfGenerator {
                 MerchandiseLineItem::isSelected,
                 MerchandiseLineItem::getDescription);
 
-        // Special Charges — template has slots for 7 of 8 (no "Other" field)
         String[] specialPriceFields = {
                 "graveSetupPrice", "cremationPrice", "mileagePrice",
                 "remainsForwardingPrice", "remainsReceivingPrice", "vaultWeekendPrice",
@@ -119,7 +143,6 @@ public final class PdfGenerator {
                 SpecialChargeLineItem::isSelected,
                 SpecialChargeLineItem::getDescription);
 
-        // Cash Advances — every slot has detail (provider) + price (amount)
         String[] cashDetailFields = {
                 "graveOpeningDetail", "weekendHolidayDetail", "newspaperADetail",
                 "newspaperBDetail", "newspaperCDetail", "newspaperDDetail",
@@ -136,23 +159,25 @@ public final class PdfGenerator {
                 "hairdresserPrice", "deathCertPrice", "outOfTownPrice",
                 "markerDatePrice", "flowerPrice", "cashAdvOtherAPrice", "cashAdvOtherBPrice"
         };
+
         List<CashAdvanceLineItem> cashAdvances = stmt.getCashAdvances();
+
         int cashCount = Math.min(cashDetailFields.length, cashAdvances.size());
+
         for (int i = 0; i < cashCount; i++) {
             CashAdvanceLineItem item = cashAdvances.get(i);
             m.put(cashDetailFields[i], item.isSelected() ? nullSafe(item.getProvider()) : "");
             m.put(cashPriceFields[i], item.isSelected() ? toDouble(item.getAmount()) : null);
         }
 
-        // Totals — not computed yet; pass blanks/nulls so template renders empty
-        m.put("totalServices", null);
-        m.put("totalMerchandise", "");
-        m.put("totalSpecialCharges", "");
-        m.put("totalCashAdv", null);
-        m.put("salesTax", null);
-        m.put("subTotal", null);
+        m.put("totalServices", StatementCalculator.servicesTotal(stmt).doubleValue());
+        m.put("totalMerchandise", StatementCalculator.merchandiseTotal(stmt).doubleValue());
+        m.put("totalSpecialCharges", StatementCalculator.specialChargesTotal(stmt).doubleValue());
+        m.put("totalCashAdv", StatementCalculator.cashAdvancesTotal(stmt).doubleValue());
+        m.put("salesTax", StatementCalculator.salesTax(stmt).doubleValue());
+        m.put("subTotal", StatementCalculator.subtotal(stmt).doubleValue());
         m.put("downPayment", toDouble(stmt.getPayment()));
-        m.put("finalTotal", "");
+        m.put("finalTotal", StatementCalculator.finalTotal(stmt).doubleValue());
 
         return m;
     }
@@ -189,5 +214,34 @@ public final class PdfGenerator {
 
     private static String formatDate(LocalDate d) {
         return d == null ? "" : d.format(DATE_FMT);
+    }
+
+    /**
+     * Opens a save dialog and exports the current statement as a PDF.
+     * Shows a success or error alert when the operation completes.
+     *
+     * @param ownerWindow
+     *         the owner window for the save dialog and any alerts shown
+     */
+    public static void export(Window ownerWindow) {
+        FileChooser fc = new FileChooser();
+        fc.setTitle("Save Statement as PDF");
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF files", "*.pdf"));
+        fc.setInitialFileName("statement-" + StatementContext.current().getControlNumber() + ".pdf");
+
+        File output = fc.showSaveDialog(ownerWindow);
+        if (output == null) {
+            return;
+        }
+
+        log.info("Exporting PDF for control number {} to {}", StatementContext.current().getControlNumber(), output.getAbsolutePath());
+        try {
+            generate(StatementContext.current(), output);
+            log.info("PDF export successful: {}", output.getAbsolutePath());
+            new Alert(Alert.AlertType.INFORMATION, "PDF saved to:\n" + output.getAbsolutePath()).showAndWait();
+        } catch (Throwable t) {
+            log.error("PDF export failed", t);
+            new Alert(Alert.AlertType.ERROR, "Failed to generate PDF: " + t.getMessage()).showAndWait();
+        }
     }
 }

@@ -3,3 +3,7 @@
 /.claude/
 /.github/
 /.idea/
+/out/
+/logs/
+/lib/
+/build/

@@ -2,6 +2,12 @@ package com.palmer.billingstatementgenerator.models.catalog;
 
 import java.math.BigDecimal;
 
+/**
+ * Immutable catalog record representing a funeral service or facility offering
+ * (e.g. embalming, transfer, graveside service). Loaded from the database at startup
+ * and wrapped in a {@link com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem}
+ * for user selection.
+ */
 public class Service {
     private final int id;
     private final int sortOrder;
@@ -17,9 +23,23 @@ public class Service {
         this.includedInPackage = includedInPackage;
     }
 
-    public int getId() { return id; }
-    public int getSortOrder() { return sortOrder; }
-    public String getName() { return name; }
-    public BigDecimal getDefaultCost() { return defaultCost; }
-    public boolean isIncludedInPackage() { return includedInPackage; }
+    public int getId() {
+        return id;
+    }
+
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public BigDecimal getDefaultCost() {
+        return defaultCost;
+    }
+
+    public boolean isIncludedInPackage() {
+        return includedInPackage;
+    }
 }
