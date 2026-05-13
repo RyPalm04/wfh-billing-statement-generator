@@ -54,8 +54,7 @@ public class ServiceInformationController extends BaseController {
     private void initialize() {
         Statement stmt = StatementContext.current();
 
-        configTextFieldForInts(controlNumberField);
-        bindIntegerTextField(controlNumberField, stmt.controlNumberProperty());
+        controlNumberField.textProperty().bind(stmt.controlNumberProperty().asString());
 
         servicesForField.textProperty().bindBidirectional(stmt.servicesForNameProperty());
         dateOfDeathPicker.valueProperty().bindBidirectional(stmt.dateOfDeathProperty());
@@ -64,8 +63,8 @@ public class ServiceInformationController extends BaseController {
     }
 
     /**
-     * Returns a binding that is {@code true} while the control number or services-for
-     * name is missing, preventing navigation past this tab until both are provided.
+     * Returns a binding that is {@code true} while the services-for name is missing,
+     * preventing navigation past this tab until it is provided.
      *
      * @return a {@link BooleanBinding} that is {@code true} when required fields are incomplete
      */
@@ -73,7 +72,7 @@ public class ServiceInformationController extends BaseController {
     public BooleanBinding hasInvalidSelections() {
         Statement stmt = StatementContext.current();
         return Bindings.createBooleanBinding(
-                () -> stmt.getControlNumber() == 0 || stmt.getServicesForName().trim().isEmpty(),
-                stmt.controlNumberProperty(), stmt.servicesForNameProperty());
+                () -> stmt.getServicesForName().trim().isEmpty(),
+                stmt.servicesForNameProperty());
     }
 }

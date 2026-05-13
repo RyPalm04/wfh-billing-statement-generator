@@ -22,12 +22,9 @@
             <Label text="Enter the service details below to get started." styleClass="instructions-subtitle"/>
         </VBox>
 
-        <HBox alignment="CENTER_RIGHT" spacing="2"
-              GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.halignment="RIGHT">
-            <Label text="Control Number" styleClass="field-label"/>
-            <Label text="*" styleClass="required-asterisk"/>
-        </HBox>
-        <TextField fx:id="controlNumberField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Control Number" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="field-label"/>
+        <TextField fx:id="controlNumberField" GridPane.rowIndex="1" GridPane.columnIndex="1"
+                   editable="false" styleClass="field-readonly"/>
 
         <HBox alignment="CENTER_RIGHT" spacing="2"
               GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.halignment="RIGHT">

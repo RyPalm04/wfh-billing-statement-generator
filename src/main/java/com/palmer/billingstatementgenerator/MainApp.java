@@ -98,9 +98,15 @@ public class MainApp extends Application {
 
             mainView.wireKeyNav(mainScene);
             mainView.fitWindowToLargestTab();
-            if (!firstLaunch) {
-                mainView.skipInstructions();
-            }
+            mainView.onAppReady(firstLaunch);
+
+            mainStage.setOnCloseRequest(event -> {
+                if (StatementContext.isDirty()) {
+                    event.consume();
+                    mainView.showUnsavedChangesOnClose(mainStage);
+                }
+            });
+
             primaryStage.close();
         });
 

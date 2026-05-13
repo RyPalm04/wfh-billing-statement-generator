@@ -170,6 +170,11 @@
     -fx-text-fill: -wfh-secondary;
 }
 
+.field-readonly {
+    -fx-background-color: -wfh-green-light;
+    -fx-text-fill: -wfh-secondary;
+}
+
 .required-asterisk {
     -fx-font-weight: bold;
     -fx-font-size: 14px;
@@ -316,6 +321,19 @@
 .summary-clickable:hover {
     -fx-text-fill: -wfh-green;
     -fx-underline: true;
+}
+
+.button-save {
+    -fx-background-color: transparent;
+    -fx-text-fill: -wfh-green;
+    -fx-border-color: -wfh-green;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-font-weight: normal;
+}
+
+.button-save:hover {
+    -fx-background-color: -wfh-green-light;
 }
 
 .button-reset {
