@@ -1,5 +1,6 @@
 package com.palmer.billingstatementgenerator.views;
 
+import com.palmer.billingstatementgenerator.models.statement.Statement;
 import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.pdf.PdfGenerator;
@@ -11,6 +12,7 @@ import com.palmer.billingstatementgenerator.views.controllers.ServicesController
 import com.palmer.billingstatementgenerator.views.controllers.SpecialChargesController;
 import com.palmer.billingstatementgenerator.views.controllers.SummaryTabController;
 import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -67,6 +69,7 @@ public class MainView {
         createButtonBar();
         createLayout();
         wireTabs();
+        wireTabDisabling();
     }
 
     /**
@@ -206,6 +209,8 @@ public class MainView {
         prevButton.disableProperty().unbind();
         nextButton.disableProperty().unbind();
 
+        prevButton.setDisable(index == 1);
+
         BooleanBinding invalid = tab.getController().hasInvalidSelections();
 
         prevButton.setOnAction(e -> {
@@ -225,6 +230,8 @@ public class MainView {
                     PdfGenerator.export(root.getScene().getWindow());
                 }
             });
+            clearButton.disableProperty().unbind();
+            clearButton.setDisable(false);
             clearButton.setText("Reset");
             clearButton.getStyleClass().add("button-reset");
             clearButton.setOnAction(e -> showResetDialog());
@@ -367,12 +374,14 @@ public class MainView {
             dialog.close();
             StatementContext.init();
             rebuildView();
+            tabPane.getSelectionModel().select(1);
         });
 
         Button clearSelections = new Button("Clear Selections");
         clearSelections.setOnAction(e -> {
             dialog.close();
             clearAllSelections();
+            tabPane.getSelectionModel().select(2);
         });
 
         Button cancel = new Button("Cancel");
@@ -419,5 +428,22 @@ public class MainView {
         createTabs();
         root.setCenter(tabPane);
         wireTabs();
+        wireTabDisabling();
+    }
+
+    /**
+     * Binds the disabled state of all data tabs (indices 2–6) to whether the
+     * Service Information tab has valid control number and services-for name.
+     * Tabs re-enable automatically as soon as both fields are filled.
+     */
+    private void wireTabDisabling() {
+        Statement stmt = StatementContext.current();
+        BooleanBinding infoIncomplete = Bindings.createBooleanBinding(
+                () -> stmt.getControlNumber() == 0 || stmt.getServicesForName().trim().isEmpty(),
+                stmt.controlNumberProperty(), stmt.servicesForNameProperty()
+        );
+        for (int i = 2; i < tabPane.getTabs().size(); i++) {
+            tabPane.getTabs().get(i).disableProperty().bind(infoIncomplete);
+        }
     }
 }

@@ -4,14 +4,18 @@ import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem
 import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineItem;
+import com.palmer.billingstatementgenerator.models.statement.Statement;
 import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
+import com.palmer.billingstatementgenerator.util.BigDecimalCurrencyConverter;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -25,8 +29,9 @@ import java.util.stream.Collectors;
 /**
  * Controller for the Summary tab, displayed as the final tab before PDF generation.
  * Presents a read-only overview of all selected line items grouped by category,
- * along with calculated totals. Each section header and line item is clickable,
- * navigating the user back to the corresponding data entry tab.
+ * along with calculated totals. The down payment field is editable; the grand total
+ * updates reactively as the user enters a value. Each section header and line item
+ * is clickable, navigating the user back to the corresponding data entry tab.
  * Refreshes automatically when the tab is shown.
  */
 public class SummaryTabController extends BaseController {
@@ -41,6 +46,12 @@ public class SummaryTabController extends BaseController {
      * receiving the tab index to navigate to.
      */
     private Consumer<Integer> onJumpToTab;
+
+    /**
+     * The grand total value label, kept as a field so it can be updated reactively
+     * when the down payment changes without rebuilding the entire summary.
+     */
+    private Label grandTotalValueLabel;
 
     /**
      * Builds the summary tab view and returns it wrapped in a {@link ScrollPane}.
@@ -93,7 +104,8 @@ public class SummaryTabController extends BaseController {
                     stmt.getSelectedPackage().getDefaultCost(), 2);
         }
         selectedServices.forEach(s ->
-                addLineItem(s.getCatalog().getName(), s.getCatalog().getDefaultCost(), 2));
+                addLineItem(s.getCatalog().getName(),
+                        s.isInPackage() ? null : s.getCatalog().getDefaultCost(), 2));
         addTotalRow("Services Total", StatementCalculator.servicesTotal(stmt));
 
         List<MerchandiseLineItem> selectedMerch = stmt.getMerchandise().stream()
@@ -129,7 +141,7 @@ public class SummaryTabController extends BaseController {
         addSeparator();
         addTotalRow("Sales Tax", StatementCalculator.salesTax(stmt));
         addTotalRow("Subtotal", StatementCalculator.subtotal(stmt));
-        addTotalRow("Down Payment", stmt.getPayment());
+        addPaymentRow(stmt);
         addGrandTotalRow("Total", StatementCalculator.finalTotal(stmt));
     }
 
@@ -229,6 +241,59 @@ public class SummaryTabController extends BaseController {
     }
 
     /**
+     * Adds an editable down payment row. The price field is bound to the statement's
+     * payment property; changes update the grand total label immediately.
+     *
+     * @param stmt
+     *         the current statement
+     */
+    private void addPaymentRow(Statement stmt) {
+        GridPane row = buildRow();
+
+        Label lbl = new Label("Down Payment");
+        lbl.getStyleClass().add("summary-total-label");
+
+        TextField field = new TextField();
+        field.setPrefColumnCount(10);
+        field.getStyleClass().add("price-field");
+        field.setPromptText("$0.00");
+        field.setAlignment(Pos.CENTER_RIGHT);
+
+        TextFormatter<BigDecimal> formatter = new TextFormatter<>(
+                new BigDecimalCurrencyConverter(),
+                stmt.getPayment(),
+                change -> {
+                    String newText = change.getControlNewText().replaceAll("[^\\d.]", "");
+                    return newText.matches("\\d*\\.?\\d{0,2}") ? change : null;
+                }
+        );
+        field.setTextFormatter(formatter);
+        formatter.valueProperty().addListener((obs, oldVal, newVal) -> {
+            stmt.setPayment(newVal != null ? newVal : BigDecimal.ZERO);
+            updateGrandTotal(stmt);
+        });
+
+        GridPane.setConstraints(lbl, 0, 0);
+        GridPane.setConstraints(field, 1, 0);
+        GridPane.setHalignment(field, HPos.RIGHT);
+        row.getChildren().addAll(lbl, field);
+        root.getChildren().add(row);
+    }
+
+    /**
+     * Updates the grand total label to reflect the current final total.
+     * Called reactively when the down payment value changes.
+     *
+     * @param stmt
+     *         the current statement
+     */
+    private void updateGrandTotal(Statement stmt) {
+        if (grandTotalValueLabel != null) {
+            grandTotalValueLabel.setText(DOLLAR_FORMATTER.format(StatementCalculator.finalTotal(stmt)));
+        }
+    }
+
+    /**
      * Adds a subtotal row showing a label and formatted amount.
      *
      * @param label
@@ -262,12 +327,12 @@ public class SummaryTabController extends BaseController {
         GridPane row = buildRow();
         Label lbl = new Label(label);
         lbl.getStyleClass().add("summary-grand-total-label");
-        Label val = new Label(amount != null ? DOLLAR_FORMATTER.format(amount) : "");
-        val.getStyleClass().add("summary-grand-total-value");
+        grandTotalValueLabel = new Label(amount != null ? DOLLAR_FORMATTER.format(amount) : "");
+        grandTotalValueLabel.getStyleClass().add("summary-grand-total-value");
         GridPane.setConstraints(lbl, 0, 0);
-        GridPane.setConstraints(val, 1, 0);
-        GridPane.setHalignment(val, HPos.RIGHT);
-        row.getChildren().addAll(lbl, val);
+        GridPane.setConstraints(grandTotalValueLabel, 1, 0);
+        GridPane.setHalignment(grandTotalValueLabel, HPos.RIGHT);
+        row.getChildren().addAll(lbl, grandTotalValueLabel);
         root.getChildren().add(row);
     }
 

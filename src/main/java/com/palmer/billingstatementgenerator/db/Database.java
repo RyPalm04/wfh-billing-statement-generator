@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,8 +17,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * Manages the application's single in-memory H2 database instance.
- * The database is kept alive for the lifetime of the JVM via {@code DB_CLOSE_DELAY=-1}.
+ * Manages the application's single file-based H2 database instance.
+ * The database file is stored in {@code ~/.wfh-billing/data.mv.db} and persists
+ * across application launches. Schema and seed scripts are run only on first launch.
  *
  * <p>Call {@link #init()} once at startup before any DAO is used.
  * {@link #init()} is idempotent — subsequent calls are no-ops.
@@ -25,14 +27,16 @@ import java.sql.SQLException;
  */
 public final class Database {
     private static final Logger log = LoggerFactory.getLogger(Database.class);
-    private static final String URL = "jdbc:h2:mem:wfh;DB_CLOSE_DELAY=-1";
+    private static final String DB_DIR = System.getProperty("user.home") + "/.wfh-billing";
+    private static final String URL = "jdbc:h2:file:" + DB_DIR + "/data;DB_CLOSE_DELAY=-1";
     private static DataSource dataSource;
 
     private Database() {
     }
 
     /**
-     * Initializes the in-memory H2 database and runs the schema and seed scripts.
+     * Initializes the file-based H2 database. On first launch, creates the database
+     * directory and runs the schema and seed scripts. Subsequent launches skip seeding.
      * Safe to call multiple times; only the first call has any effect.
      */
     public static synchronized void init() {
@@ -40,14 +44,22 @@ public final class Database {
             log.debug("Database already initialized, skipping");
             return;
         }
-        log.info("Initializing in-memory H2 database");
+        File dbDir = new File(DB_DIR);
+        boolean firstLaunch = !new File(DB_DIR + "/data.mv.db").exists();
+        if (!dbDir.exists()) {
+            dbDir.mkdirs();
+        }
+        log.info("Initializing H2 database at {}", DB_DIR);
         JdbcDataSource ds = new JdbcDataSource();
         ds.setURL(URL);
         ds.setUser("sa");
         ds.setPassword("");
         dataSource = ds;
-        runScript("/com/palmer/billingstatementgenerator/db/schema.sql");
-        runScript("/com/palmer/billingstatementgenerator/db/seed.sql");
+        if (firstLaunch) {
+            log.info("First launch — running schema and seed scripts");
+            runScript("/com/palmer/billingstatementgenerator/db/schema.sql");
+            runScript("/com/palmer/billingstatementgenerator/db/seed.sql");
+        }
         log.info("Database initialized");
     }
 

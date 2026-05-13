@@ -17,8 +17,10 @@ import java.util.stream.Stream;
 /**
  * Controller for the Services, Facilities &amp; Transportation tab.
  * Extends {@link GridTabController} with an additional service package {@link ComboBox}
- * above the services grid. Overrides clear button configuration to account for the
- * combo box selection, and overrides {@link #clearAll()} to also reset the combo box.
+ * above the services grid. When a package is selected, service checkboxes are automatically
+ * set to match the package's defined service list. Overrides clear button configuration
+ * to account for the combo box selection, and overrides {@link #clearAll()} to also reset
+ * the combo box.
  */
 public class ServicesController extends GridTabController<ServiceLineItem> {
 
@@ -51,6 +53,20 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
             }
         });
         packagesCombo.valueProperty().bindBidirectional(StatementContext.current().selectedPackageProperty());
+        packagesCombo.valueProperty().addListener((obs, oldPkg, newPkg) -> {
+            if (newPkg == null) {
+                StatementContext.current().getServices().forEach(item -> item.setInPackage(false));
+                refreshTotal();
+                return;
+            }
+            List<Integer> serviceIds = dao.findServiceIdsForPackage(newPkg.getId());
+            StatementContext.current().getServices().forEach(item -> {
+                boolean inPkg = serviceIds.contains(item.getCatalog().getId());
+                item.setInPackage(inPkg);
+                item.setSelected(inPkg);
+            });
+            refreshTotal();
+        });
 
         GridPane pane = new GridPane();
         pane.setHgap(7);
@@ -93,6 +109,7 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
         CheckBox cb = buildCheckBox(item.getCatalog().getName(), row, itemsGrid);
         buildPriceLabel(item.getCatalog().getDefaultCost(), row, itemsGrid);
         cb.selectedProperty().bindBidirectional(item.selectedProperty());
+        cb.disableProperty().bind(item.inPackageProperty());
         return cb;
     }
 

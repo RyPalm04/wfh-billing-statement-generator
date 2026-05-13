@@ -21,6 +21,8 @@ public class ServicePackageDao {
     private static final String SELECT_ALL =
             "SELECT id, sort_order, name, default_cost " +
                     "FROM service_packages ORDER BY sort_order";
+    private static final String SELECT_SERVICE_IDS =
+            "SELECT service_id FROM package_services WHERE package_id = ?";
 
     private final DataSource dataSource;
 
@@ -30,6 +32,34 @@ public class ServicePackageDao {
      */
     public ServicePackageDao(DataSource dataSource) {
         this.dataSource = dataSource;
+    }
+
+    /**
+     * Returns the IDs of services belonging to the given package.
+     *
+     * @param packageId
+     *         the ID of the service package
+     *
+     * @return a non-null, possibly empty list of service IDs
+     *
+     * @throws RuntimeException
+     *         if the query fails
+     */
+    public List<Integer> findServiceIdsForPackage(int packageId) {
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(SELECT_SERVICE_IDS)) {
+            ps.setInt(1, packageId);
+            try (ResultSet rs = ps.executeQuery()) {
+                List<Integer> result = new ArrayList<>();
+                while (rs.next()) {
+                    result.add(rs.getInt("service_id"));
+                }
+                return result;
+            }
+        } catch (SQLException e) {
+            log.error("Failed to load service IDs for package {}", packageId, e);
+            throw new RuntimeException("Failed to load service IDs for package " + packageId, e);
+        }
     }
 
     /**

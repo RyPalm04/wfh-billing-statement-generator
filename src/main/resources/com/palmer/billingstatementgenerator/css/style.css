@@ -170,6 +170,12 @@
     -fx-text-fill: -wfh-secondary;
 }
 
+.required-asterisk {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-text-fill: #cc2222;
+}
+
 /* Splash */
 .splash-container {
     -fx-background-color: white;

@@ -20,8 +20,10 @@ public final class StatementCalculator {
     }
 
     /**
-     * Calculates the total for services and facilities, including any selected
-     * service package cost plus the sum of individually selected service costs.
+     * Calculates the total for services and facilities: the selected package cost
+     * plus the sum of individually selected services that are not covered by the package.
+     * Services with {@code inPackage == true} are excluded from the individual sum
+     * because their cost is already included in the package price.
      *
      * @param stmt
      *         the statement to calculate from
@@ -35,6 +37,7 @@ public final class StatementCalculator {
 
         BigDecimal servicesTotal = stmt.getServices().stream()
                 .filter(ServiceLineItem::isSelected)
+                .filter(s -> !s.isInPackage())
                 .map(s -> s.getCatalog().getDefaultCost())
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

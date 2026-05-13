@@ -1,0 +1,39 @@
+name: Package
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  package:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            installer-type: dmg
+          - os: windows-latest
+            installer-type: exe
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        if: runner.os == 'macOS'
+        run: chmod +x gradlew
+
+      - name: Build and package
+        run: ./gradlew installDist jpackageApp
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-${{ matrix.os }}
+          path: build/jpackage/
+          retention-days: 30
