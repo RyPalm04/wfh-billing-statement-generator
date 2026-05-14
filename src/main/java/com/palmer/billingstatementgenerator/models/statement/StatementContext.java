@@ -3,8 +3,8 @@ package com.palmer.billingstatementgenerator.models.statement;
 import com.palmer.billingstatementgenerator.dao.CashAdvanceDao;
 import com.palmer.billingstatementgenerator.dao.MerchandiseDao;
 import com.palmer.billingstatementgenerator.dao.ServiceDao;
-import com.palmer.billingstatementgenerator.dao.SpecialChargeDao;
 import com.palmer.billingstatementgenerator.dao.ServicePackageDao;
+import com.palmer.billingstatementgenerator.dao.SpecialChargeDao;
 import com.palmer.billingstatementgenerator.dao.StatementDao;
 import com.palmer.billingstatementgenerator.db.Database;
 import com.palmer.billingstatementgenerator.models.catalog.ServicePackage;
@@ -33,9 +33,9 @@ import org.slf4j.LoggerFactory;
 public final class StatementContext {
 
     private static final Logger log = LoggerFactory.getLogger(StatementContext.class);
+    private static final BooleanProperty dirty = new SimpleBooleanProperty(false);
     private static Statement current;
     private static Integer savedId;
-    private static final BooleanProperty dirty = new SimpleBooleanProperty(false);
 
     private StatementContext() {
     }

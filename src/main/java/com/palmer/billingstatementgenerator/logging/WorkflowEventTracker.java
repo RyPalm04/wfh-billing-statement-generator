@@ -34,17 +34,12 @@ public class WorkflowEventTracker {
     private final KeyStrokeLogger keyStrokeLogger;
     private final MouseClickLogger mouseClickLogger;
     private final TabNavigationLogger tabNavigationLogger = new TabNavigationLogger();
-
-    private TabPane tabPane;
-
     private final EventHandler<Event> eventFilter = this::dispatch;
-
-    private final ChangeListener<Scene> sceneChangeListener =
-            (obs, oldScene, newScene) -> handleSceneChange(oldScene, newScene);
-
     private final ChangeListener<Node> focusChangeListener =
             (obs, oldNode, newNode) -> handleFocusChange(newNode);
-
+    private final ChangeListener<Scene> sceneChangeListener =
+            (obs, oldScene, newScene) -> handleSceneChange(oldScene, newScene);
+    private TabPane tabPane;
     private final ChangeListener<Tab> tabChangeListener = (obs, oldTab, newTab) -> {
         if (newTab != null) {
             int step = tabPane.getTabs().indexOf(newTab) + 1;

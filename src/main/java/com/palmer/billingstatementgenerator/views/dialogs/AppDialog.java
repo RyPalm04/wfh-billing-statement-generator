@@ -43,6 +43,33 @@ public abstract class AppDialog extends Stage {
     }
 
     /**
+     * Builds the standard titled content box: a {@link VBox} with a
+     * {@code "splash-title"} heading, 32 px padding, centered alignment,
+     * and the {@code "splash-container"} style applied.
+     *
+     * @param title
+     *         the dialog heading text
+     * @param children
+     *         body nodes to display below the title
+     *
+     * @return the assembled content {@link VBox}
+     */
+    protected static VBox contentBox(String title, Node... children) {
+        Label titleLabel = new Label(title);
+        titleLabel.getStyleClass().add("splash-title");
+
+        Node[] all = new Node[children.length + 1];
+        all[0] = titleLabel;
+        System.arraycopy(children, 0, all, 1, children.length);
+
+        VBox box = new VBox(20, all);
+        box.setPadding(new Insets(32));
+        box.setAlignment(Pos.CENTER);
+        box.getStyleClass().add("splash-container");
+        return box;
+    }
+
+    /**
      * Builds and returns the dialog's content node. Called once by {@link #open()}
      * immediately before the dialog is shown, so button handlers may safely
      * reference {@link #close()} via {@code this}.
@@ -68,31 +95,5 @@ public abstract class AppDialog extends Stage {
         }
         setScene(scene);
         showAndWait();
-    }
-
-    /**
-     * Builds the standard titled content box: a {@link VBox} with a
-     * {@code "splash-title"} heading, 32 px padding, centered alignment,
-     * and the {@code "splash-container"} style applied.
-     *
-     * @param title
-     *         the dialog heading text
-     * @param children
-     *         body nodes to display below the title
-     * @return the assembled content {@link VBox}
-     */
-    protected static VBox contentBox(String title, Node... children) {
-        Label titleLabel = new Label(title);
-        titleLabel.getStyleClass().add("splash-title");
-
-        Node[] all = new Node[children.length + 1];
-        all[0] = titleLabel;
-        System.arraycopy(children, 0, all, 1, children.length);
-
-        VBox box = new VBox(20, all);
-        box.setPadding(new Insets(32));
-        box.setAlignment(Pos.CENTER);
-        box.getStyleClass().add("splash-container");
-        return box;
     }
 }

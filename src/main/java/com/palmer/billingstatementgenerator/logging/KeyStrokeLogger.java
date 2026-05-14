@@ -15,7 +15,9 @@ public class KeyStrokeLogger extends UiEventLogger {
 
     private static final Logger logger = LoggerFactory.getLogger(KeyStrokeLogger.class);
 
-    /** Constructs a logger for KEY_PRESSED events. */
+    /**
+     * Constructs a logger for KEY_PRESSED events.
+     */
     public KeyStrokeLogger() {
         super(KeyEvent.KEY_PRESSED);
     }

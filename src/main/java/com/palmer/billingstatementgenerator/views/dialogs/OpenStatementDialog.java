@@ -48,7 +48,9 @@ public class OpenStatementDialog extends AppDialog {
         return opened;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected VBox buildContent() {
         DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("MM/dd/yyyy");

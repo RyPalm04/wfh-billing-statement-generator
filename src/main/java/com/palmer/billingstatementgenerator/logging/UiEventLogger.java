@@ -119,6 +119,15 @@ public abstract class UiEventLogger {
     protected abstract Logger getLogger();
 
     /**
+     * Returns the node that currently holds scene focus.
+     *
+     * @return the focused node, or {@code null}
+     */
+    protected Node getNodeInFocus() {
+        return nodeInFocus;
+    }
+
+    /**
      * Sets the node that currently holds scene focus.
      *
      * @param nodeInFocus
@@ -126,14 +135,5 @@ public abstract class UiEventLogger {
      */
     public void setNodeInFocus(Node nodeInFocus) {
         this.nodeInFocus = nodeInFocus;
-    }
-
-    /**
-     * Returns the node that currently holds scene focus.
-     *
-     * @return the focused node, or {@code null}
-     */
-    protected Node getNodeInFocus() {
-        return nodeInFocus;
     }
 }

@@ -42,7 +42,7 @@ CREATE TABLE cash_advances
     name       VARCHAR(80) NOT NULL
 );
 
-CREATE TABLE package_services
+CREATE TABLE packaged_services
 (
     package_id INT NOT NULL REFERENCES service_packages (id),
     service_id INT NOT NULL REFERENCES services (id),
@@ -74,27 +74,27 @@ CREATE TABLE saved_statement_services
 
 CREATE TABLE saved_statement_merchandise
 (
-    statement_id   INT            NOT NULL REFERENCES saved_statements (id) ON DELETE CASCADE,
-    merchandise_id INT            NOT NULL REFERENCES merchandise (id),
+    statement_id   INT          NOT NULL REFERENCES saved_statements (id) ON DELETE CASCADE,
+    merchandise_id INT          NOT NULL REFERENCES merchandise (id),
     price          DECIMAL(10, 2),
-    description    VARCHAR(255)   NOT NULL DEFAULT '',
+    description    VARCHAR(255) NOT NULL DEFAULT '',
     PRIMARY KEY (statement_id, merchandise_id)
 );
 
 CREATE TABLE saved_statement_special_charges
 (
-    statement_id      INT            NOT NULL REFERENCES saved_statements (id) ON DELETE CASCADE,
-    special_charge_id INT            NOT NULL REFERENCES special_charges (id),
+    statement_id      INT          NOT NULL REFERENCES saved_statements (id) ON DELETE CASCADE,
+    special_charge_id INT          NOT NULL REFERENCES special_charges (id),
     price             DECIMAL(10, 2),
-    description       VARCHAR(255)   NOT NULL DEFAULT '',
+    description       VARCHAR(255) NOT NULL DEFAULT '',
     PRIMARY KEY (statement_id, special_charge_id)
 );
 
 CREATE TABLE saved_statement_cash_advances
 (
-    statement_id    INT            NOT NULL REFERENCES saved_statements (id) ON DELETE CASCADE,
-    cash_advance_id INT            NOT NULL REFERENCES cash_advances (id),
+    statement_id    INT          NOT NULL REFERENCES saved_statements (id) ON DELETE CASCADE,
+    cash_advance_id INT          NOT NULL REFERENCES cash_advances (id),
     amount          DECIMAL(10, 2),
-    provider        VARCHAR(120)   NOT NULL DEFAULT '',
+    provider        VARCHAR(120) NOT NULL DEFAULT '',
     PRIMARY KEY (statement_id, cash_advance_id)
 );

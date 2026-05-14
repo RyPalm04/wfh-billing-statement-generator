@@ -3,11 +3,10 @@ package com.palmer.billingstatementgenerator;
 import com.palmer.billingstatementgenerator.db.Database;
 import com.palmer.billingstatementgenerator.db.DatabaseLockedException;
 import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
-import com.palmer.billingstatementgenerator.util.AppPreferences;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
+import com.palmer.billingstatementgenerator.util.AppPreferences;
 import com.palmer.billingstatementgenerator.views.MainView;
 import com.palmer.billingstatementgenerator.views.SplashView;
-
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -21,7 +20,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

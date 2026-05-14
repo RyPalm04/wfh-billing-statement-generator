@@ -43,6 +43,10 @@ public abstract class BaseController {
      */
     protected Button nextButton;
 
+    protected static String toId(String name) {
+        return name.toLowerCase().replaceAll("[^a-z0-9]+", "_").replaceAll("^_|_$", "");
+    }
+
     /**
      * Injects the clear button and triggers {@link #onClearButtonSet()}.
      *
@@ -103,10 +107,6 @@ public abstract class BaseController {
         GridPane.setConstraints(cb, 0, row);
         grid.getChildren().add(cb);
         return cb;
-    }
-
-    protected static String toId(String name) {
-        return name.toLowerCase().replaceAll("[^a-z0-9]+", "_").replaceAll("^_|_$", "");
     }
 
     /**
@@ -193,55 +193,6 @@ public abstract class BaseController {
      */
     protected void clearAll() {
         refreshTotal();
-    }
-
-    /**
-     * Applies an integer-only {@link TextFormatter} to the given text fields,
-     * restricting input to digits and an optional leading minus sign.
-     *
-     * @param fields
-     *         one or more text fields to configure
-     */
-    protected void configTextFieldForInts(TextField... fields) {
-        Arrays.stream(fields).forEach(field -> field.setTextFormatter(new TextFormatter<Integer>((Change c) -> {
-            if (c.getControlNewText().matches("-?\\d*")) {
-                return c;
-            }
-            return null;
-        })));
-    }
-
-    /**
-     * Binds a {@link TextField} bidirectionally to an {@link IntegerProperty},
-     * displaying a blank field when the value is zero.
-     *
-     * @param field
-     *         the text field to bind
-     * @param prop
-     *         the integer property to bind to
-     */
-    protected void bindIntegerTextField(TextField field, IntegerProperty prop) {
-        Bindings.bindBidirectional(field.textProperty(), prop, new NumberStringConverter() {
-            @Override
-            public String toString(Number value) {
-                if (value == null || value.intValue() == 0) {
-                    return "";
-                }
-                return value.intValue() + "";
-            }
-
-            @Override
-            public Number fromString(String value) {
-                if (value == null || value.trim().isEmpty()) {
-                    return 0;
-                }
-                try {
-                    return Integer.parseInt(value.trim());
-                } catch (NumberFormatException e) {
-                    return 0;
-                }
-            }
-        });
     }
 
     /**

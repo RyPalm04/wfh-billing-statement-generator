@@ -12,7 +12,9 @@ import javafx.scene.layout.VBox;
  */
 public class PdfDialog extends AppDialog {
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected VBox buildContent() {
         Label message = new Label("How would you like to output this statement?");

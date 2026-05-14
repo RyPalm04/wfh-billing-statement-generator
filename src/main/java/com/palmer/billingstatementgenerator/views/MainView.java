@@ -2,6 +2,7 @@ package com.palmer.billingstatementgenerator.views;
 
 import com.palmer.billingstatementgenerator.dao.StatementDao;
 import com.palmer.billingstatementgenerator.db.Database;
+import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
 import com.palmer.billingstatementgenerator.models.statement.SavedStatementSummary;
 import com.palmer.billingstatementgenerator.models.statement.Statement;
 import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
@@ -13,9 +14,8 @@ import com.palmer.billingstatementgenerator.views.controllers.MerchandiseControl
 import com.palmer.billingstatementgenerator.views.controllers.ServicesController;
 import com.palmer.billingstatementgenerator.views.controllers.SpecialChargesController;
 import com.palmer.billingstatementgenerator.views.controllers.SummaryTabController;
-import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
 import com.palmer.billingstatementgenerator.views.dialogs.AppDialog;
-import com.palmer.billingstatementgenerator.views.dialogs.AppReadyDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.StartupDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.IncompleteAlertDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.OpenStatementDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.PdfDialog;
@@ -433,12 +433,16 @@ public class MainView {
                 }
                 case OPEN: {
                     Runnable doOpen = () -> {
-                        if (!showOpenDialog()) showResetDialog();
+                        if (!showOpenDialog()) {
+                            showResetDialog();
+                        }
                     };
                     if (StatementContext.isDirty()) {
                         showUnsavedChangesDialog(doOpen);
                     } else {
-                        if (!showOpenDialog()) continue;
+                        if (!showOpenDialog()) {
+                            continue;
+                        }
                     }
                     done = true;
                     break;
@@ -480,7 +484,10 @@ public class MainView {
      */
     private void showUnsavedChangesDialog(Runnable onDiscard) {
         new UnsavedChangesDialog(
-                () -> { saveCurrentStatement(); onDiscard.run(); },
+                () -> {
+                    saveCurrentStatement();
+                    onDiscard.run();
+                },
                 onDiscard
         ).open();
     }
@@ -496,11 +503,13 @@ public class MainView {
         boolean done = false;
         while (!done) {
             List<SavedStatementSummary> saved = new StatementDao(Database.get()).findAll();
-            AppReadyDialog dialog = new AppReadyDialog(!saved.isEmpty());
+            StartupDialog dialog = new StartupDialog(!saved.isEmpty());
             dialog.open();
             switch (dialog.getChoice()) {
                 case NEW:
-                    if (!firstLaunch) skipInstructions();
+                    if (!firstLaunch) {
+                        skipInstructions();
+                    }
                     done = true;
                     break;
                 case OPEN:

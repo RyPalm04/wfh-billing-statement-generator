@@ -12,9 +12,6 @@ import javafx.scene.layout.VBox;
  */
 public class ResetStatementDialog extends AppDialog {
 
-    /** The action the user selected when the dialog closed. */
-    public enum Choice { NEW, OPEN, CLEAR, CANCEL }
-
     private Choice choice = Choice.CANCEL;
 
     /**
@@ -26,7 +23,9 @@ public class ResetStatementDialog extends AppDialog {
         return choice;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected VBox buildContent() {
         Label message = new Label("How would you like to proceed?");
@@ -34,15 +33,24 @@ public class ResetStatementDialog extends AppDialog {
 
         Button newStatement = new Button("New Statement");
         newStatement.setId("newStatementButton");
-        newStatement.setOnAction(e -> { choice = Choice.NEW; close(); });
+        newStatement.setOnAction(e -> {
+            choice = Choice.NEW;
+            close();
+        });
 
         Button openExisting = new Button("Open Existing");
         openExisting.setId("openExistingButton");
-        openExisting.setOnAction(e -> { choice = Choice.OPEN; close(); });
+        openExisting.setOnAction(e -> {
+            choice = Choice.OPEN;
+            close();
+        });
 
         Button clearSelections = new Button("Clear Selections");
         clearSelections.setId("clearSelectionsButton");
-        clearSelections.setOnAction(e -> { choice = Choice.CLEAR; close(); });
+        clearSelections.setOnAction(e -> {
+            choice = Choice.CLEAR;
+            close();
+        });
 
         Button cancel = new Button("Cancel");
         cancel.setId("cancelButton");
@@ -54,4 +62,9 @@ public class ResetStatementDialog extends AppDialog {
 
         return contentBox("Reset Statement", message, buttons);
     }
+
+    /**
+     * The action the user selected when the dialog closed.
+     */
+    public enum Choice {NEW, OPEN, CLEAR, CANCEL}
 }

@@ -10,21 +10,17 @@ import javafx.scene.layout.VBox;
  * Modal startup dialog offering New Statement or Open Existing.
  * The user's choice is available via {@link #getChoice()} after {@link #open()} returns.
  */
-public class AppReadyDialog extends AppDialog {
-
-    /** The action the user selected when the dialog closed. */
-    public enum Choice { NEW, OPEN, CANCEL }
+public class StartupDialog extends AppDialog {
 
     private final boolean savedExists;
     private Choice choice = Choice.CANCEL;
-
     /**
      * Creates the startup dialog.
      *
      * @param savedExists
      *         whether any saved statements exist; disables "Open Existing" if {@code false}
      */
-    public AppReadyDialog(boolean savedExists) {
+    public StartupDialog(boolean savedExists) {
         this.savedExists = savedExists;
     }
 
@@ -37,7 +33,9 @@ public class AppReadyDialog extends AppDialog {
         return choice;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected VBox buildContent() {
         Label message = new Label("What would you like to do?");
@@ -45,16 +43,27 @@ public class AppReadyDialog extends AppDialog {
 
         Button newStatement = new Button("New Statement");
         newStatement.setId("newStatementButton");
-        newStatement.setOnAction(e -> { choice = Choice.NEW; close(); });
+        newStatement.setOnAction(e -> {
+            choice = Choice.NEW;
+            close();
+        });
 
         Button openExisting = new Button("Open Existing");
         openExisting.setId("openExistingButton");
         openExisting.setDisable(!savedExists);
-        openExisting.setOnAction(e -> { choice = Choice.OPEN; close(); });
+        openExisting.setOnAction(e -> {
+            choice = Choice.OPEN;
+            close();
+        });
 
         HBox buttons = new HBox(16, newStatement, openExisting);
         buttons.setAlignment(Pos.CENTER);
 
         return contentBox("Wright Funeral Home", message, buttons);
     }
+
+    /**
+     * The action the user selected when the dialog closed.
+     */
+    public enum Choice {NEW, OPEN, CANCEL}
 }
