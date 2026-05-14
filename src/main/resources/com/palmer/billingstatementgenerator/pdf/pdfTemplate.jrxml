@@ -2088,7 +2088,7 @@ SERVICES SELECTED]]></text>
                         <rightPen lineWidth="1.0"/>
                     </box>
                     <textElement textAlignment="Right">
-                        <font fontName="Arial" size="8" isBold="false"/>
+                        <font fontName="Arial" size="8" isBold="true"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{subTotal}]]></textFieldExpression>
                 </textField>
@@ -2105,7 +2105,7 @@ SERVICES SELECTED]]></text>
                         <rightPen lineWidth="1.0"/>
                     </box>
                     <textElement textAlignment="Right">
-                        <font fontName="Arial" size="8" isBold="false"/>
+                        <font fontName="Arial" size="8" isBold="true"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{finalTotal}]]></textFieldExpression>
                 </textField>
