@@ -19,8 +19,6 @@ packages, services, merchandise, special charges, and cash advances, then export
 
 ![Generated PDF statement](docs/screenshots/pdf-output.png)
 
-> Place screenshots in `docs/screenshots/` and commit them to replace these placeholders.
-
 ## Stack
 
 - Java 21, JavaFX 17
