@@ -211,6 +211,9 @@ public final class PdfGenerator {
         m.put("totalSpecialCharges", StatementCalculator.specialChargesTotal(stmt).doubleValue());
         m.put("totalCashAdv", StatementCalculator.cashAdvancesTotal(stmt).doubleValue());
         m.put("salesTax", StatementCalculator.salesTax(stmt).doubleValue());
+        String ratePercent = stmt.getSalesTaxRate().multiply(new BigDecimal("100"))
+                .stripTrailingZeros().toPlainString();
+        m.put("salesTaxLabel", "Sales Tax " + ratePercent + "%");
         m.put("subTotal", StatementCalculator.subtotal(stmt).doubleValue());
         m.put("downPayment", toDouble(stmt.getPayment()));
         m.put("finalTotal", StatementCalculator.finalTotal(stmt).doubleValue());

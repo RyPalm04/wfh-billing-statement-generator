@@ -107,6 +107,7 @@
     <field name="totalCashAdv" class="java.lang.Double"/>
     <field name="totalServices" class="java.lang.Double"/>
     <field name="salesTax" class="java.lang.Double"/>
+    <field name="salesTaxLabel" class="java.lang.String"/>
     <field name="subTotal" class="java.lang.Double"/>
     <field name="downPayment" class="java.lang.Double"/>
     <field name="finalTotal" class="java.lang.Double"/>
@@ -2065,7 +2066,7 @@ SERVICES SELECTED]]></text>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{salesTax}]]></textFieldExpression>
                 </textField>
-                <staticText>
+                <textField>
                     <reportElement x="271" y="544" width="129" height="10" uuid="23da368a-1f20-4520-b4eb-89d48c7f6554">
                         <property name="com.jaspersoft.studio.unit.height" value="px"/>
                         <property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -2073,8 +2074,8 @@ SERVICES SELECTED]]></text>
                     <textElement textAlignment="Right" verticalAlignment="Bottom">
                         <font fontName="Arial" size="8" isBold="false"/>
                     </textElement>
-                    <text><![CDATA[Sales Tax 8.475%]]></text>
-                </staticText>
+                    <textFieldExpression><![CDATA[$F{salesTaxLabel}]]></textFieldExpression>
+                </textField>
                 <textField textAdjust="ScaleFont" pattern="¤#,##0.00;¤-#,##0.00" isBlankWhenNull="true">
                     <reportElement mode="Opaque" x="463" y="554" width="106" height="11" backcolor="#F2F2F2" uuid="ac230a2e-5625-4848-9002-bd91b870602a">
                         <property name="com.jaspersoft.studio.unit.width" value="px"/>
