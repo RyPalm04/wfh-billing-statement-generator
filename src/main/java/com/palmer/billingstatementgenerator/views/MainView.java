@@ -6,8 +6,6 @@ import com.palmer.billingstatementgenerator.models.statement.SavedStatementSumma
 import com.palmer.billingstatementgenerator.models.statement.Statement;
 import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
-import com.palmer.billingstatementgenerator.pdf.PdfGenerator;
-import com.palmer.billingstatementgenerator.util.AppPreferences;
 import com.palmer.billingstatementgenerator.views.controllers.BaseController;
 import com.palmer.billingstatementgenerator.views.controllers.CashAdvanceController;
 import com.palmer.billingstatementgenerator.views.controllers.InstructionsTabController;
@@ -16,6 +14,14 @@ import com.palmer.billingstatementgenerator.views.controllers.ServicesController
 import com.palmer.billingstatementgenerator.views.controllers.SpecialChargesController;
 import com.palmer.billingstatementgenerator.views.controllers.SummaryTabController;
 import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
+import com.palmer.billingstatementgenerator.views.dialogs.AppDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.AppReadyDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.IncompleteAlertDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.OpenStatementDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.PdfDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.ResetStatementDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.SettingsDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.UnsavedChangesDialog;
 import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -23,14 +29,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.collections.FXCollections;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -39,17 +40,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.application.Platform;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.math.BigDecimal;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -122,6 +117,7 @@ public class MainView {
      */
     public void setEventTracker(WorkflowEventTracker eventTracker) {
         this.eventTracker = eventTracker;
+        AppDialog.configure(root.getScene().getWindow(), eventTracker);
     }
 
     /**
@@ -236,7 +232,7 @@ public class MainView {
         Button settingsBtn = new Button("⚙");
         settingsBtn.setId("settingsButton");
         settingsBtn.getStyleClass().add("button-close");
-        settingsBtn.setOnAction(e -> showSettingsDialog());
+        settingsBtn.setOnAction(e -> new SettingsDialog().open());
 
         Region headerSpacer = new Region();
         HBox.setHgrow(headerSpacer, Priority.ALWAYS);
@@ -250,88 +246,6 @@ public class MainView {
         root.setTop(header);
         root.setCenter(tabPane);
         root.setBottom(buildButtonBar());
-    }
-
-
-    /**
-     * Displays the application settings dialog.
-     * Allows the user to configure the sales tax rate and reset help prompts.
-     */
-    private void showSettingsDialog() {
-        Stage dialog = new Stage();
-        dialog.initStyle(StageStyle.UNDECORATED);
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(root.getScene().getWindow());
-        dialog.setTitle("Settings");
-
-        Label title = new Label("Settings");
-        title.getStyleClass().add("splash-title");
-
-        Label taxRateLabel = new Label("Sales Tax Rate (%)");
-        taxRateLabel.getStyleClass().add("splash-subtitle");
-
-        String displayRate = AppPreferences.getSalesTaxRate()
-                .movePointRight(2).stripTrailingZeros().toPlainString();
-        TextField taxRateField = new TextField(displayRate);
-        taxRateField.setMaxWidth(100);
-        taxRateField.setId("taxRateField");
-
-        Label taxRateError = new Label("Please enter a valid number (e.g. 8.25)");
-        taxRateError.getStyleClass().add("splash-subtitle");
-        taxRateError.setVisible(false);
-
-        HBox taxRateRow = new HBox(12, taxRateLabel, taxRateField);
-        taxRateRow.setAlignment(Pos.CENTER);
-
-        Button resetPromptsButton = new Button("Reset Help Prompts");
-        resetPromptsButton.setId("resetPromptsButton");
-        resetPromptsButton.setOnAction(e -> {
-            AppPreferences.setHasLaunched(false);
-            resetPromptsButton.setText("✓ Takes effect on next launch");
-            resetPromptsButton.setDisable(true);
-        });
-
-        Label resetNote = new Label("Shows the instructions tab on next launch");
-        resetNote.getStyleClass().add("splash-subtitle");
-
-        VBox resetSection = new VBox(6, resetPromptsButton, resetNote);
-        resetSection.setAlignment(Pos.CENTER);
-
-        Button saveButton = createSaveButton(taxRateField, dialog, taxRateError);
-
-        Button cancelButton = new Button("Cancel");
-        cancelButton.setId("settingsCancelButton");
-        cancelButton.getStyleClass().add("button-clear");
-        cancelButton.setOnAction(e -> dialog.close());
-
-        HBox buttons = new HBox(12, saveButton, cancelButton);
-        buttons.setAlignment(Pos.CENTER);
-
-        VBox content = new VBox(20, title, taxRateRow, taxRateError, resetSection, buttons);
-        content.setPadding(new Insets(32));
-        content.setAlignment(Pos.CENTER);
-        content.getStyleClass().add("splash-container");
-
-        dialog.setScene(buildDialogScene(content));
-        dialog.setResizable(false);
-        dialog.showAndWait();
-    }
-
-    private static Button createSaveButton(TextField taxRateField, Stage dialog, Label taxRateError) {
-        Button saveButton = new Button("Save");
-        saveButton.setId("settingsSaveButton");
-        saveButton.setOnAction(e -> {
-            try {
-                BigDecimal rate = new BigDecimal(taxRateField.getText().trim()).movePointLeft(2);
-                AppPreferences.setSalesTaxRate(rate);
-                StatementContext.current().setSalesTaxRate(rate);
-                log.info("Tax rate updated to {}", rate.toPlainString());
-                dialog.close();
-            } catch (NumberFormatException ex) {
-                taxRateError.setVisible(true);
-            }
-        });
-        return saveButton;
     }
 
     /**
@@ -372,7 +286,7 @@ public class MainView {
 
         prevButton.setOnAction(e -> {
             if (invalid.get()) {
-                showIncompleteAlert();
+                new IncompleteAlertDialog().open();
             } else {
                 tabPane.getSelectionModel().selectPrevious();
             }
@@ -382,9 +296,9 @@ public class MainView {
             nextButton.setText("Generate PDF");
             nextButton.setOnAction(e -> {
                 if (invalid.get()) {
-                    showIncompleteAlert();
+                    new IncompleteAlertDialog().open();
                 } else {
-                    showPdfDialog();
+                    new PdfDialog().open();
                 }
             });
             clearButton.disableProperty().unbind();
@@ -395,7 +309,7 @@ public class MainView {
             nextButton.setText("Next");
             nextButton.setOnAction(e -> {
                 if (invalid.get()) {
-                    showIncompleteAlert();
+                    new IncompleteAlertDialog().open();
                 } else {
                     tabPane.getSelectionModel().selectNext();
                 }
@@ -407,7 +321,7 @@ public class MainView {
     }
 
     private void unbindButtonDisable(Button... buttons) {
-        Arrays.stream(buttons).forEach(button -> button.disableProperty().unbind());
+        Arrays.stream(buttons).forEach(b -> b.disableProperty().unbind());
     }
 
     /**
@@ -428,7 +342,7 @@ public class MainView {
     public void wireKeyNav(Scene scene) {
         scene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
             if (e.isShortcutDown() && e.getCode() == KeyCode.COMMA) {
-                showSettingsDialog();
+                new SettingsDialog().open();
                 e.consume();
             } else if (e.isAltDown()) {
                 if (e.getCode() == KeyCode.RIGHT) {
@@ -440,16 +354,6 @@ public class MainView {
                 }
             }
         });
-    }
-
-    private Scene buildDialogScene(javafx.scene.Parent content) {
-        Scene scene = new Scene(content);
-        scene.getStylesheets().add(getClass().getResource(
-                "/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
-        if (eventTracker != null) {
-            eventTracker.attachTo(scene);
-        }
-        return scene;
     }
 
     /**
@@ -488,187 +392,6 @@ public class MainView {
     }
 
     /**
-     * Displays a modal alert when the user attempts to navigate away from a tab
-     * that has checked items missing a required price or description.
-     */
-    private void showIncompleteAlert() {
-        Stage dialog = new Stage();
-        dialog.initStyle(StageStyle.UNDECORATED);
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(root.getScene().getWindow());
-        dialog.setTitle("Incomplete Items");
-
-        Label title = new Label("Incomplete Items");
-        title.getStyleClass().add("splash-title");
-
-        Label message = new Label(
-                "One or more selected items are missing a required price or description.\n" +
-                        "Please complete all selections before continuing.");
-        message.getStyleClass().add("splash-subtitle");
-        message.setWrapText(true);
-        message.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        message.setMaxWidth(320);
-
-        Button ok = new Button("Got It");
-        ok.setId("okButton");
-        ok.setOnAction(e -> dialog.close());
-
-        VBox content = new VBox(20, title, message, ok);
-        content.setPadding(new Insets(32));
-        content.setAlignment(Pos.CENTER);
-        content.getStyleClass().add("splash-container");
-
-        Scene scene = buildDialogScene(content);
-        dialog.setScene(scene);
-        dialog.setResizable(false);
-        dialog.showAndWait();
-    }
-
-    /**
-     * Displays a modal reset dialog offering New Statement, Open Existing,
-     * Clear Selections, or Cancel. New Statement and Open Existing prompt for
-     * unsaved changes first if the current statement is dirty.
-     */
-    private void showResetDialog() {
-        boolean done = false;
-        while (!done) {
-            Stage dialog = new Stage();
-            dialog.initStyle(StageStyle.UNDECORATED);
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(root.getScene().getWindow());
-            dialog.setTitle("Reset Statement");
-
-            Label title = new Label("Reset Statement");
-            title.getStyleClass().add("splash-title");
-
-            Label message = new Label("How would you like to proceed?");
-            message.getStyleClass().add("splash-subtitle");
-
-            boolean[] choseNew = {false};
-            boolean[] choseOpen = {false};
-            boolean[] choseClear = {false};
-
-            Button newStatement = new Button("New Statement");
-            newStatement.setId("newStatementButton");
-            newStatement.setOnAction(e -> {
-                choseNew[0] = true;
-                dialog.close();
-            });
-
-            Button openExisting = new Button("Open Existing");
-            openExisting.setId("openExistingButton");
-            openExisting.setOnAction(e -> {
-                choseOpen[0] = true;
-                dialog.close();
-            });
-
-            Button clearSelections = new Button("Clear Selections");
-            clearSelections.setId("clearSelectionsButton");
-            clearSelections.setOnAction(e -> {
-                choseClear[0] = true;
-                dialog.close();
-            });
-
-            Button cancel = new Button("Cancel");
-            cancel.setId("cancelButton");
-            cancel.getStyleClass().add("button-clear");
-            cancel.setOnAction(e -> dialog.close());
-
-            HBox buttons = new HBox(12, newStatement, openExisting, clearSelections, cancel);
-            buttons.setAlignment(Pos.CENTER);
-
-            VBox content = new VBox(20, title, message, buttons);
-            content.setPadding(new Insets(32));
-            content.setAlignment(Pos.CENTER);
-            content.getStyleClass().add("splash-container");
-
-            dialog.setScene(buildDialogScene(content));
-            dialog.setResizable(false);
-            dialog.showAndWait();
-
-            if (choseNew[0]) {
-                Runnable doNew = () -> {
-                    StatementContext.init();
-                    rebuildView();
-                    tabPane.getSelectionModel().select(1);
-                };
-                if (StatementContext.isDirty()) {
-                    showUnsavedChangesDialog(doNew);
-                } else {
-                    doNew.run();
-                }
-                done = true;
-            } else if (choseOpen[0]) {
-                Runnable doOpen = () -> {
-                    boolean opened = showOpenDialog();
-                    if (!opened) showResetDialog();
-                };
-                if (StatementContext.isDirty()) {
-                    showUnsavedChangesDialog(doOpen);
-                } else {
-                    boolean opened = showOpenDialog();
-                    if (!opened) continue;
-                }
-                done = true;
-            } else if (choseClear[0]) {
-                clearAllSelections();
-                tabPane.getSelectionModel().select(2);
-                done = true;
-            } else {
-                done = true;
-            }
-        }
-    }
-
-    /**
-     * Displays a modal dialog offering Save to Computer or Print for the current statement.
-     */
-    private void showPdfDialog() {
-        Stage dialog = new Stage();
-        dialog.initStyle(StageStyle.UNDECORATED);
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(root.getScene().getWindow());
-        dialog.setTitle("Generate PDF");
-
-        Label title = new Label("Generate PDF");
-        title.getStyleClass().add("splash-title");
-
-        Label message = new Label("How would you like to output this statement?");
-        message.getStyleClass().add("splash-subtitle");
-
-        Button saveButton = new Button("Save to Computer");
-        saveButton.setId("pdfSaveButton");
-        saveButton.setOnAction(e -> {
-            dialog.close();
-            PdfGenerator.export(root.getScene().getWindow());
-        });
-
-        Button printButton = new Button("Print");
-        printButton.setId("pdfPrintButton");
-        printButton.setOnAction(e -> {
-            dialog.close();
-            PdfGenerator.print(root.getScene().getWindow());
-        });
-
-        Button cancel = new Button("Cancel");
-        cancel.setId("pdfCancelButton");
-        cancel.getStyleClass().add("button-clear");
-        cancel.setOnAction(e -> dialog.close());
-
-        HBox buttons = new HBox(12, saveButton, printButton, cancel);
-        buttons.setAlignment(Pos.CENTER);
-
-        VBox content = new VBox(20, title, message, buttons);
-        content.setPadding(new Insets(32));
-        content.setAlignment(Pos.CENTER);
-        content.getStyleClass().add("splash-container");
-
-        dialog.setScene(buildDialogScene(content));
-        dialog.setResizable(false);
-        dialog.showAndWait();
-    }
-
-    /**
      * Saves the current statement. Calls {@link StatementDao#save} if it has never
      * been saved, or {@link StatementDao#update} if it already exists in the database.
      */
@@ -686,85 +409,66 @@ public class MainView {
     }
 
     /**
-     * Displays a modal "Open Existing Statement" dialog listing all saved statements.
-     * Returns {@code true} if the user opened a statement, {@code false} if they cancelled.
+     * Shows the reset dialog in a loop until the user makes a terminal choice.
+     */
+    private void showResetDialog() {
+        boolean done = false;
+        while (!done) {
+            ResetStatementDialog dialog = new ResetStatementDialog();
+            dialog.open();
+            switch (dialog.getChoice()) {
+                case NEW: {
+                    Runnable doNew = () -> {
+                        StatementContext.init();
+                        rebuildView();
+                        tabPane.getSelectionModel().select(1);
+                    };
+                    if (StatementContext.isDirty()) {
+                        showUnsavedChangesDialog(doNew);
+                    } else {
+                        doNew.run();
+                    }
+                    done = true;
+                    break;
+                }
+                case OPEN: {
+                    Runnable doOpen = () -> {
+                        if (!showOpenDialog()) showResetDialog();
+                    };
+                    if (StatementContext.isDirty()) {
+                        showUnsavedChangesDialog(doOpen);
+                    } else {
+                        if (!showOpenDialog()) continue;
+                    }
+                    done = true;
+                    break;
+                }
+                case CLEAR:
+                    clearAllSelections();
+                    tabPane.getSelectionModel().select(2);
+                    done = true;
+                    break;
+                default:
+                    done = true;
+            }
+        }
+    }
+
+    /**
+     * Shows the open-statement dialog and returns {@code true} if a statement was loaded.
      */
     private boolean showOpenDialog() {
         List<SavedStatementSummary> summaries = new StatementDao(Database.get()).findAll();
         if (summaries.isEmpty()) {
             return false;
         }
-
-        Stage dialog = new Stage();
-        dialog.initStyle(StageStyle.UNDECORATED);
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(root.getScene().getWindow());
-        dialog.setTitle("Open Statement");
-
-        Label title = new Label("Open Statement");
-        title.getStyleClass().add("splash-title");
-
-        DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        DateTimeFormatter tsFmt = DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm a");
-
-        ListView<SavedStatementSummary> list = new ListView<>(FXCollections.observableArrayList(summaries));
-        list.setPrefHeight(220);
-        list.setPrefWidth(520);
-        list.setCellFactory(lv -> new ListCell<>() {
-            @Override
-            protected void updateItem(SavedStatementSummary item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    String date = item.getServiceDate() != null ? dateFmt.format(item.getServiceDate()) : "—";
-                    String saved = item.getSavedAt() != null ? tsFmt.format(item.getSavedAt()) : "—";
-                    setText(String.format("#%d  %-30s  Service: %-12s  Saved: %s",
-                            item.getControlNumber(), item.getServicesForName(), date, saved));
-                }
-            }
+        OpenStatementDialog dialog = new OpenStatementDialog(summaries, id -> {
+            StatementContext.load(id);
+            rebuildView();
+            tabPane.getSelectionModel().select(1);
         });
-
-        boolean[] opened = {false};
-
-        Button open = new Button("Open");
-        open.setId("openButton");
-        open.setDisable(true);
-        list.getSelectionModel().selectedItemProperty().addListener(
-                (obs, o, n) -> open.setDisable(n == null));
-
-        open.setOnAction(e -> {
-            SavedStatementSummary selected = list.getSelectionModel().getSelectedItem();
-            if (selected != null) {
-                opened[0] = true;
-                dialog.close();
-                int id = selected.getId();
-                Platform.runLater(() -> {
-                    StatementContext.load(id);
-                    rebuildView();
-                    tabPane.getSelectionModel().select(1);
-                });
-            }
-        });
-
-        Button cancel = new Button("Cancel");
-        cancel.setId("cancelButton");
-        cancel.getStyleClass().add("button-clear");
-        cancel.setOnAction(e -> dialog.close());
-
-        HBox buttons = new HBox(12, open, cancel);
-        buttons.setAlignment(Pos.CENTER);
-
-        VBox content = new VBox(16, title, list, buttons);
-        content.setPadding(new Insets(32));
-        content.setAlignment(Pos.CENTER);
-        content.getStyleClass().add("splash-container");
-
-        Scene scene = buildDialogScene(content);
-        dialog.setScene(scene);
-        dialog.setResizable(false);
-        dialog.showAndWait();
-        return opened[0];
+        dialog.open();
+        return dialog.wasOpened();
     }
 
     /**
@@ -775,56 +479,15 @@ public class MainView {
      *         the action to run if the user chooses to discard
      */
     private void showUnsavedChangesDialog(Runnable onDiscard) {
-        Stage dialog = new Stage();
-        dialog.initStyle(StageStyle.UNDECORATED);
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(root.getScene().getWindow());
-        dialog.setTitle("Unsaved Changes");
-
-        Label title = new Label("Unsaved Changes");
-        title.getStyleClass().add("splash-title");
-
-        Label message = new Label("You have unsaved changes. Save before continuing?");
-        message.getStyleClass().add("splash-subtitle");
-
-        Button save = new Button("Save & Continue");
-        save.setId("saveContinueButton");
-        save.setOnAction(e -> {
-            dialog.close();
-            saveCurrentStatement();
-            onDiscard.run();
-        });
-
-        Button discard = new Button("Discard");
-        discard.setId("discardButton");
-        discard.getStyleClass().add("button-reset");
-        discard.setOnAction(e -> {
-            dialog.close();
-            onDiscard.run();
-        });
-
-        Button cancel = new Button("Cancel");
-        cancel.setId("cancelButton");
-        cancel.getStyleClass().add("button-clear");
-        cancel.setOnAction(e -> dialog.close());
-
-        HBox buttons = new HBox(12, save, discard, cancel);
-        buttons.setAlignment(Pos.CENTER);
-
-        VBox content = new VBox(20, title, message, buttons);
-        content.setPadding(new Insets(32));
-        content.setAlignment(Pos.CENTER);
-        content.getStyleClass().add("splash-container");
-
-        Scene scene = buildDialogScene(content);
-        dialog.setScene(scene);
-        dialog.setResizable(false);
-        dialog.showAndWait();
+        new UnsavedChangesDialog(
+                () -> { saveCurrentStatement(); onDiscard.run(); },
+                onDiscard
+        ).open();
     }
 
     /**
      * Called by the application after startup completes. Shows the launch dialog
-     * if there are saved statements, otherwise navigates directly.
+     * and navigates based on the user's choice.
      *
      * @param firstLaunch
      *         whether this is the first time the app has been launched
@@ -833,56 +496,18 @@ public class MainView {
         boolean done = false;
         while (!done) {
             List<SavedStatementSummary> saved = new StatementDao(Database.get()).findAll();
-
-            Stage dialog = new Stage();
-            dialog.initStyle(StageStyle.UNDECORATED);
-            dialog.initModality(Modality.APPLICATION_MODAL);
-            dialog.initOwner(root.getScene().getWindow());
-            dialog.setTitle("Wright Funeral Home");
-
-            Label title = new Label("Wright Funeral Home");
-            title.getStyleClass().add("splash-title");
-
-            Label message = new Label("What would you like to do?");
-            message.getStyleClass().add("splash-subtitle");
-
-            boolean[] choseNew = {false};
-            boolean[] choseOpen = {false};
-
-            Button newStatement = new Button("New Statement");
-            newStatement.setId("newStatementButton");
-            newStatement.setOnAction(e -> {
-                choseNew[0] = true;
-                dialog.close();
-            });
-
-            Button openExisting = new Button("Open Existing");
-            openExisting.setId("openExistingButton");
-            openExisting.setDisable(saved.isEmpty());
-            openExisting.setOnAction(e -> {
-                choseOpen[0] = true;
-                dialog.close();
-            });
-
-            HBox buttons = new HBox(16, newStatement, openExisting);
-            buttons.setAlignment(Pos.CENTER);
-
-            VBox content = new VBox(20, title, message, buttons);
-            content.setPadding(new Insets(32));
-            content.setAlignment(Pos.CENTER);
-            content.getStyleClass().add("splash-container");
-
-            dialog.setScene(buildDialogScene(content));
-            dialog.setResizable(false);
-            dialog.showAndWait();
-
-            if (choseNew[0]) {
-                skipInstructions();
-                done = true;
-            } else if (choseOpen[0]) {
-                done = showOpenDialog();
-            } else {
-                done = true;
+            AppReadyDialog dialog = new AppReadyDialog(!saved.isEmpty());
+            dialog.open();
+            switch (dialog.getChoice()) {
+                case NEW:
+                    if (!firstLaunch) skipInstructions();
+                    done = true;
+                    break;
+                case OPEN:
+                    done = showOpenDialog();
+                    break;
+                default:
+                    done = true;
             }
         }
     }
