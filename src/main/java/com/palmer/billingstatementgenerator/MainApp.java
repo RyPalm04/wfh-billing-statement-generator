@@ -3,6 +3,7 @@ package com.palmer.billingstatementgenerator;
 import com.palmer.billingstatementgenerator.db.Database;
 import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
+import com.palmer.billingstatementgenerator.util.AppLock;
 import com.palmer.billingstatementgenerator.util.AppPreferences;
 import com.palmer.billingstatementgenerator.views.MainView;
 import com.palmer.billingstatementgenerator.views.SplashView;
@@ -36,6 +37,13 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         log.info("Application starting");
+        if (!AppLock.acquire()) {
+            new MessageDialog("Already Running",
+                    "Wright Funeral Home Billing is already open.\n" +
+                    "Only one instance can run at a time.").open();
+            Platform.exit();
+            return;
+        }
         loadFonts();
 
         var iconStream = getClass().getResourceAsStream(
