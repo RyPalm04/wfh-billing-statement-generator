@@ -8,20 +8,9 @@ import javafx.scene.layout.VBox;
 
 /**
  * Modal dialog offering New Statement, Open Existing, Clear Selections, or Cancel.
- * The user's choice is available via {@link #getChoice()} after {@link #open()} returns.
+ * The selected {@link Choice} is returned directly by {@link #open()}.
  */
-public class ResetStatementDialog extends AppDialog {
-
-    private Choice choice = Choice.CANCEL;
-
-    /**
-     * Returns the choice the user made. Valid after {@code open()} returns.
-     *
-     * @return the selected {@link Choice}
-     */
-    public Choice getChoice() {
-        return choice;
-    }
+public class ResetStatementDialog extends AppDialog<ResetStatementDialog.Choice> {
 
     /**
      * {@inheritDoc}
@@ -34,28 +23,31 @@ public class ResetStatementDialog extends AppDialog {
         Button newStatement = new Button("New Statement");
         newStatement.setId("newStatementButton");
         newStatement.setOnAction(e -> {
-            choice = Choice.NEW;
+            result = Choice.NEW;
             close();
         });
 
         Button openExisting = new Button("Open Existing");
         openExisting.setId("openExistingButton");
         openExisting.setOnAction(e -> {
-            choice = Choice.OPEN;
+            result = Choice.OPEN;
             close();
         });
 
         Button clearSelections = new Button("Clear Selections");
         clearSelections.setId("clearSelectionsButton");
         clearSelections.setOnAction(e -> {
-            choice = Choice.CLEAR;
+            result = Choice.CLEAR;
             close();
         });
 
         Button cancel = new Button("Cancel");
         cancel.setId("cancelButton");
         cancel.getStyleClass().add("button-clear");
-        cancel.setOnAction(e -> close());
+        cancel.setOnAction(e -> {
+            result = Choice.CANCEL;
+            close();
+        });
 
         HBox buttons = new HBox(12, newStatement, openExisting, clearSelections, cancel);
         buttons.setAlignment(Pos.CENTER);

@@ -1,7 +1,6 @@
 package com.palmer.billingstatementgenerator.views.dialogs;
 
 import com.palmer.billingstatementgenerator.models.statement.SavedStatementSummary;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -12,40 +11,23 @@ import javafx.scene.layout.VBox;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Modal dialog listing all saved statements and allowing the user to open one.
- * Whether a statement was opened is available via {@link #wasOpened()} after {@link #open()} returns.
+ * Returns the selected statement ID from {@link #open()}, or {@code null} if cancelled.
  */
-public class OpenStatementDialog extends AppDialog {
+public class OpenStatementDialog extends AppDialog<Integer> {
 
     private final List<SavedStatementSummary> summaries;
-    private final Consumer<Integer> onLoad;
-    private boolean opened = false;
 
     /**
      * Creates the open-statement dialog.
      *
      * @param summaries
      *         the list of saved statements to display
-     * @param onLoad
-     *         called with the selected statement ID after the dialog closes;
-     *         runs on the JavaFX Application Thread via {@link Platform#runLater}
      */
-    public OpenStatementDialog(List<SavedStatementSummary> summaries, Consumer<Integer> onLoad) {
+    public OpenStatementDialog(List<SavedStatementSummary> summaries) {
         this.summaries = summaries;
-        this.onLoad = onLoad;
-    }
-
-    /**
-     * Returns {@code true} if the user opened a statement.
-     * Valid after {@code open()} returns.
-     *
-     * @return whether a statement was opened
-     */
-    public boolean wasOpened() {
-        return opened;
     }
 
     /**
@@ -83,10 +65,8 @@ public class OpenStatementDialog extends AppDialog {
         open.setOnAction(e -> {
             SavedStatementSummary selected = list.getSelectionModel().getSelectedItem();
             if (selected != null) {
-                opened = true;
-                int id = selected.getId();
+                result = selected.getId();
                 close();
-                Platform.runLater(() -> onLoad.accept(id));
             }
         });
 

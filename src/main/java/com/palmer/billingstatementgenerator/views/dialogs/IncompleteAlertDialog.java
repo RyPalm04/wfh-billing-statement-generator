@@ -9,7 +9,7 @@ import javafx.scene.text.TextAlignment;
  * Modal alert shown when the user navigates away from a tab that has checked
  * items missing a required price or description.
  */
-public class IncompleteAlertDialog extends AppDialog {
+public class IncompleteAlertDialog extends AppDialog<Void> {
 
     /**
      * {@inheritDoc}

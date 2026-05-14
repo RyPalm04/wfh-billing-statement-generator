@@ -414,9 +414,7 @@ public class MainView {
     private void showResetDialog() {
         boolean done = false;
         while (!done) {
-            ResetStatementDialog dialog = new ResetStatementDialog();
-            dialog.open();
-            switch (dialog.getChoice()) {
+            switch (new ResetStatementDialog().open()) {
                 case NEW: {
                     Runnable doNew = () -> {
                         StatementContext.init();
@@ -466,13 +464,14 @@ public class MainView {
         if (summaries.isEmpty()) {
             return false;
         }
-        OpenStatementDialog dialog = new OpenStatementDialog(summaries, id -> {
+        Integer id = new OpenStatementDialog(summaries).open();
+        if (id != null) {
             StatementContext.load(id);
             rebuildView();
             tabPane.getSelectionModel().select(1);
-        });
-        dialog.open();
-        return dialog.wasOpened();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -503,9 +502,7 @@ public class MainView {
         boolean done = false;
         while (!done) {
             List<SavedStatementSummary> saved = new StatementDao(Database.get()).findAll();
-            StartupDialog dialog = new StartupDialog(!saved.isEmpty());
-            dialog.open();
-            switch (dialog.getChoice()) {
+            switch (new StartupDialog(!saved.isEmpty()).open()) {
                 case NEW:
                     if (!firstLaunch) {
                         skipInstructions();

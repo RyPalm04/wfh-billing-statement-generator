@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 /**
  * Modal dialog offering Save to Computer or Print for the current statement.
  */
-public class PdfDialog extends AppDialog {
+public class PdfDialog extends AppDialog<Void> {
 
     /**
      * {@inheritDoc}

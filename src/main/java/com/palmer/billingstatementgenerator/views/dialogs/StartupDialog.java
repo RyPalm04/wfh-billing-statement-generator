@@ -8,12 +8,12 @@ import javafx.scene.layout.VBox;
 
 /**
  * Modal startup dialog offering New Statement or Open Existing.
- * The user's choice is available via {@link #getChoice()} after {@link #open()} returns.
+ * The selected {@link Choice} is returned directly by {@link #open()}.
  */
-public class StartupDialog extends AppDialog {
+public class StartupDialog extends AppDialog<StartupDialog.Choice> {
 
     private final boolean savedExists;
-    private Choice choice = Choice.CANCEL;
+
     /**
      * Creates the startup dialog.
      *
@@ -22,15 +22,6 @@ public class StartupDialog extends AppDialog {
      */
     public StartupDialog(boolean savedExists) {
         this.savedExists = savedExists;
-    }
-
-    /**
-     * Returns the choice the user made. Valid after {@code open()} returns.
-     *
-     * @return the selected {@link Choice}
-     */
-    public Choice getChoice() {
-        return choice;
     }
 
     /**
@@ -44,7 +35,7 @@ public class StartupDialog extends AppDialog {
         Button newStatement = new Button("New Statement");
         newStatement.setId("newStatementButton");
         newStatement.setOnAction(e -> {
-            choice = Choice.NEW;
+            result = Choice.NEW;
             close();
         });
 
@@ -52,7 +43,7 @@ public class StartupDialog extends AppDialog {
         openExisting.setId("openExistingButton");
         openExisting.setDisable(!savedExists);
         openExisting.setOnAction(e -> {
-            choice = Choice.OPEN;
+            result = Choice.OPEN;
             close();
         });
 

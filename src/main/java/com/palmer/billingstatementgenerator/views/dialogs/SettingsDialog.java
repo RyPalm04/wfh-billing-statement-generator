@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 /**
  * Modal settings dialog for configuring the sales tax rate and resetting help prompts.
  */
-public class SettingsDialog extends AppDialog {
+public class SettingsDialog extends AppDialog<Void> {
 
     private static final Logger log = LoggerFactory.getLogger(SettingsDialog.class);
 

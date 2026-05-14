@@ -42,7 +42,7 @@ public final class StatementContext {
 
     /**
      * Initializes a new {@link Statement}, loading all catalog data from the database
-     * and applying the configured sales tax rate from {@link AppConfig}.
+     * and applying the configured sales tax rate from {@link AppPreferences}.
      * Auto-assigns the next available control number.
      * Safe to call multiple times; each call replaces the previous statement.
      */

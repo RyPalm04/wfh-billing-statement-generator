@@ -7,6 +7,7 @@ import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.util.AppPreferences;
 import com.palmer.billingstatementgenerator.views.MainView;
 import com.palmer.billingstatementgenerator.views.SplashView;
+import com.palmer.billingstatementgenerator.views.dialogs.MessageDialog;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -37,6 +38,12 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         log.info("Application starting");
         loadFonts();
+
+        var iconStream = getClass().getResourceAsStream(
+                "/com/palmer/billingstatementgenerator/img/app-icon.png");
+        if (iconStream != null) {
+            primaryStage.getIcons().add(new javafx.scene.image.Image(iconStream));
+        }
 
         SplashView splashView = new SplashView();
         Scene splashScene = new Scene(splashView.asParent());
@@ -114,21 +121,14 @@ public class MainApp extends Application {
             Throwable ex = initTask.getException();
             primaryStage.close();
             if (ex instanceof DatabaseLockedException) {
-                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
-                        javafx.scene.control.Alert.AlertType.ERROR);
-                alert.setTitle("Already Running");
-                alert.setHeaderText("Wright Funeral Home Billing is already open.");
-                alert.setContentText(
-                        "Only one instance can run at a time. Close the existing window and try again.");
-                alert.showAndWait();
+                new MessageDialog("Already Running",
+                        "Wright Funeral Home Billing is already open.\n" +
+                        "Only one instance can run at a time. Close the existing window and try again.").open();
             } else {
                 log.error("Startup failed", ex);
-                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
-                        javafx.scene.control.Alert.AlertType.ERROR);
-                alert.setTitle("Startup Error");
-                alert.setHeaderText("The application failed to start.");
-                alert.setContentText(ex != null ? ex.getMessage() : "Unknown error");
-                alert.showAndWait();
+                new MessageDialog("Startup Error",
+                        "The application failed to start.\n" +
+                        (ex != null ? ex.getMessage() : "Unknown error")).open();
             }
             Platform.exit();
         });

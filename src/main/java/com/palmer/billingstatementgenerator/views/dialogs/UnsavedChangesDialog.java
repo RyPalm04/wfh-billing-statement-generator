@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 /**
  * Modal dialog warning the user of unsaved changes before a destructive action.
  */
-public class UnsavedChangesDialog extends AppDialog {
+public class UnsavedChangesDialog extends AppDialog<Void> {
 
     private final Runnable onSaveAndContinue;
     private final Runnable onDiscard;

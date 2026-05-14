@@ -8,8 +8,8 @@ import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineIt
 import com.palmer.billingstatementgenerator.models.statement.Statement;
 import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
+import com.palmer.billingstatementgenerator.views.dialogs.MessageDialog;
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import net.sf.jasperreports.engine.JRException;
@@ -92,12 +92,12 @@ public final class PdfGenerator {
                 } catch (JRException e) {
                     log.error("Print failed", e);
                     Platform.runLater(() ->
-                            new Alert(Alert.AlertType.ERROR, "Failed to print: " + e.getMessage()).showAndWait());
+                            new MessageDialog("Print Error", "Failed to print: " + e.getMessage()).open());
                 }
             });
         } catch (Throwable t) {
             log.error("Print failed during report fill", t);
-            new Alert(Alert.AlertType.ERROR, "Failed to print: " + t.getMessage()).showAndWait();
+            new MessageDialog("Print Error", "Failed to print: " + t.getMessage()).open();
         }
     }
 
@@ -277,10 +277,10 @@ public final class PdfGenerator {
         try {
             generate(StatementContext.current(), output);
             log.info("PDF export successful: {}", output.getAbsolutePath());
-            new Alert(Alert.AlertType.INFORMATION, "PDF saved to:\n" + output.getAbsolutePath()).showAndWait();
+            new MessageDialog("PDF Saved", "PDF saved to:\n" + output.getAbsolutePath()).open();
         } catch (Throwable t) {
             log.error("PDF export failed", t);
-            new Alert(Alert.AlertType.ERROR, "Failed to generate PDF: " + t.getMessage()).showAndWait();
+            new MessageDialog("Export Error", "Failed to generate PDF: " + t.getMessage()).open();
         }
     }
 }
