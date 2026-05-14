@@ -6,6 +6,9 @@ on:
     tags: [ 'v*' ]
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     strategy:
@@ -15,19 +18,25 @@ jobs:
             installer-type: dmg
           - os: windows-latest
             installer-type: exe
+          - os: ubuntu-latest
+            installer-type: deb
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Java 20
+      - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
 
       - name: Grant execute permission for gradlew
-        if: runner.os == 'macOS'
+        if: runner.os == 'macOS' || runner.os == 'Linux'
         run: chmod +x gradlew
+
+      - name: Install jpackage dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y fakeroot
 
       - name: Build and package
         run: ./gradlew installDist jpackageApp
@@ -58,6 +67,12 @@ jobs:
           name: installer-exe
           path: artifacts/windows
 
+      - name: Download Linux installer
+        uses: actions/download-artifact@v4
+        with:
+          name: installer-deb
+          path: artifacts/linux
+
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -75,4 +90,5 @@ jobs:
             --generate-notes \
             $PRERELEASE \
             artifacts/macos/* \
-            artifacts/windows/*
+            artifacts/windows/* \
+            artifacts/linux/*
