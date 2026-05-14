@@ -144,7 +144,7 @@
                         <property name="com.jaspersoft.studio.unit.height" value="px"/>
                     </reportElement>
                     <textElement textAlignment="Center" verticalAlignment="Middle">
-                        <font fontName="Times New Roman" size="11"/>
+                        <font fontName="Great Vibes" size="11"/>
                     </textElement>
                     <text><![CDATA["A Family Tradition of Trust & Dignity"]]></text>
                 </staticText>
@@ -659,7 +659,7 @@ BROOKFIELD, MISSOURI 64628
                         <rightPen lineWidth="1.0"/>
                     </box>
                     <textElement textAlignment="Right">
-                        <font fontName="Arial" size="8" isBold="false"/>
+                        <font fontName="Arial" size="8" isBold="true"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{totalServices}]]></textFieldExpression>
                 </textField>
@@ -1084,7 +1084,7 @@ BROOKFIELD, MISSOURI 64628
                         <rightPen lineWidth="1.0"/>
                     </box>
                     <textElement textAlignment="Right">
-                        <font fontName="Arial" size="8" isBold="false"/>
+                        <font fontName="Arial" size="8" isBold="true"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{totalMerchandise}]]></textFieldExpression>
                 </textField>
@@ -1317,7 +1317,7 @@ BROOKFIELD, MISSOURI 64628
                         <rightPen lineWidth="1.0"/>
                     </box>
                     <textElement textAlignment="Right">
-                        <font fontName="Arial" size="8" isBold="false"/>
+                        <font fontName="Arial" size="8" isBold="true"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{totalSpecialCharges}]]></textFieldExpression>
                 </textField>
@@ -1913,7 +1913,7 @@ SERVICES SELECTED]]></text>
                         <rightPen lineWidth="1.0"/>
                     </box>
                     <textElement textAlignment="Right">
-                        <font fontName="Arial" size="8" isBold="false"/>
+                        <font fontName="Arial" size="8" isBold="true"/>
                     </textElement>
                     <textFieldExpression><![CDATA[$F{totalCashAdv}]]></textFieldExpression>
                 </textField>
