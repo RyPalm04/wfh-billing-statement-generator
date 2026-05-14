@@ -1,7 +1,6 @@
 package com.palmer.billingstatementgenerator;
 
 import com.palmer.billingstatementgenerator.db.Database;
-import com.palmer.billingstatementgenerator.db.DatabaseLockedException;
 import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.util.AppPreferences;
@@ -119,17 +118,11 @@ public class MainApp extends Application {
 
         initTask.setOnFailed(e -> {
             Throwable ex = initTask.getException();
+            log.error("Startup failed", ex);
             primaryStage.close();
-            if (ex instanceof DatabaseLockedException) {
-                new MessageDialog("Already Running",
-                        "Wright Funeral Home Billing is already open.\n" +
-                        "Only one instance can run at a time. Close the existing window and try again.").open();
-            } else {
-                log.error("Startup failed", ex);
-                new MessageDialog("Startup Error",
-                        "The application failed to start.\n" +
-                        (ex != null ? ex.getMessage() : "Unknown error")).open();
-            }
+            new MessageDialog("Startup Error",
+                    "The application failed to start.\n" +
+                    (ex != null ? ex.getMessage() : "Unknown error")).open();
             Platform.exit();
         });
 
