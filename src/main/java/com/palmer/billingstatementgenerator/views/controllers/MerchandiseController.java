@@ -55,12 +55,14 @@ public class MerchandiseController extends GridTabController<MerchandiseLineItem
         } else {
             if (item.getCatalog().isDescriptionRequired()) {
                 TextField desc = buildTextField(18, 1, row, itemsGrid);
+                desc.setId(toId(item.getCatalog().getName()) + "_desc");
                 desc.textProperty().bindBidirectional(item.descriptionProperty());
                 wireTextFieldToCheckBox(desc, cb);
             }
 
             if (item.getCatalog().getDefaultCost() == null) {
                 TextField priceField = buildPriceField(item.priceProperty(), row, itemsGrid);
+                priceField.setId(toId(item.getCatalog().getName()) + "_price");
                 wireTextFieldToCheckBox(priceField, cb);
                 addValidationPair(cb, item.priceProperty());
             } else {
@@ -86,6 +88,7 @@ public class MerchandiseController extends GridTabController<MerchandiseLineItem
      */
     private void addPerUnitRow(MerchandiseLineItem item, CheckBox cb, int row) {
         Spinner<Integer> spinner = new Spinner<>(1, 999, item.getQuantity());
+        spinner.setId(toId(item.getCatalog().getName()) + "_spinner");
         spinner.setPrefWidth(70);
         spinner.setEditable(true);
         GridPane.setConstraints(spinner, 1, row);

@@ -1,9 +1,12 @@
 package com.palmer.billingstatementgenerator.views;
 
+import com.palmer.billingstatementgenerator.dao.StatementDao;
+import com.palmer.billingstatementgenerator.db.Database;
+import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
+import com.palmer.billingstatementgenerator.models.statement.SavedStatementSummary;
 import com.palmer.billingstatementgenerator.models.statement.Statement;
 import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
-import com.palmer.billingstatementgenerator.pdf.PdfGenerator;
 import com.palmer.billingstatementgenerator.views.controllers.BaseController;
 import com.palmer.billingstatementgenerator.views.controllers.CashAdvanceController;
 import com.palmer.billingstatementgenerator.views.controllers.InstructionsTabController;
@@ -11,6 +14,14 @@ import com.palmer.billingstatementgenerator.views.controllers.MerchandiseControl
 import com.palmer.billingstatementgenerator.views.controllers.ServicesController;
 import com.palmer.billingstatementgenerator.views.controllers.SpecialChargesController;
 import com.palmer.billingstatementgenerator.views.controllers.SummaryTabController;
+import com.palmer.billingstatementgenerator.views.dialogs.AppDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.StartupDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.IncompleteAlertDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.OpenStatementDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.PdfDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.ResetStatementDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.SettingsDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.UnsavedChangesDialog;
 import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -19,7 +30,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
@@ -30,13 +40,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -54,11 +64,18 @@ public class MainView {
     private Button prevButton;
     private Button nextButton;
     private Button clearButton;
+    private Button saveButton;
+    private Button resetButton;
 
     /**
      * Controller for the summary tab, held for refresh and reset operations.
      */
     private SummaryTabController summaryController;
+
+    /**
+     * Event tracker used to extend logging to modal dialog scenes.
+     */
+    private WorkflowEventTracker eventTracker;
 
     /**
      * Constructs the main view by creating tabs, the button bar, the layout,
@@ -79,6 +96,28 @@ public class MainView {
      */
     public Parent asParent() {
         return root;
+    }
+
+    /**
+     * Returns the workflow tab pane, used by external components to observe
+     * or pass tab context to loggers and other coordinators.
+     *
+     * @return the main {@link TabPane}
+     */
+    public TabPane getTabPane() {
+        return tabPane;
+    }
+
+    /**
+     * Sets the event tracker so that modal dialog scenes created by this view
+     * are also covered by UI activity logging.
+     *
+     * @param eventTracker
+     *         the active {@link WorkflowEventTracker}
+     */
+    public void setEventTracker(WorkflowEventTracker eventTracker) {
+        this.eventTracker = eventTracker;
+        AppDialog.configure(root.getScene().getWindow(), eventTracker);
     }
 
     /**
@@ -125,9 +164,19 @@ public class MainView {
      */
     private void createButtonBar() {
         prevButton = new Button("Previous");
+        prevButton.setId("prevButton");
         clearButton = new Button("Clear Selections");
+        clearButton.setId("clearButton");
+        saveButton = new Button("Save");
+        saveButton.setId("saveButton");
         nextButton = new Button("Next");
+        nextButton.setId("nextButton");
+        resetButton = new Button("Reset");
+        resetButton.setId("resetButton");
         clearButton.getStyleClass().add("button-clear");
+        saveButton.getStyleClass().add("button-save");
+        resetButton.getStyleClass().add("button-reset");
+        resetButton.setVisible(false);
     }
 
     /**
@@ -137,7 +186,8 @@ public class MainView {
      * @return the configured button bar {@link HBox}
      */
     private HBox buildButtonBar() {
-        HBox bar = new HBox(prevButton, spacer(), clearButton, spacer(), nextButton);
+        HBox rightGroup = new HBox(8, resetButton, saveButton, nextButton);
+        HBox bar = new HBox(prevButton, spacer(), clearButton, spacer(), rightGroup);
         bar.setPadding(new Insets(12, 24, 12, 24));
         bar.setAlignment(Pos.CENTER);
         bar.getStyleClass().add("button-bar");
@@ -167,7 +217,27 @@ public class MainView {
         logoView.setPreserveRatio(true);
         logoView.setOpacity(0.9);
 
-        HBox header = new HBox(logoView);
+        Button closeBtn = new Button("✕");
+        closeBtn.setId("closeButton");
+        closeBtn.getStyleClass().add("button-close");
+        closeBtn.setOnAction(e -> {
+            Stage stage = (Stage) root.getScene().getWindow();
+            if (StatementContext.isDirty()) {
+                showUnsavedChangesOnClose(stage);
+            } else {
+                stage.close();
+            }
+        });
+
+        Button settingsBtn = new Button("⚙");
+        settingsBtn.setId("settingsButton");
+        settingsBtn.getStyleClass().add("button-close");
+        settingsBtn.setOnAction(e -> new SettingsDialog().open());
+
+        Region headerSpacer = new Region();
+        HBox.setHgrow(headerSpacer, Priority.ALWAYS);
+
+        HBox header = new HBox(logoView, headerSpacer, settingsBtn, closeBtn);
         header.setPadding(new Insets(10, 16, 10, 16));
         header.setAlignment(Pos.CENTER_LEFT);
         header.getStyleClass().add("app-header");
@@ -206,16 +276,17 @@ public class MainView {
 
         root.setBottom(isFirst ? null : buildButtonBar());
 
-        prevButton.disableProperty().unbind();
-        nextButton.disableProperty().unbind();
+        unbindButtonDisable(prevButton, nextButton, saveButton);
 
         prevButton.setDisable(index == 1);
+        saveButton.disableProperty().bind(StatementContext.dirtyProperty().not());
+        saveButton.setOnAction(e -> saveCurrentStatement());
 
         BooleanBinding invalid = tab.getController().hasInvalidSelections();
 
         prevButton.setOnAction(e -> {
             if (invalid.get()) {
-                showIncompleteAlert();
+                new IncompleteAlertDialog().open();
             } else {
                 tabPane.getSelectionModel().selectPrevious();
             }
@@ -225,29 +296,32 @@ public class MainView {
             nextButton.setText("Generate PDF");
             nextButton.setOnAction(e -> {
                 if (invalid.get()) {
-                    showIncompleteAlert();
+                    new IncompleteAlertDialog().open();
                 } else {
-                    PdfGenerator.export(root.getScene().getWindow());
+                    new PdfDialog().open();
                 }
             });
             clearButton.disableProperty().unbind();
-            clearButton.setDisable(false);
-            clearButton.setText("Reset");
-            clearButton.getStyleClass().add("button-reset");
-            clearButton.setOnAction(e -> showResetDialog());
+            clearButton.setVisible(false);
+            resetButton.setVisible(true);
+            resetButton.setOnAction(e -> showResetDialog());
         } else {
             nextButton.setText("Next");
             nextButton.setOnAction(e -> {
                 if (invalid.get()) {
-                    showIncompleteAlert();
+                    new IncompleteAlertDialog().open();
                 } else {
                     tabPane.getSelectionModel().selectNext();
                 }
             });
-            clearButton.setText("Clear Selections");
-            clearButton.getStyleClass().remove("button-reset");
+            resetButton.setVisible(false);
+            clearButton.setVisible(true);
             tab.getController().setClearButton(clearButton);
         }
+    }
+
+    private void unbindButtonDisable(Button... buttons) {
+        Arrays.stream(buttons).forEach(b -> b.disableProperty().unbind());
     }
 
     /**
@@ -267,7 +341,10 @@ public class MainView {
      */
     public void wireKeyNav(Scene scene) {
         scene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
-            if (e.isAltDown()) {
+            if (e.isShortcutDown() && e.getCode() == KeyCode.COMMA) {
+                new SettingsDialog().open();
+                e.consume();
+            } else if (e.isAltDown()) {
                 if (e.getCode() == KeyCode.RIGHT) {
                     tabPane.getSelectionModel().selectNext();
                     e.consume();
@@ -315,93 +392,130 @@ public class MainView {
     }
 
     /**
-     * Displays a modal alert when the user attempts to navigate away from a tab
-     * that has checked items missing a required price or description.
+     * Saves the current statement. Calls {@link StatementDao#save} if it has never
+     * been saved, or {@link StatementDao#update} if it already exists in the database.
      */
-    private void showIncompleteAlert() {
-        Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(root.getScene().getWindow());
-        dialog.setTitle("Incomplete Items");
-
-        Label title = new Label("Incomplete Items");
-        title.getStyleClass().add("splash-title");
-
-        Label message = new Label(
-                "One or more selected items are missing a required price or description.\n" +
-                        "Please complete all selections before continuing.");
-        message.getStyleClass().add("splash-subtitle");
-        message.setWrapText(true);
-        message.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        message.setMaxWidth(320);
-
-        Button ok = new Button("Got It");
-        ok.setOnAction(e -> dialog.close());
-
-        VBox content = new VBox(20, title, message, ok);
-        content.setPadding(new Insets(32));
-        content.setAlignment(Pos.CENTER);
-        content.getStyleClass().add("splash-container");
-
-        Scene scene = new Scene(content);
-        scene.getStylesheets().add(getClass().getResource(
-                "/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
-        dialog.setScene(scene);
-        dialog.setResizable(false);
-        dialog.showAndWait();
+    private void saveCurrentStatement() {
+        StatementDao dao = new StatementDao(Database.get());
+        Integer savedId = StatementContext.getSavedId();
+        if (savedId == null) {
+            int newId = dao.save(StatementContext.current());
+            StatementContext.markSaved(newId);
+        } else {
+            dao.update(savedId, StatementContext.current());
+            StatementContext.markSaved(savedId);
+        }
+        log.info("Statement saved, id={}", StatementContext.getSavedId());
     }
 
     /**
-     * Displays a modal reset dialog offering three options: Full Reset,
-     * Clear Selections, or Cancel. Full Reset reinitializes the statement
-     * context and rebuilds the entire view. Clear Selections resets all
-     * tab controllers without affecting service information.
+     * Shows the reset dialog in a loop until the user makes a terminal choice.
      */
     private void showResetDialog() {
-        Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(root.getScene().getWindow());
-        dialog.setTitle("Reset Statement");
+        boolean done = false;
+        while (!done) {
+            switch (new ResetStatementDialog().open()) {
+                case NEW: {
+                    Runnable doNew = () -> {
+                        StatementContext.init();
+                        rebuildView();
+                        tabPane.getSelectionModel().select(1);
+                    };
+                    if (StatementContext.isDirty()) {
+                        showUnsavedChangesDialog(doNew);
+                    } else {
+                        doNew.run();
+                    }
+                    done = true;
+                    break;
+                }
+                case OPEN: {
+                    Runnable doOpen = () -> {
+                        if (!showOpenDialog()) {
+                            showResetDialog();
+                        }
+                    };
+                    if (StatementContext.isDirty()) {
+                        showUnsavedChangesDialog(doOpen);
+                    } else {
+                        if (!showOpenDialog()) {
+                            continue;
+                        }
+                    }
+                    done = true;
+                    break;
+                }
+                case CLEAR:
+                    clearAllSelections();
+                    tabPane.getSelectionModel().select(2);
+                    done = true;
+                    break;
+                default:
+                    done = true;
+            }
+        }
+    }
 
-        Label title = new Label("Reset Statement");
-        title.getStyleClass().add("splash-title");
-
-        Label message = new Label("How would you like to proceed?");
-        message.getStyleClass().add("splash-subtitle");
-
-        Button fullReset = new Button("Full Reset");
-        fullReset.setOnAction(e -> {
-            dialog.close();
-            StatementContext.init();
+    /**
+     * Shows the open-statement dialog and returns {@code true} if a statement was loaded.
+     */
+    private boolean showOpenDialog() {
+        List<SavedStatementSummary> summaries = new StatementDao(Database.get()).findAll();
+        if (summaries.isEmpty()) {
+            return false;
+        }
+        Integer id = new OpenStatementDialog(summaries).open();
+        if (id != null) {
+            StatementContext.load(id);
             rebuildView();
             tabPane.getSelectionModel().select(1);
-        });
+            return true;
+        }
+        return false;
+    }
 
-        Button clearSelections = new Button("Clear Selections");
-        clearSelections.setOnAction(e -> {
-            dialog.close();
-            clearAllSelections();
-            tabPane.getSelectionModel().select(2);
-        });
+    /**
+     * Displays a modal "unsaved changes" warning and runs {@code onDiscard} if the
+     * user confirms they want to discard changes.
+     *
+     * @param onDiscard
+     *         the action to run if the user chooses to discard
+     */
+    private void showUnsavedChangesDialog(Runnable onDiscard) {
+        new UnsavedChangesDialog(
+                () -> {
+                    saveCurrentStatement();
+                    onDiscard.run();
+                },
+                onDiscard
+        ).open();
+    }
 
-        Button cancel = new Button("Cancel");
-        cancel.getStyleClass().add("button-clear");
-        cancel.setOnAction(e -> dialog.close());
-
-        HBox buttons = new HBox(12, fullReset, clearSelections, cancel);
-        buttons.setAlignment(Pos.CENTER);
-
-        VBox content = new VBox(20, title, message, buttons);
-        content.setPadding(new Insets(32));
-        content.setAlignment(Pos.CENTER);
-        content.getStyleClass().add("splash-container");
-
-        Scene scene = new Scene(content);
-        scene.getStylesheets().add(getClass().getResource(
-                "/com/palmer/billingstatementgenerator/css/style.css").toExternalForm());
-        dialog.setScene(scene);
-        dialog.setResizable(false);
-        dialog.showAndWait();
+    /**
+     * Called by the application after startup completes. Shows the launch dialog
+     * and navigates based on the user's choice.
+     *
+     * @param firstLaunch
+     *         whether this is the first time the app has been launched
+     */
+    public void onAppReady(boolean firstLaunch) {
+        boolean done = false;
+        while (!done) {
+            List<SavedStatementSummary> saved = new StatementDao(Database.get()).findAll();
+            switch (new StartupDialog(!saved.isEmpty()).open()) {
+                case NEW:
+                    if (!firstLaunch) {
+                        skipInstructions();
+                    }
+                    done = true;
+                    break;
+                case OPEN:
+                    done = showOpenDialog();
+                    break;
+                default:
+                    done = true;
+            }
+        }
     }
 
     /**
@@ -420,6 +534,20 @@ public class MainView {
     }
 
     /**
+     * Shows the unsaved changes dialog when the application window is closing.
+     * If the user saves or discards, the stage is closed. Cancel leaves the app open.
+     *
+     * @param stage
+     *         the primary application stage to close after confirmation
+     */
+    public void showUnsavedChangesOnClose(Stage stage) {
+        showUnsavedChangesDialog(() -> {
+            stage.setOnCloseRequest(null);
+            stage.close();
+        });
+    }
+
+    /**
      * Rebuilds the entire view after a full reset by recreating tabs,
      * the layout, and rewiring tab selection behavior.
      */
@@ -429,6 +557,9 @@ public class MainView {
         root.setCenter(tabPane);
         wireTabs();
         wireTabDisabling();
+        if (eventTracker != null) {
+            eventTracker.onTabPaneReplaced(tabPane);
+        }
     }
 
     /**
@@ -439,8 +570,8 @@ public class MainView {
     private void wireTabDisabling() {
         Statement stmt = StatementContext.current();
         BooleanBinding infoIncomplete = Bindings.createBooleanBinding(
-                () -> stmt.getControlNumber() == 0 || stmt.getServicesForName().trim().isEmpty(),
-                stmt.controlNumberProperty(), stmt.servicesForNameProperty()
+                () -> stmt.getServicesForName().trim().isEmpty(),
+                stmt.servicesForNameProperty()
         );
         for (int i = 2; i < tabPane.getTabs().size(); i++) {
             tabPane.getTabs().get(i).disableProperty().bind(infoIncomplete);

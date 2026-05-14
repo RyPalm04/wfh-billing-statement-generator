@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+    <fontFamily name="Arial">
+        <normal><![CDATA[com/palmer/billingstatementgenerator/fonts/Arial-Regular.ttf]]></normal>
+        <bold><![CDATA[com/palmer/billingstatementgenerator/fonts/Arial-Bold.ttf]]></bold>
+        <italic><![CDATA[com/palmer/billingstatementgenerator/fonts/Arial-Italic.ttf]]></italic>
+        <boldItalic><![CDATA[com/palmer/billingstatementgenerator/fonts/Arial-BoldItalic.ttf]]></boldItalic>
+        <pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+        <isPdfEmbedded>true</isPdfEmbedded>
+    </fontFamily>
+    <fontFamily name="Great Vibes">
+        <normal><![CDATA[com/palmer/billingstatementgenerator/fonts/GreatVibes-Regular.ttf]]></normal>
+        <bold><![CDATA[com/palmer/billingstatementgenerator/fonts/GreatVibes-Regular.ttf]]></bold>
+        <italic><![CDATA[com/palmer/billingstatementgenerator/fonts/GreatVibes-Regular.ttf]]></italic>
+        <boldItalic><![CDATA[com/palmer/billingstatementgenerator/fonts/GreatVibes-Regular.ttf]]></boldItalic>
+        <pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+        <isPdfEmbedded>true</isPdfEmbedded>
+    </fontFamily>
+</fontFamilies>

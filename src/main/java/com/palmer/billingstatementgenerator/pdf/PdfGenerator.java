@@ -8,7 +8,8 @@ import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineIt
 import com.palmer.billingstatementgenerator.models.statement.Statement;
 import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
-import javafx.scene.control.Alert;
+import com.palmer.billingstatementgenerator.views.dialogs.MessageDialog;
+import javafx.application.Platform;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import net.sf.jasperreports.engine.JRException;
@@ -16,11 +17,13 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRMapArrayDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.SwingUtilities;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,14 +65,47 @@ public final class PdfGenerator {
      */
     public static void generate(Statement stmt, File outputFile) throws IOException {
         try {
-            JasperReport report = compiledReport();
-            Map<String, Object> row = buildFieldMap(stmt);
-            JRMapArrayDataSource ds = new JRMapArrayDataSource(new Map[]{row});
-            JasperPrint print = JasperFillManager.fillReport(report, new HashMap<>(), ds);
+            JasperPrint print = fill(stmt);
             JasperExportManager.exportReportToPdfFile(print, outputFile.getAbsolutePath());
         } catch (JRException e) {
             throw new IOException("PDF generation failed: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Opens the system print dialog and prints the current statement directly.
+     * Filling the report happens on the calling thread; the AWT print dialog is
+     * dispatched to the AWT EDT to avoid the JavaFX/AWT thread conflict on macOS.
+     * Shows an error alert on the JavaFX thread if printing fails.
+     *
+     * @param ownerWindow
+     *         the owner window for any alerts shown
+     */
+    public static void print(Window ownerWindow) {
+        log.info("Printing statement for control number {}", StatementContext.current().getControlNumber());
+        try {
+            JasperPrint jasperPrint = fill(StatementContext.current());
+            SwingUtilities.invokeLater(() -> {
+                try {
+                    JasperPrintManager.printReport(jasperPrint, true);
+                    log.info("Print job submitted for control number {}", StatementContext.current().getControlNumber());
+                } catch (JRException e) {
+                    log.error("Print failed", e);
+                    Platform.runLater(() ->
+                            new MessageDialog("Print Error", "Failed to print: " + e.getMessage()).open());
+                }
+            });
+        } catch (Throwable t) {
+            log.error("Print failed during report fill", t);
+            new MessageDialog("Print Error", "Failed to print: " + t.getMessage()).open();
+        }
+    }
+
+    private static JasperPrint fill(Statement stmt) throws JRException, IOException {
+        JasperReport report = compiledReport();
+        Map<String, Object> row = buildFieldMap(stmt);
+        JRMapArrayDataSource ds = new JRMapArrayDataSource(new Map[]{row});
+        return JasperFillManager.fillReport(report, new HashMap<>(), ds);
     }
 
     private static synchronized JasperReport compiledReport() throws JRException, IOException {
@@ -175,6 +211,9 @@ public final class PdfGenerator {
         m.put("totalSpecialCharges", StatementCalculator.specialChargesTotal(stmt).doubleValue());
         m.put("totalCashAdv", StatementCalculator.cashAdvancesTotal(stmt).doubleValue());
         m.put("salesTax", StatementCalculator.salesTax(stmt).doubleValue());
+        String ratePercent = stmt.getSalesTaxRate().multiply(new BigDecimal("100"))
+                .stripTrailingZeros().toPlainString();
+        m.put("salesTaxLabel", "Sales Tax " + ratePercent + "%");
         m.put("subTotal", StatementCalculator.subtotal(stmt).doubleValue());
         m.put("downPayment", toDouble(stmt.getPayment()));
         m.put("finalTotal", StatementCalculator.finalTotal(stmt).doubleValue());
@@ -238,10 +277,10 @@ public final class PdfGenerator {
         try {
             generate(StatementContext.current(), output);
             log.info("PDF export successful: {}", output.getAbsolutePath());
-            new Alert(Alert.AlertType.INFORMATION, "PDF saved to:\n" + output.getAbsolutePath()).showAndWait();
+            new MessageDialog("PDF Saved", "PDF saved to:\n" + output.getAbsolutePath()).open();
         } catch (Throwable t) {
             log.error("PDF export failed", t);
-            new Alert(Alert.AlertType.ERROR, "Failed to generate PDF: " + t.getMessage()).showAndWait();
+            new MessageDialog("Export Error", "Failed to generate PDF: " + t.getMessage()).open();
         }
     }
 }

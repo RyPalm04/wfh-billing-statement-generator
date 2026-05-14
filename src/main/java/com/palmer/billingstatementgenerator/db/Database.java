@@ -54,6 +54,18 @@ public final class Database {
         ds.setURL(URL);
         ds.setUser("sa");
         ds.setPassword("");
+        try (Connection probe = ds.getConnection()) {
+            log.debug("Database connection verified");
+        } catch (SQLException e) {
+            Throwable cause = e;
+            while (cause != null) {
+                if (cause.getMessage() != null && cause.getMessage().contains("locked")) {
+                    throw new DatabaseLockedException();
+                }
+                cause = cause.getCause();
+            }
+            throw new RuntimeException("Failed to connect to database", e);
+        }
         dataSource = ds;
         if (firstLaunch) {
             log.info("First launch — running schema and seed scripts");

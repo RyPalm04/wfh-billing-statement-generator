@@ -40,6 +40,7 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
     public GridPane buildView() {
         ServicePackageDao dao = new ServicePackageDao(Database.get());
         packagesCombo = new ComboBox<>();
+        packagesCombo.setId("packagesCombo");
         packagesCombo.getItems().addAll(dao.findAll());
         packagesCombo.setConverter(new javafx.util.StringConverter<>() {
             @Override

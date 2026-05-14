@@ -170,10 +170,39 @@
     -fx-text-fill: -wfh-secondary;
 }
 
+.field-readonly {
+    -fx-background-color: -wfh-green-light;
+    -fx-text-fill: -wfh-secondary;
+}
+
 .required-asterisk {
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-text-fill: #cc2222;
+}
+
+/* Dialog */
+.dialog-container {
+    -fx-background-color: white;
+    -fx-border-color: -wfh-border;
+    -fx-border-width: 1;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.22), 18, 0, 0, 4);
+}
+
+.dialog-header {
+    -fx-background-color: -wfh-green-dark;
+    -fx-padding: 12 16 12 16;
+    -fx-cursor: move;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.dialog-header-title {
+    -fx-font-family: "Playfair Display";
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
 }
 
 /* Splash */
@@ -318,6 +347,19 @@
     -fx-underline: true;
 }
 
+.button-save {
+    -fx-background-color: transparent;
+    -fx-text-fill: -wfh-green;
+    -fx-border-color: -wfh-green;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-font-weight: normal;
+}
+
+.button-save:hover {
+    -fx-background-color: -wfh-green-light;
+}
+
 .button-reset {
     -fx-text-fill: -wfh-rose;
     -fx-border-color: -wfh-rose;
@@ -326,6 +368,26 @@
 .button-reset:hover {
     -fx-background-color: -wfh-rose;
     -fx-text-fill: white;
+}
+
+.button-close {
+    -fx-background-color: transparent;
+    -fx-text-fill: -wfh-muted;
+    -fx-border-color: transparent;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 2 8 2 8;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.button-close:hover {
+    -fx-background-color: -wfh-rose;
+    -fx-text-fill: white;
+}
+
+#settingsButton {
+    -fx-font-size: 26px;
 }
 
 .instructions-title {

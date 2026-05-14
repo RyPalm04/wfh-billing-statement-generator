@@ -1,10 +1,13 @@
 package com.palmer.billingstatementgenerator;
 
 import com.palmer.billingstatementgenerator.db.Database;
+import com.palmer.billingstatementgenerator.db.DatabaseLockedException;
+import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
+import com.palmer.billingstatementgenerator.util.AppPreferences;
 import com.palmer.billingstatementgenerator.views.MainView;
 import com.palmer.billingstatementgenerator.views.SplashView;
-
+import com.palmer.billingstatementgenerator.views.dialogs.MessageDialog;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -18,12 +21,10 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Random;
-import java.util.prefs.Preferences;
 
 public class MainApp extends Application {
 
@@ -37,6 +38,12 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         log.info("Application starting");
         loadFonts();
+
+        var iconStream = getClass().getResourceAsStream(
+                "/com/palmer/billingstatementgenerator/img/app-icon.png");
+        if (iconStream != null) {
+            primaryStage.getIcons().add(new javafx.scene.image.Image(iconStream));
+        }
 
         SplashView splashView = new SplashView();
         Scene splashScene = new Scene(splashView.asParent());
@@ -81,9 +88,8 @@ public class MainApp extends Application {
         }));
 
         initTask.setOnSucceeded(e -> {
-            Preferences prefs = Preferences.userNodeForPackage(MainApp.class);
-            boolean firstLaunch = !prefs.getBoolean("hasLaunched", false);
-            prefs.putBoolean("hasLaunched", true);
+            boolean firstLaunch = !AppPreferences.hasLaunched();
+            AppPreferences.setHasLaunched(true);
             log.info("Startup complete — firstLaunch={}", firstLaunch);
 
             MainView mainView = new MainView();
@@ -97,11 +103,34 @@ public class MainApp extends Application {
             mainStage.show();
 
             mainView.wireKeyNav(mainScene);
+            mainView.setEventTracker(new WorkflowEventTracker(mainStage, mainView.getTabPane()));
             mainView.fitWindowToLargestTab();
-            if (!firstLaunch) {
-                mainView.skipInstructions();
-            }
+            mainView.onAppReady(firstLaunch);
+
+            mainStage.setOnCloseRequest(event -> {
+                if (StatementContext.isDirty()) {
+                    event.consume();
+                    mainView.showUnsavedChangesOnClose(mainStage);
+                }
+            });
+
             primaryStage.close();
+        });
+
+        initTask.setOnFailed(e -> {
+            Throwable ex = initTask.getException();
+            primaryStage.close();
+            if (ex instanceof DatabaseLockedException) {
+                new MessageDialog("Already Running",
+                        "Wright Funeral Home Billing is already open.\n" +
+                        "Only one instance can run at a time. Close the existing window and try again.").open();
+            } else {
+                log.error("Startup failed", ex);
+                new MessageDialog("Startup Error",
+                        "The application failed to start.\n" +
+                        (ex != null ? ex.getMessage() : "Unknown error")).open();
+            }
+            Platform.exit();
         });
 
         new Thread(initTask).start();

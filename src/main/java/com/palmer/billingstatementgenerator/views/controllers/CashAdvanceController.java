@@ -41,7 +41,9 @@ public class CashAdvanceController extends GridTabController<CashAdvanceLineItem
     protected CheckBox addItemRow(CashAdvanceLineItem item, int row) {
         CheckBox cb = buildCheckBox(item.getCatalog().getName(), row, itemsGrid);
         TextField provider = buildTextField(18, 1, row, itemsGrid);
+        provider.setId(toId(item.getCatalog().getName()) + "_provider");
         TextField amount = buildPriceField(item.amountProperty(), row, itemsGrid);
+        amount.setId(toId(item.getCatalog().getName()) + "_amount");
 
         cb.selectedProperty().bindBidirectional(item.selectedProperty());
         provider.textProperty().bindBidirectional(item.providerProperty());

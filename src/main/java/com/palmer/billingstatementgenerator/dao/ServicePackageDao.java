@@ -22,7 +22,7 @@ public class ServicePackageDao {
             "SELECT id, sort_order, name, default_cost " +
                     "FROM service_packages ORDER BY sort_order";
     private static final String SELECT_SERVICE_IDS =
-            "SELECT service_id FROM package_services WHERE package_id = ?";
+            "SELECT service_id FROM packaged_services WHERE package_id = ?";
 
     private final DataSource dataSource;
 
