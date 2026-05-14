@@ -57,6 +57,13 @@ test {
     useJUnitPlatform()
 }
 
+run {
+    if (org.gradle.internal.os.OperatingSystem.current().macOsX) {
+        jvmArgs "-Xdock:icon=${projectDir}/packaging/app.icns",
+                '-Xdock:name=WFH Billing Statement Generator'
+    }
+}
+
 tasks.register('jpackageApp', Exec) {
     dependsOn installDist
 
@@ -69,10 +76,10 @@ tasks.register('jpackageApp', Exec) {
         outputDir.mkdirs()
     }
 
-    def iconFile = os.macOsX ? 'packaging/app.icns' : 'packaging/app.ico'
+    def iconFile = os.macOsX ? 'packaging/app.icns' : (os.windows ? 'packaging/app.ico' : 'packaging/app.png')
 
     commandLine 'jpackage',
-            '--type', os.macOsX ? 'dmg' : 'exe',
+            '--type', os.macOsX ? 'dmg' : (os.windows ? 'exe' : 'deb'),
             '--name', 'WFH Billing Statement Generator',
             '--app-version', appVersion,
             '--vendor', 'Wright Funeral Home',
