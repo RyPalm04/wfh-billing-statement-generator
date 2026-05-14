@@ -11,6 +11,7 @@ import javafx.scene.text.TextAlignment;
  */
 public class IncompleteAlertDialog extends AppDialog {
 
+    /** {@inheritDoc} */
     @Override
     protected VBox buildContent() {
         Label message = new Label(

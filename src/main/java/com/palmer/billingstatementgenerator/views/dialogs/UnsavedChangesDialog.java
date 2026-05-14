@@ -27,6 +27,7 @@ public class UnsavedChangesDialog extends AppDialog {
         this.onDiscard = onDiscard;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected VBox buildContent() {
         Label message = new Label("You have unsaved changes. Save before continuing?");

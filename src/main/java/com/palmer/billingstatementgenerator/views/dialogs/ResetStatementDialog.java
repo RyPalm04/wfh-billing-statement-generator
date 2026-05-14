@@ -8,9 +8,7 @@ import javafx.scene.layout.VBox;
 
 /**
  * Modal dialog offering New Statement, Open Existing, Clear Selections, or Cancel.
- * The user's choice is available via {@link #getChoice()} after
- * {@link #open(javafx.stage.Window, com.palmer.billingstatementgenerator.logging.WorkflowEventTracker)}
- * returns.
+ * The user's choice is available via {@link #getChoice()} after {@link #open()} returns.
  */
 public class ResetStatementDialog extends AppDialog {
 
@@ -28,6 +26,7 @@ public class ResetStatementDialog extends AppDialog {
         return choice;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected VBox buildContent() {
         Label message = new Label("How would you like to proceed?");

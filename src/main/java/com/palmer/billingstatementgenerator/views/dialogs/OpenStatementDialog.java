@@ -16,9 +16,7 @@ import java.util.function.Consumer;
 
 /**
  * Modal dialog listing all saved statements and allowing the user to open one.
- * Whether a statement was opened is available via {@link #wasOpened()} after
- * {@link #open(javafx.stage.Window, com.palmer.billingstatementgenerator.logging.WorkflowEventTracker)}
- * returns.
+ * Whether a statement was opened is available via {@link #wasOpened()} after {@link #open()} returns.
  */
 public class OpenStatementDialog extends AppDialog {
 
@@ -50,6 +48,7 @@ public class OpenStatementDialog extends AppDialog {
         return opened;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected VBox buildContent() {
         DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("MM/dd/yyyy");

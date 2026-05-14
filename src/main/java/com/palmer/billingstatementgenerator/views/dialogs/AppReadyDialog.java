@@ -8,9 +8,7 @@ import javafx.scene.layout.VBox;
 
 /**
  * Modal startup dialog offering New Statement or Open Existing.
- * The user's choice is available via {@link #getChoice()} after
- * {@link #open(javafx.stage.Window, com.palmer.billingstatementgenerator.logging.WorkflowEventTracker)}
- * returns.
+ * The user's choice is available via {@link #getChoice()} after {@link #open()} returns.
  */
 public class AppReadyDialog extends AppDialog {
 
@@ -39,6 +37,7 @@ public class AppReadyDialog extends AppDialog {
         return choice;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected VBox buildContent() {
         Label message = new Label("What would you like to do?");

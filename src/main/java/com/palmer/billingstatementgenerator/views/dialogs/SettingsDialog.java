@@ -20,6 +20,7 @@ public class SettingsDialog extends AppDialog {
 
     private static final Logger log = LoggerFactory.getLogger(SettingsDialog.class);
 
+    /** {@inheritDoc} */
     @Override
     protected VBox buildContent() {
         Label taxRateLabel = new Label("Sales Tax Rate (%)");
