@@ -3,6 +3,10 @@
 A desktop JavaFX application for generating funeral home billing statements. Users enter service information, select
 packages, services, merchandise, special charges, and cash advances, then export a formatted PDF statement.
 
+## Download
+
+[Download latest release](https://github.com/RyPalm04/wfh-billing-statement-generator/releases)
+
 ## Screenshots
 
 | Instructions                                           | Service Information                                                  |
@@ -19,16 +23,16 @@ packages, services, merchandise, special charges, and cash advances, then export
 
 ## Stack
 
-- Java 11, JavaFX 17
+- Java 21, JavaFX 17
 - Gradle (wrapper included)
 - H2 in-memory database initialized from SQL scripts
 - DynamicReports / iText for PDF generation
-- Groovy / Spock for tests
+- Groovy 4 / Spock for tests
 - SLF4J + Logback for logging
 
 ## Requirements
 
-- JDK 11 or higher
+- JDK 21 or higher
 - Use the included Gradle wrapper (`./gradlew`) — do not rely on a globally installed Gradle version
 
 ## Quick start
@@ -39,11 +43,11 @@ cd wfh-billing-statement-generator
 ./gradlew run
 ```
 
-If you see `UnsupportedClassVersionError`, your `JAVA_HOME` is pointing to a JDK older than 11. Override it for the
+If you see `UnsupportedClassVersionError`, your `JAVA_HOME` is pointing to a JDK older than 21. Override it for the
 command:
 
 ```bash
-JAVA_HOME=/path/to/jdk11 ./gradlew run
+JAVA_HOME=/path/to/jdk21 ./gradlew run
 ```
 
 ## Common commands
