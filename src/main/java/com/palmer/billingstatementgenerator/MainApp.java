@@ -3,6 +3,7 @@ package com.palmer.billingstatementgenerator;
 import com.palmer.billingstatementgenerator.db.Database;
 import com.palmer.billingstatementgenerator.db.DatabaseLockedException;
 import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
+import com.palmer.billingstatementgenerator.util.AppPreferences;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.views.MainView;
 import com.palmer.billingstatementgenerator.views.SplashView;
@@ -25,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Random;
-import java.util.prefs.Preferences;
 
 public class MainApp extends Application {
 
@@ -83,9 +83,8 @@ public class MainApp extends Application {
         }));
 
         initTask.setOnSucceeded(e -> {
-            Preferences prefs = Preferences.userNodeForPackage(MainApp.class);
-            boolean firstLaunch = !prefs.getBoolean("hasLaunched", false);
-            prefs.putBoolean("hasLaunched", true);
+            boolean firstLaunch = !AppPreferences.hasLaunched();
+            AppPreferences.setHasLaunched(true);
             log.info("Startup complete — firstLaunch={}", firstLaunch);
 
             MainView mainView = new MainView();

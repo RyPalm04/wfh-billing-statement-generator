@@ -12,7 +12,7 @@ import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem
 import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineItem;
-import com.palmer.billingstatementgenerator.util.AppConfig;
+import com.palmer.billingstatementgenerator.util.AppPreferences;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import org.slf4j.Logger;
@@ -142,7 +142,7 @@ public final class StatementContext {
 
     private static Statement buildFreshStatement() {
         Statement statement = new Statement();
-        statement.setSalesTaxRate(AppConfig.getSalesTaxRate());
+        statement.setSalesTaxRate(AppPreferences.getSalesTaxRate());
         new ServiceDao(Database.get()).findAll()
                 .forEach(s -> statement.getServices().add(new ServiceLineItem(s)));
         new MerchandiseDao(Database.get()).findAll()

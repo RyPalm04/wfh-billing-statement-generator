@@ -362,6 +362,10 @@
     -fx-text-fill: white;
 }
 
+#settingsButton {
+    -fx-font-size: 26px;
+}
+
 .instructions-title {
     -fx-font-family: "Playfair Display";
     -fx-font-weight: bold;

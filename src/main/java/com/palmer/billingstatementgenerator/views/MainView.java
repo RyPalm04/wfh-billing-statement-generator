@@ -7,6 +7,7 @@ import com.palmer.billingstatementgenerator.models.statement.Statement;
 import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.pdf.PdfGenerator;
+import com.palmer.billingstatementgenerator.util.AppPreferences;
 import com.palmer.billingstatementgenerator.views.controllers.BaseController;
 import com.palmer.billingstatementgenerator.views.controllers.CashAdvanceController;
 import com.palmer.billingstatementgenerator.views.controllers.InstructionsTabController;
@@ -29,6 +30,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -41,11 +43,14 @@ import javafx.scene.layout.VBox;
 import javafx.application.Platform;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -228,10 +233,15 @@ public class MainView {
             }
         });
 
+        Button settingsBtn = new Button("⚙");
+        settingsBtn.setId("settingsButton");
+        settingsBtn.getStyleClass().add("button-close");
+        settingsBtn.setOnAction(e -> showSettingsDialog());
+
         Region headerSpacer = new Region();
         HBox.setHgrow(headerSpacer, Priority.ALWAYS);
 
-        HBox header = new HBox(logoView, headerSpacer, closeBtn);
+        HBox header = new HBox(logoView, headerSpacer, settingsBtn, closeBtn);
         header.setPadding(new Insets(10, 16, 10, 16));
         header.setAlignment(Pos.CENTER_LEFT);
         header.getStyleClass().add("app-header");
@@ -240,6 +250,88 @@ public class MainView {
         root.setTop(header);
         root.setCenter(tabPane);
         root.setBottom(buildButtonBar());
+    }
+
+
+    /**
+     * Displays the application settings dialog.
+     * Allows the user to configure the sales tax rate and reset help prompts.
+     */
+    private void showSettingsDialog() {
+        Stage dialog = new Stage();
+        dialog.initStyle(StageStyle.UNDECORATED);
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(root.getScene().getWindow());
+        dialog.setTitle("Settings");
+
+        Label title = new Label("Settings");
+        title.getStyleClass().add("splash-title");
+
+        Label taxRateLabel = new Label("Sales Tax Rate (%)");
+        taxRateLabel.getStyleClass().add("splash-subtitle");
+
+        String displayRate = AppPreferences.getSalesTaxRate()
+                .movePointRight(2).stripTrailingZeros().toPlainString();
+        TextField taxRateField = new TextField(displayRate);
+        taxRateField.setMaxWidth(100);
+        taxRateField.setId("taxRateField");
+
+        Label taxRateError = new Label("Please enter a valid number (e.g. 8.25)");
+        taxRateError.getStyleClass().add("splash-subtitle");
+        taxRateError.setVisible(false);
+
+        HBox taxRateRow = new HBox(12, taxRateLabel, taxRateField);
+        taxRateRow.setAlignment(Pos.CENTER);
+
+        Button resetPromptsButton = new Button("Reset Help Prompts");
+        resetPromptsButton.setId("resetPromptsButton");
+        resetPromptsButton.setOnAction(e -> {
+            AppPreferences.setHasLaunched(false);
+            resetPromptsButton.setText("✓ Takes effect on next launch");
+            resetPromptsButton.setDisable(true);
+        });
+
+        Label resetNote = new Label("Shows the instructions tab on next launch");
+        resetNote.getStyleClass().add("splash-subtitle");
+
+        VBox resetSection = new VBox(6, resetPromptsButton, resetNote);
+        resetSection.setAlignment(Pos.CENTER);
+
+        Button saveButton = createSaveButton(taxRateField, dialog, taxRateError);
+
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setId("settingsCancelButton");
+        cancelButton.getStyleClass().add("button-clear");
+        cancelButton.setOnAction(e -> dialog.close());
+
+        HBox buttons = new HBox(12, saveButton, cancelButton);
+        buttons.setAlignment(Pos.CENTER);
+
+        VBox content = new VBox(20, title, taxRateRow, taxRateError, resetSection, buttons);
+        content.setPadding(new Insets(32));
+        content.setAlignment(Pos.CENTER);
+        content.getStyleClass().add("splash-container");
+
+        dialog.setScene(buildDialogScene(content));
+        dialog.setResizable(false);
+        dialog.showAndWait();
+    }
+
+    private static Button createSaveButton(TextField taxRateField, Stage dialog, Label taxRateError) {
+        Button saveButton = new Button("Save");
+        saveButton.setId("settingsSaveButton");
+        saveButton.setOnAction(e -> {
+            try {
+                BigDecimal rate = new BigDecimal(taxRateField.getText().trim()).movePointLeft(2);
+                AppPreferences.setSalesTaxRate(rate);
+                StatementContext.current().setSalesTaxRate(rate);
+                log.info("Tax rate updated to {}", rate.toPlainString());
+                dialog.close();
+            } catch (NumberFormatException ex) {
+                taxRateError.setVisible(true);
+            }
+        });
+        return saveButton;
     }
 
     /**
@@ -270,9 +362,7 @@ public class MainView {
 
         root.setBottom(isFirst ? null : buildButtonBar());
 
-        prevButton.disableProperty().unbind();
-        nextButton.disableProperty().unbind();
-        saveButton.disableProperty().unbind();
+        unbindButtonDisable(prevButton, nextButton, saveButton);
 
         prevButton.setDisable(index == 1);
         saveButton.disableProperty().bind(StatementContext.dirtyProperty().not());
@@ -311,8 +401,13 @@ public class MainView {
                 }
             });
             resetButton.setVisible(false);
+            clearButton.setVisible(true);
             tab.getController().setClearButton(clearButton);
         }
+    }
+
+    private void unbindButtonDisable(Button... buttons) {
+        Arrays.stream(buttons).forEach(button -> button.disableProperty().unbind());
     }
 
     /**
@@ -332,7 +427,10 @@ public class MainView {
      */
     public void wireKeyNav(Scene scene) {
         scene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
-            if (e.isAltDown()) {
+            if (e.isShortcutDown() && e.getCode() == KeyCode.COMMA) {
+                showSettingsDialog();
+                e.consume();
+            } else if (e.isAltDown()) {
                 if (e.getCode() == KeyCode.RIGHT) {
                     tabPane.getSelectionModel().selectNext();
                     e.consume();
@@ -395,6 +493,7 @@ public class MainView {
      */
     private void showIncompleteAlert() {
         Stage dialog = new Stage();
+        dialog.initStyle(StageStyle.UNDECORATED);
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(root.getScene().getWindow());
         dialog.setTitle("Incomplete Items");
@@ -434,6 +533,7 @@ public class MainView {
         boolean done = false;
         while (!done) {
             Stage dialog = new Stage();
+            dialog.initStyle(StageStyle.UNDECORATED);
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(root.getScene().getWindow());
             dialog.setTitle("Reset Statement");
@@ -525,6 +625,7 @@ public class MainView {
      */
     private void showPdfDialog() {
         Stage dialog = new Stage();
+        dialog.initStyle(StageStyle.UNDECORATED);
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(root.getScene().getWindow());
         dialog.setTitle("Generate PDF");
@@ -595,6 +696,7 @@ public class MainView {
         }
 
         Stage dialog = new Stage();
+        dialog.initStyle(StageStyle.UNDECORATED);
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(root.getScene().getWindow());
         dialog.setTitle("Open Statement");
@@ -674,6 +776,7 @@ public class MainView {
      */
     private void showUnsavedChangesDialog(Runnable onDiscard) {
         Stage dialog = new Stage();
+        dialog.initStyle(StageStyle.UNDECORATED);
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(root.getScene().getWindow());
         dialog.setTitle("Unsaved Changes");
@@ -732,6 +835,7 @@ public class MainView {
             List<SavedStatementSummary> saved = new StatementDao(Database.get()).findAll();
 
             Stage dialog = new Stage();
+            dialog.initStyle(StageStyle.UNDECORATED);
             dialog.initModality(Modality.APPLICATION_MODAL);
             dialog.initOwner(root.getScene().getWindow());
             dialog.setTitle("Wright Funeral Home");
