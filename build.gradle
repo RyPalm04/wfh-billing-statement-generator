@@ -104,9 +104,10 @@ tasks.register('jpackageApp', Exec) {
     doLast {
         if (appVersionQualifier) {
             def ext = os.macOsX ? 'dmg' : (os.windows ? 'exe' : 'deb')
-            def from = new File(outputDir, "WFH Billing Statement Generator-${appVersionBase}.${ext}")
-            def to   = new File(outputDir, "WFH Billing Statement Generator-${appVersion}.${ext}")
-            if (from.exists()) from.renameTo(to)
+            def found = outputDir.listFiles()?.find { it.name.endsWith(".${ext}") }
+            if (found) {
+                found.renameTo(new File(outputDir, "WFH Billing Statement Generator-${appVersion}.${ext}"))
+            }
         }
     }
 }

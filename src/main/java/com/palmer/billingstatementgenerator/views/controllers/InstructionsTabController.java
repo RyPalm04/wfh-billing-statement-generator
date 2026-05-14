@@ -31,7 +31,7 @@ public class InstructionsTabController extends BaseController {
      */
     private static final List<String[]> STEPS = List.of(
             new String[]{"Service Information",
-                    "Enter the control number, name of the deceased, dates, and place of death."},
+                    "Enter the name of the deceased, dates, and place of death. The control number is assigned automatically."},
             new String[]{"Services, Facilities & Transportation",
                     "Select a service package if applicable, then choose individual services provided."},
             new String[]{"Merchandise",
