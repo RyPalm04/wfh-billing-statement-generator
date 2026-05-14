@@ -9,10 +9,22 @@ repositories {
     mavenCentral()
 }
 
+def resolveQualifier = {
+    def ref = System.getenv('GITHUB_REF_NAME') ?: ''
+    if (!ref || ref == 'master') return ''
+    if (ref ==~ /v\d+\.\d+\.\d+$/) return ''                  // clean release tag
+    def tagMatch = (ref =~ /^v\d+\.\d+\.\d+-(.+)$/)
+    if (tagMatch) return tagMatch[0][1]                        // v1.1.0-beta.1 → beta.1
+    if (ref == 'beta') return 'beta'
+    return 'SNAPSHOT'                                          // develop, feature/*, etc.
+}
+
 ext {
-    junitVersion = '5.7.1'
-    spockVersion = '2.0-groovy-3.0'
-    appVersion = '1.1.0'
+    junitVersion       = '5.7.1'
+    spockVersion       = '2.0-groovy-3.0'
+    appVersionBase     = '1.1.0'
+    appVersionQualifier = resolveQualifier()
+    appVersion         = appVersionQualifier ? "${appVersionBase}-${appVersionQualifier}" : appVersionBase
 }
 
 version = appVersion
@@ -81,13 +93,22 @@ tasks.register('jpackageApp', Exec) {
     commandLine 'jpackage',
             '--type', os.macOsX ? 'dmg' : (os.windows ? 'exe' : 'deb'),
             '--name', 'WFH Billing Statement Generator',
-            '--app-version', appVersion,
+            '--app-version', appVersionBase,
             '--vendor', 'Wright Funeral Home',
             '--icon', iconFile,
             '--input', libDir.absolutePath,
             '--main-jar', "${rootProject.name}-${project.version}.jar",
             '--main-class', 'com.palmer.billingstatementgenerator.Launcher',
             '--dest', outputDir.absolutePath
+
+    doLast {
+        if (appVersionQualifier) {
+            def ext = os.macOsX ? 'dmg' : (os.windows ? 'exe' : 'deb')
+            def from = new File(outputDir, "WFH Billing Statement Generator-${appVersionBase}.${ext}")
+            def to   = new File(outputDir, "WFH Billing Statement Generator-${appVersion}.${ext}")
+            if (from.exists()) from.renameTo(to)
+        }
+    }
 }
 
 javadoc {
