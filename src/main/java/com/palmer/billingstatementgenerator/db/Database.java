@@ -1,25 +1,23 @@
 package com.palmer.billingstatementgenerator.db;
 
-import org.h2.jdbcx.JdbcDataSource;
-import org.h2.tools.RunScript;
-
+import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 /**
- * Manages the application's single file-based H2 database instance.
- * The database file is stored in {@code ~/.wfh-billing/data.mv.db} and persists
- * across application launches. Schema and seed scripts are run only on first launch.
+ * Manages the application's PostgreSQL database connection and schema migrations.
+ * Connection details are read from {@code ~/.wfh-billing/database.properties} on first launch.
+ * Schema migrations are applied automatically via Flyway on every startup.
  *
  * <p>Call {@link #init()} once at startup before any DAO is used.
  * {@link #init()} is idempotent — subsequent calls are no-ops.
@@ -28,51 +26,59 @@ import java.sql.SQLException;
 public final class Database {
     private static final Logger log = LoggerFactory.getLogger(Database.class);
     private static final String DB_DIR = System.getProperty("user.home") + "/.wfh-billing";
-    private static final String URL = "jdbc:h2:file:" + DB_DIR + "/data;DB_CLOSE_DELAY=-1";
+    private static final String CONFIG_PATH = DB_DIR + "/database.properties";
     private static DataSource dataSource;
 
     private Database() {
     }
 
     /**
-     * Initializes the file-based H2 database. On first launch, creates the database
-     * directory and runs the schema and seed scripts. Subsequent launches skip seeding.
-     * Safe to call multiple times; only the first call has any effect.
+     * Initializes the database using connection details from {@code ~/.wfh-billing/database.properties}.
+     * Applies any pending Flyway migrations before returning. Safe to call multiple times;
+     * only the first call has any effect.
+     *
+     * @throws IllegalStateException
+     *         if the configuration file does not exist (a template is created automatically)
+     * @throws RuntimeException
+     *         if the database connection fails or migrations cannot be applied
      */
     public static synchronized void init() {
         if (dataSource != null) {
             log.debug("Database already initialized, skipping");
             return;
         }
-        File dbDir = new File(DB_DIR);
-        boolean firstLaunch = !new File(DB_DIR + "/data.mv.db").exists();
-        if (!dbDir.exists()) {
-            dbDir.mkdirs();
-        }
-        log.info("Initializing H2 database at {}", DB_DIR);
-        JdbcDataSource ds = new JdbcDataSource();
-        ds.setURL(URL);
-        ds.setUser("sa");
-        ds.setPassword("");
-        try (Connection probe = ds.getConnection()) {
+        new File(DB_DIR).mkdirs();
+        Properties config = loadConfig();
+
+        String url = config.getProperty("db.url");
+        String user = config.getProperty("db.user");
+        String password = config.getProperty("db.password");
+
+        try (Connection probe = DriverManager.getConnection(url, user, password)) {
             log.debug("Database connection verified");
         } catch (SQLException e) {
-            Throwable cause = e;
-            while (cause != null) {
-                if (cause.getMessage() != null && cause.getMessage().contains("locked")) {
-                    throw new DatabaseLockedException();
-                }
-                cause = cause.getCause();
-            }
-            throw new RuntimeException("Failed to connect to database", e);
+            throw new RuntimeException("Failed to connect to database — check " + CONFIG_PATH, e);
+        }
+
+        dataSource = new DriverManagerDataSource(url, user, password);
+        migrate(dataSource);
+        log.info("Database initialized");
+    }
+
+    /**
+     * Initializes the database using the provided {@link DataSource}. Intended for use
+     * in tests, where an in-memory datasource is supplied directly.
+     *
+     * @param ds
+     *         the {@link DataSource} to use
+     */
+    static synchronized void initWithDataSource(DataSource ds) {
+        if (dataSource != null) {
+            log.debug("Database already initialized, skipping");
+            return;
         }
         dataSource = ds;
-        if (firstLaunch) {
-            log.info("First launch — running schema and seed scripts");
-            runScript("/com/palmer/billingstatementgenerator/db/schema.sql");
-            runScript("/com/palmer/billingstatementgenerator/db/seed.sql");
-        }
-        log.info("Database initialized");
+        migrate(ds);
     }
 
     /**
@@ -90,19 +96,93 @@ public final class Database {
         return dataSource;
     }
 
-    private static void runScript(String resourcePath) {
-        log.debug("Running script: {}", resourcePath);
-        try (InputStream in = Database.class.getResourceAsStream(resourcePath)) {
-            if (in == null) {
-                throw new IllegalStateException("Missing resource: " + resourcePath);
-            }
-            try (Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
-                 Connection c = dataSource.getConnection()) {
-                RunScript.execute(c, reader);
-            }
-        } catch (IOException | SQLException e) {
-            log.error("Failed to run script: {}", resourcePath, e);
-            throw new RuntimeException("Failed to run script: " + resourcePath, e);
+    private static void migrate(DataSource ds) {
+        Flyway.configure()
+                .dataSource(ds)
+                .locations("classpath:db/migration")
+                .load()
+                .migrate();
+    }
+
+    private static Properties loadConfig() {
+        File configFile = new File(CONFIG_PATH);
+        if (!configFile.exists()) {
+            writeConfigTemplate(configFile);
+            throw new IllegalStateException(
+                    "Database configuration not found. A template has been created at " + CONFIG_PATH +
+                    ". Please fill in your PostgreSQL connection details and restart.");
+        }
+        Properties props = new Properties();
+        try (FileInputStream in = new FileInputStream(configFile)) {
+            props.load(in);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read database configuration from " + CONFIG_PATH, e);
+        }
+        return props;
+    }
+
+    private static void writeConfigTemplate(File configFile) {
+        try (FileWriter w = new FileWriter(configFile)) {
+            w.write("db.url=jdbc:postgresql://host:5432/dbname\n");
+            w.write("db.user=username\n");
+            w.write("db.password=password\n");
+        } catch (IOException e) {
+            log.warn("Could not write config template to {}", CONFIG_PATH, e);
+        }
+    }
+
+    private static class DriverManagerDataSource implements DataSource {
+        private final String url;
+        private final String user;
+        private final String password;
+
+        DriverManagerDataSource(String url, String user, String password) {
+            this.url = url;
+            this.user = user;
+            this.password = password;
+        }
+
+        @Override
+        public Connection getConnection() throws SQLException {
+            return DriverManager.getConnection(url, user, password);
+        }
+
+        @Override
+        public Connection getConnection(String user, String password) throws SQLException {
+            return DriverManager.getConnection(url, user, password);
+        }
+
+        @Override
+        public java.io.PrintWriter getLogWriter() {
+            return null;
+        }
+
+        @Override
+        public void setLogWriter(java.io.PrintWriter pw) {
+        }
+
+        @Override
+        public int getLoginTimeout() {
+            return 0;
+        }
+
+        @Override
+        public void setLoginTimeout(int seconds) {
+        }
+
+        @Override
+        public java.util.logging.Logger getParentLogger() {
+            return null;
+        }
+
+        @Override
+        public <T> T unwrap(Class<T> iface) throws SQLException {
+            throw new SQLException("Not a wrapper");
+        }
+
+        @Override
+        public boolean isWrapperFor(Class<?> iface) {
+            return false;
         }
     }
 }

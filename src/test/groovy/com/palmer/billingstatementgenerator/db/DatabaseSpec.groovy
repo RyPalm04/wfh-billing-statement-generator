@@ -11,7 +11,7 @@ class DatabaseSpec extends Specification {
 
     def "initializes and seeds catalog"() {
         given:
-        Database.init()
+        TestDatabase.init()
 
         expect:
         new ServicePackageDao(Database.get()).findAll().size() == 7
