@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * DAO for loading {@link com.palmer.billingstatementgenerator.models.catalog.Merchandise} records
+ * DAO for loading {@link Merchandise} records
  * from the database. Results are returned in {@code sort_order} sequence.
- * The {@code pricing_mode} column is mapped to {@link com.palmer.billingstatementgenerator.models.catalog.Merchandise.PricingMode}.
+ * The {@code pricing_mode} column is mapped to {@link Merchandise.PricingMode}.
  */
 public class MerchandiseDao {
     private static final Logger log = LoggerFactory.getLogger(MerchandiseDao.class);

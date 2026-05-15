@@ -1,10 +1,12 @@
 package com.palmer.billingstatementgenerator.dao;
 
+import com.palmer.billingstatementgenerator.models.catalog.ServicePackage;
 import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineItem;
 import com.palmer.billingstatementgenerator.models.statement.SavedStatementSummary;
+import com.palmer.billingstatementgenerator.models.statement.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +24,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * DAO for persisting and loading {@link com.palmer.billingstatementgenerator.models.statement.Statement}
+ * DAO for persisting and loading {@link Statement}
  * records. Each save operation writes the statement header and all selected line items
  * atomically within a single transaction.
  */
@@ -127,7 +129,7 @@ public class StatementDao {
      * @throws RuntimeException
      *         if the save fails
      */
-    public int save(com.palmer.billingstatementgenerator.models.statement.Statement stmt) {
+    public int save(Statement stmt) {
         log.info("Saving new statement, control number {}", stmt.getControlNumber());
         try (Connection c = dataSource.getConnection()) {
             c.setAutoCommit(false);
@@ -158,7 +160,7 @@ public class StatementDao {
      * @throws RuntimeException
      *         if the update fails
      */
-    public void update(int savedId, com.palmer.billingstatementgenerator.models.statement.Statement stmt) {
+    public void update(int savedId, Statement stmt) {
         log.info("Updating statement id={}", savedId);
         try (Connection c = dataSource.getConnection()) {
             c.setAutoCommit(false);
@@ -178,7 +180,7 @@ public class StatementDao {
     }
 
     /**
-     * Loads a saved statement into the provided {@link com.palmer.billingstatementgenerator.models.statement.Statement},
+     * Loads a saved statement into the provided {@link Statement},
      * restoring all header fields and marking the appropriate line items as selected.
      * The statement's line item lists must already be populated with catalog data.
      * Returns the saved package ID (or 0 if none) so the caller can resolve the
@@ -194,7 +196,7 @@ public class StatementDao {
      * @throws RuntimeException
      *         if the load fails
      */
-    public int load(int savedId, com.palmer.billingstatementgenerator.models.statement.Statement stmt) {
+    public int load(int savedId, Statement stmt) {
         log.info("Loading statement id={}", savedId);
         try (Connection c = dataSource.getConnection()) {
             int packageId = loadHeader(c, savedId, stmt);
@@ -240,7 +242,7 @@ public class StatementDao {
     }
 
     private int insertHeader(Connection c,
-                             com.palmer.billingstatementgenerator.models.statement.Statement stmt)
+                             Statement stmt)
             throws SQLException {
         try (PreparedStatement ps = c.prepareStatement(INSERT_STATEMENT, PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, stmt.getControlNumber());
@@ -265,7 +267,7 @@ public class StatementDao {
     }
 
     private void updateHeader(Connection c, int savedId,
-                              com.palmer.billingstatementgenerator.models.statement.Statement stmt)
+                              Statement stmt)
             throws SQLException {
         try (PreparedStatement ps = c.prepareStatement(UPDATE_STATEMENT)) {
             ps.setString(1, stmt.getServicesForName());
@@ -295,7 +297,7 @@ public class StatementDao {
     }
 
     private void insertLineItems(Connection c, int savedId,
-                                 com.palmer.billingstatementgenerator.models.statement.Statement stmt)
+                                 Statement stmt)
             throws SQLException {
         for (ServiceLineItem item : stmt.getServices()) {
             if (!item.isSelected()) {
@@ -347,7 +349,7 @@ public class StatementDao {
     }
 
     private int loadHeader(Connection c, int savedId,
-                           com.palmer.billingstatementgenerator.models.statement.Statement stmt)
+                           Statement stmt)
             throws SQLException {
         try (PreparedStatement ps = c.prepareStatement(SELECT_STATEMENT)) {
             ps.setInt(1, savedId);
@@ -372,7 +374,7 @@ public class StatementDao {
     }
 
     private void loadServices(Connection c, int savedId,
-                              com.palmer.billingstatementgenerator.models.statement.Statement stmt)
+                              Statement stmt)
             throws SQLException {
         Map<Integer, ServiceLineItem> byId = stmt.getServices().stream()
                 .collect(Collectors.toMap(i -> i.getCatalog().getId(), Function.identity()));
@@ -395,7 +397,7 @@ public class StatementDao {
     }
 
     private void loadMerchandise(Connection c, int savedId,
-                                 com.palmer.billingstatementgenerator.models.statement.Statement stmt)
+                                 Statement stmt)
             throws SQLException {
         Map<Integer, MerchandiseLineItem> byId = stmt.getMerchandise().stream()
                 .collect(Collectors.toMap(i -> i.getCatalog().getId(), Function.identity()));
@@ -416,7 +418,7 @@ public class StatementDao {
     }
 
     private void loadSpecialCharges(Connection c, int savedId,
-                                    com.palmer.billingstatementgenerator.models.statement.Statement stmt)
+                                    Statement stmt)
             throws SQLException {
         Map<Integer, SpecialChargeLineItem> byId = stmt.getSpecialCharges().stream()
                 .collect(Collectors.toMap(i -> i.getCatalog().getId(), Function.identity()));
@@ -437,7 +439,7 @@ public class StatementDao {
     }
 
     private void loadCashAdvances(Connection c, int savedId,
-                                  com.palmer.billingstatementgenerator.models.statement.Statement stmt)
+                                  Statement stmt)
             throws SQLException {
         Map<Integer, CashAdvanceLineItem> byId = stmt.getCashAdvances().stream()
                 .collect(Collectors.toMap(i -> i.getCatalog().getId(), Function.identity()));

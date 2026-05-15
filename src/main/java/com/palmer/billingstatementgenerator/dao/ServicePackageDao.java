@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DAO for loading {@link com.palmer.billingstatementgenerator.models.catalog.ServicePackage} records
+ * DAO for loading {@link ServicePackage} records
  * from the database. Results are returned in {@code sort_order} sequence.
  */
 public class ServicePackageDao {
