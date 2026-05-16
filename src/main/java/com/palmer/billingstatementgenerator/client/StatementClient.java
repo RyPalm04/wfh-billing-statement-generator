@@ -10,6 +10,7 @@ import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem
 import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineItem;
+import com.palmer.billingstatementgenerator.models.statement.PdfResult;
 import com.palmer.billingstatementgenerator.models.statement.SavedStatementSummary;
 import com.palmer.billingstatementgenerator.models.statement.Statement;
 import org.slf4j.Logger;
@@ -36,7 +37,7 @@ public class StatementClient {
 
     public int getNextControlNumber() {
         try {
-            HttpResponse<String> response = getResponse("/statements/next-control-number");
+            HttpResponse<String> response = getResponse("/next-control-number");
 
             return Integer.parseInt(response.body().trim());
 
@@ -138,6 +139,31 @@ public class StatementClient {
         } catch (Exception e) {
             log.error("Failed to update statement id={}", id, e);
             throw new RuntimeException("Failed to update statement id=" + id, e);
+        }
+    }
+
+    public PdfResult getPdf(int id) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(ApiConfig.getStatementsUrl() + String.format("/%d/pdf", id)))
+                    .GET()
+                    .build();
+
+            HttpResponse<byte[]> response = ApiConfig.getHttpClient().send(request, HttpResponse.BodyHandlers.ofByteArray());
+
+            if (response.statusCode() < 200 || response.statusCode() >= 300) {
+                throw new RuntimeException("PDF generation failed — status " + response.statusCode());
+            }
+
+            String disposition = response.headers().firstValue("Content-Disposition").orElse("");
+            String filename = disposition.contains("filename=") ?
+                    disposition.split("filename=")[1].replace("\"", "") :
+                    "statement.pdf";
+
+            return new PdfResult(response.body(), filename);
+        } catch (Exception e) {
+            log.error("Failed to get PDF for statement id={}", id, e);
+            throw new RuntimeException("Failed to get PDF for statement " + id, e);
         }
     }
 

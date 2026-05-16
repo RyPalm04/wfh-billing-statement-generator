@@ -14,6 +14,7 @@ import com.palmer.billingstatementgenerator.views.controllers.ServicesController
 import com.palmer.billingstatementgenerator.views.controllers.SpecialChargesController;
 import com.palmer.billingstatementgenerator.views.controllers.SummaryTabController;
 import com.palmer.billingstatementgenerator.views.dialogs.AppDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.MessageDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.StartupDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.IncompleteAlertDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.OpenStatementDialog;
@@ -56,7 +57,7 @@ import java.util.Objects;
  */
 public class MainView {
     private static final Logger log = LoggerFactory.getLogger(MainView.class);
-    private static final String FXML_BASE = "/com/palmer/billingstatementgenerator/views/";
+    private static final String FXML_BASE = "/views/";
 
     private BorderPane root;
     private TabPane tabPane;
@@ -297,6 +298,8 @@ public class MainView {
             nextButton.setOnAction(e -> {
                 if (invalid.get()) {
                     new IncompleteAlertDialog().open();
+                } else if (StatementContext.isDirty()) {
+                    new MessageDialog("Save Required", "The statement must be saved before a PDF can be generated.").open();
                 } else {
                     new PdfDialog().open();
                 }
