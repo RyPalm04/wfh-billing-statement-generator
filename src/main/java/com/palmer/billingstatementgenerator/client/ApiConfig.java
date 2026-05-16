@@ -1,7 +1,5 @@
 package com.palmer.billingstatementgenerator.client;
 
-import com.google.auth.oauth2.IdTokenCredentials;
-import com.google.auth.oauth2.ServiceAccountCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +19,7 @@ public class ApiConfig {
     private static final String CONFIG_PATH = CONFIG_DIR + "/api.properties";
     private static String baseUrl;
     private static HttpClient httpClient;
-    private static IdTokenCredentials idTokenCredentials;
+    private static String apiKey;
 
     private ApiConfig() {
     }
@@ -46,18 +44,9 @@ public class ApiConfig {
             baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
         }
 
-        String serviceAccountKey = config.getProperty("api.service-account-key", "").trim();
-        if (!serviceAccountKey.isEmpty()) {
-            try (FileInputStream keyStream = new FileInputStream(serviceAccountKey)) {
-                ServiceAccountCredentials serviceAccountCreds = ServiceAccountCredentials.fromStream(keyStream);
-                idTokenCredentials = IdTokenCredentials.newBuilder()
-                        .setIdTokenProvider(serviceAccountCreds)
-                        .setTargetAudience(baseUrl)
-                        .build();
-            } catch (IOException e) {
-                log.error("Failed to load service account key from {}", serviceAccountKey, e);
-                throw new IllegalStateException("Failed to load service account key from " + serviceAccountKey, e);
-            }
+        String apiKey = config.getProperty("api.key", "").trim();
+        if (!apiKey.isEmpty()) {
+            ApiConfig.apiKey = apiKey;
         }
 
         httpClient = HttpClient.newHttpClient();
@@ -86,13 +75,13 @@ public class ApiConfig {
         return httpClient;
     }
 
-    public static HttpRequest.Builder authenticatedRequest(URI uri) throws IOException {
-        if (idTokenCredentials == null) {
+    public static HttpRequest.Builder authenticatedRequest(URI uri) {
+        if (apiKey.isEmpty()) {
             return HttpRequest.newBuilder(uri);
         }
 
         return HttpRequest.newBuilder(uri)
-                .header("Authorization", idTokenCredentials.getRequestMetadata(uri).get("Authorization").getFirst());
+                .header("X-Api-Key", apiKey);
     }
 
     private static Properties loadConfig() {
