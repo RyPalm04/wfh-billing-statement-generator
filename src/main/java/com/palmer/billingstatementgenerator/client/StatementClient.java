@@ -109,8 +109,7 @@ public class StatementClient {
         ObjectNode body = buildStatementBody(statement);
 
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(ApiConfig.getStatementsUrl()))
+            HttpRequest request = ApiConfig.authenticatedRequest(URI.create(ApiConfig.getStatementsUrl()))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
                     .build();
@@ -129,8 +128,7 @@ public class StatementClient {
         ObjectNode body = buildStatementBody(statement);
 
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(ApiConfig.getStatementsUrl() + "/" + id))
+            HttpRequest request = ApiConfig.authenticatedRequest(URI.create(ApiConfig.getStatementsUrl() + "/" + id))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(body.toString()))
                 .build();
@@ -144,8 +142,7 @@ public class StatementClient {
 
     public PdfResult getPdf(int id) {
         try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(ApiConfig.getStatementsUrl() + String.format("/%d/pdf", id)))
+            HttpRequest request = ApiConfig.authenticatedRequest(URI.create(ApiConfig.getStatementsUrl() + String.format("/%d/pdf", id)))
                     .GET()
                     .build();
 
@@ -300,8 +297,7 @@ public class StatementClient {
     private static HttpResponse<String> getResponse(String... endPoints) throws IOException, InterruptedException {
         String statementsUrl = ApiConfig.getStatementsUrl();
 
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(endPoints.length > 0 ? statementsUrl + endPoints[0] : statementsUrl))
+        HttpRequest request = ApiConfig.authenticatedRequest(URI.create(endPoints.length > 0 ? statementsUrl + endPoints[0] : statementsUrl))
                 .GET()
                 .build();
 

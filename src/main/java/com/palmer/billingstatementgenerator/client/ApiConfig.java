@@ -1,5 +1,7 @@
 package com.palmer.billingstatementgenerator.client;
 
+import com.google.auth.oauth2.IdTokenCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,7 +9,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
 import java.util.Properties;
 
 public class ApiConfig {
@@ -17,6 +21,7 @@ public class ApiConfig {
     private static final String CONFIG_PATH = CONFIG_DIR + "/api.properties";
     private static String baseUrl;
     private static HttpClient httpClient;
+    private static IdTokenCredentials idTokenCredentials;
 
     private ApiConfig() {
     }
@@ -41,6 +46,20 @@ public class ApiConfig {
             baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
         }
 
+        String serviceAccountKey = config.getProperty("api.service-account-key", "").trim();
+        if (!serviceAccountKey.isEmpty()) {
+            try (FileInputStream keyStream = new FileInputStream(serviceAccountKey)) {
+                ServiceAccountCredentials serviceAccountCreds = ServiceAccountCredentials.fromStream(keyStream);
+                idTokenCredentials = IdTokenCredentials.newBuilder()
+                        .setIdTokenProvider(serviceAccountCreds)
+                        .setTargetAudience(baseUrl)
+                        .build();
+            } catch (IOException e) {
+                log.error("Failed to load service account key from {}", serviceAccountKey, e);
+                throw new IllegalStateException("Failed to load service account key from " + serviceAccountKey, e);
+            }
+        }
+
         httpClient = HttpClient.newHttpClient();
 
         log.info("API configured - base URL: {}", baseUrl);
@@ -51,11 +70,11 @@ public class ApiConfig {
     }
 
     public static String getCatalogUrl() {
-        return baseUrl + "/catalog";
+        return getBaseUrl() + "/catalog";
     }
 
     public static String getStatementsUrl() {
-        return baseUrl + "/statements";
+        return getBaseUrl() + "/statements";
     }
 
     public static HttpClient getHttpClient() {
@@ -65,6 +84,15 @@ public class ApiConfig {
         }
 
         return httpClient;
+    }
+
+    public static HttpRequest.Builder authenticatedRequest(URI uri) throws IOException {
+        if (idTokenCredentials == null) {
+            return HttpRequest.newBuilder(uri);
+        }
+
+        return HttpRequest.newBuilder(uri)
+                .header("Authorization", idTokenCredentials.getRequestMetadata(uri).get("Authorization").getFirst());
     }
 
     private static Properties loadConfig() {
@@ -87,6 +115,7 @@ public class ApiConfig {
     private static void writeConfigTemplate(File configFile) {
         try (FileWriter w = new FileWriter(configFile)) {
             w.write("api.base-url=http://localhost:18080\n");
+            w.write("# api.service-account-key=/path/to/service-account.json\n");
         } catch (IOException e) {
             log.warn("Could not write config template to {}", CONFIG_PATH, e);
         }
