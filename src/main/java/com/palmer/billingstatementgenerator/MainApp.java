@@ -1,6 +1,6 @@
 package com.palmer.billingstatementgenerator;
 
-import com.palmer.billingstatementgenerator.db.Database;
+import com.palmer.billingstatementgenerator.client.ApiConfig;
 import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
 import com.palmer.billingstatementgenerator.util.AppLock;
@@ -64,7 +64,7 @@ public class MainApp extends Application {
             protected Void call() throws Exception {
                 updateMessage("Connecting to database...");
                 updateProgress(1, 4);
-                Database.init();
+                ApiConfig.init();
                 Thread.sleep(new Random().nextInt(601) + 900);
 
                 updateMessage("Loading statement context...");

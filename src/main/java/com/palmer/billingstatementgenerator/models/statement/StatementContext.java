@@ -1,12 +1,7 @@
 package com.palmer.billingstatementgenerator.models.statement;
 
-import com.palmer.billingstatementgenerator.dao.CashAdvanceDao;
-import com.palmer.billingstatementgenerator.dao.MerchandiseDao;
-import com.palmer.billingstatementgenerator.dao.ServiceDao;
-import com.palmer.billingstatementgenerator.dao.ServicePackageDao;
-import com.palmer.billingstatementgenerator.dao.SpecialChargeDao;
-import com.palmer.billingstatementgenerator.dao.StatementDao;
-import com.palmer.billingstatementgenerator.db.Database;
+import com.palmer.billingstatementgenerator.client.CatalogClient;
+import com.palmer.billingstatementgenerator.client.StatementClient;
 import com.palmer.billingstatementgenerator.models.catalog.ServicePackage;
 import com.palmer.billingstatementgenerator.models.lineitems.CashAdvanceLineItem;
 import com.palmer.billingstatementgenerator.models.lineitems.MerchandiseLineItem;
@@ -36,6 +31,7 @@ public final class StatementContext {
     private static final BooleanProperty dirty = new SimpleBooleanProperty(false);
     private static Statement current;
     private static Integer savedId;
+    private static final CatalogClient catalogClient = new CatalogClient();
 
     private StatementContext() {
     }
@@ -50,7 +46,7 @@ public final class StatementContext {
         log.info("Initializing statement context");
         savedId = null;
         Statement statement = buildFreshStatement();
-        statement.setControlNumber(new StatementDao(Database.get()).nextControlNumber());
+        statement.setControlNumber(new StatementClient().getNextControlNumber());
         current = statement;
         wireListeners(current);
         dirty.set(false);
@@ -71,9 +67,9 @@ public final class StatementContext {
         log.info("Loading statement id={} into context", id);
         savedId = id;
         Statement statement = buildFreshStatement();
-        int packageId = new StatementDao(Database.get()).load(id, statement);
+        int packageId = new StatementClient().load(id, statement);
         if (packageId > 0) {
-            ServicePackage pkg = new ServicePackageDao(Database.get()).findAll().stream()
+            ServicePackage pkg = catalogClient.findAllServicePackages().stream()
                     .filter(p -> p.getId() == packageId)
                     .findFirst()
                     .orElse(null);
@@ -143,13 +139,13 @@ public final class StatementContext {
     private static Statement buildFreshStatement() {
         Statement statement = new Statement();
         statement.setSalesTaxRate(AppPreferences.getSalesTaxRate());
-        new ServiceDao(Database.get()).findAll()
+        catalogClient.findAllServices()
                 .forEach(s -> statement.getServices().add(new ServiceLineItem(s)));
-        new MerchandiseDao(Database.get()).findAll()
+        catalogClient.findAllMerchandise()
                 .forEach(m -> statement.getMerchandise().add(new MerchandiseLineItem(m)));
-        new SpecialChargeDao(Database.get()).findAll()
+        catalogClient.findAllSpecialCharges()
                 .forEach(sc -> statement.getSpecialCharges().add(new SpecialChargeLineItem(sc)));
-        new CashAdvanceDao(Database.get()).findAll()
+        catalogClient.findAllCashAdvances()
                 .forEach(ca -> statement.getCashAdvances().add(new CashAdvanceLineItem(ca)));
         return statement;
     }

@@ -1,7 +1,6 @@
 package com.palmer.billingstatementgenerator.views.controllers;
 
-import com.palmer.billingstatementgenerator.dao.ServicePackageDao;
-import com.palmer.billingstatementgenerator.db.Database;
+import com.palmer.billingstatementgenerator.client.CatalogClient;
 import com.palmer.billingstatementgenerator.models.catalog.ServicePackage;
 import com.palmer.billingstatementgenerator.models.lineitems.ServiceLineItem;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
@@ -38,10 +37,10 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
      */
     @Override
     public GridPane buildView() {
-        ServicePackageDao dao = new ServicePackageDao(Database.get());
+        CatalogClient catalogClient = new CatalogClient();
         packagesCombo = new ComboBox<>();
         packagesCombo.setId("packagesCombo");
-        packagesCombo.getItems().addAll(dao.findAll());
+        packagesCombo.getItems().addAll(catalogClient.findAllServicePackages());
         packagesCombo.setConverter(new javafx.util.StringConverter<>() {
             @Override
             public String toString(ServicePackage p) {
@@ -60,7 +59,7 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
                 refreshTotal();
                 return;
             }
-            List<Integer> serviceIds = dao.findServiceIdsForPackage(newPkg.getId());
+            List<Integer> serviceIds = catalogClient.findServiceIdsForPackage(newPkg.getId());
             StatementContext.current().getServices().forEach(item -> {
                 boolean inPkg = serviceIds.contains(item.getCatalog().getId());
                 item.setInPackage(inPkg);
