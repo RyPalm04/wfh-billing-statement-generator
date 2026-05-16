@@ -211,7 +211,7 @@ public class MainView {
      */
     private void createLayout() {
         Image logo = new Image(Objects.requireNonNull(
-                getClass().getResourceAsStream("/com/palmer/billingstatementgenerator/img/wfh splash logo.jpg")));
+                getClass().getResourceAsStream("/img/wfh splash logo.jpg")));
         ImageView logoView = new ImageView(logo);
         logoView.setFitWidth(80);
         logoView.setPreserveRatio(true);

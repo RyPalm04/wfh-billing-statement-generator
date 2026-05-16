@@ -60,7 +60,7 @@ public class InstructionsTabController extends BaseController {
         root.setMaxWidth(640);
 
         Image logo = new Image(Objects.requireNonNull(
-                getClass().getResourceAsStream("/com/palmer/billingstatementgenerator/img/wfh splash logo.jpg")));
+                getClass().getResourceAsStream("/img/wfh splash logo.jpg")));
         ImageView logoView = new ImageView(logo);
         logoView.setFitWidth(120);
         logoView.setPreserveRatio(true);

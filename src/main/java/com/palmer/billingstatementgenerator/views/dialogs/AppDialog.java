@@ -33,7 +33,7 @@ import javafx.stage.Window;
 public abstract class AppDialog<R> extends Stage {
 
     private static final String STYLESHEET =
-            "/com/palmer/billingstatementgenerator/css/style.css";
+            "/css/style.css";
 
     private static Window defaultOwner;
     private static WorkflowEventTracker defaultTracker;
