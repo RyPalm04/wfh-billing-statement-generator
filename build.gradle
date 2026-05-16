@@ -53,15 +53,13 @@ dependencies {
     implementation('ch.qos.logback:logback-classic:1.4.14')
     implementation("org.apache.commons:commons-lang3:3.18.0")
     implementation('net.sf.jasperreports:jasperreports:6.21.5')
-    implementation('org.postgresql:postgresql:42.7.3')
-    implementation('org.flywaydb:flyway-core:10.15.0')
-    implementation('org.flywaydb:flyway-database-postgresql:10.15.0')
+    implementation('com.fasterxml.jackson.core:jackson-databind:2.17.3')
+    implementation('com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.3')
     // JAXB — removed from the JDK after Java 8, but JasperReports still needs it
     implementation('javax.xml.bind:jaxb-api:2.3.1')
     implementation('org.glassfish.jaxb:jaxb-runtime:2.3.1')
     implementation('javax.activation:activation:1.1.1')
 
-    testImplementation 'com.h2database:h2:2.2.224'
     testImplementation 'org.apache.groovy:groovy-all:4.0.24'
     testImplementation "org.spockframework:spock-core:${spockVersion}"
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
