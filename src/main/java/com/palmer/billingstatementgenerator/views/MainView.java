@@ -1,7 +1,6 @@
 package com.palmer.billingstatementgenerator.views;
 
-import com.palmer.billingstatementgenerator.dao.StatementDao;
-import com.palmer.billingstatementgenerator.db.Database;
+import com.palmer.billingstatementgenerator.client.StatementClient;
 import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
 import com.palmer.billingstatementgenerator.models.statement.SavedStatementSummary;
 import com.palmer.billingstatementgenerator.models.statement.Statement;
@@ -76,6 +75,7 @@ public class MainView {
      * Event tracker used to extend logging to modal dialog scenes.
      */
     private WorkflowEventTracker eventTracker;
+    private StatementClient statementClient = new  StatementClient();
 
     /**
      * Constructs the main view by creating tabs, the button bar, the layout,
@@ -392,17 +392,16 @@ public class MainView {
     }
 
     /**
-     * Saves the current statement. Calls {@link StatementDao#save} if it has never
-     * been saved, or {@link StatementDao#update} if it already exists in the database.
+     * Saves the current statement. Calls {@link StatementClient#save} if it has never
+     * been saved, or {@link StatementClient#update} if it already exists.
      */
     private void saveCurrentStatement() {
-        StatementDao dao = new StatementDao(Database.get());
         Integer savedId = StatementContext.getSavedId();
         if (savedId == null) {
-            int newId = dao.save(StatementContext.current());
+            int newId = statementClient.save(StatementContext.current());
             StatementContext.markSaved(newId);
         } else {
-            dao.update(savedId, StatementContext.current());
+            statementClient.update(savedId, StatementContext.current());
             StatementContext.markSaved(savedId);
         }
         log.info("Statement saved, id={}", StatementContext.getSavedId());
@@ -460,7 +459,7 @@ public class MainView {
      * Shows the open-statement dialog and returns {@code true} if a statement was loaded.
      */
     private boolean showOpenDialog() {
-        List<SavedStatementSummary> summaries = new StatementDao(Database.get()).findAll();
+        List<SavedStatementSummary> summaries = statementClient.getAllStatements();
         if (summaries.isEmpty()) {
             return false;
         }
@@ -501,7 +500,7 @@ public class MainView {
     public void onAppReady(boolean firstLaunch) {
         boolean done = false;
         while (!done) {
-            List<SavedStatementSummary> saved = new StatementDao(Database.get()).findAll();
+            List<SavedStatementSummary> saved = statementClient.getAllStatements();
             switch (new StartupDialog(!saved.isEmpty()).open()) {
                 case NEW:
                     if (!firstLaunch) {
