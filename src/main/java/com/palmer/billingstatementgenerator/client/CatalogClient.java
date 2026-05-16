@@ -154,8 +154,7 @@ public class CatalogClient {
     }
 
     private static HttpResponse<String> getResponse(String endPoint) throws IOException, InterruptedException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(ApiConfig.getCatalogUrl() + endPoint))
+        HttpRequest request = ApiConfig.authenticatedRequest(URI.create(ApiConfig.getCatalogUrl() + endPoint))
                 .GET()
                 .build();
 
