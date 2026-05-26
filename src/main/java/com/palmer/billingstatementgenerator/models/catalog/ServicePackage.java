@@ -12,12 +12,14 @@ public class ServicePackage {
     private final int sortOrder;
     private final String name;
     private final BigDecimal defaultCost;
+    private final boolean legacyPackage;
 
-    public ServicePackage(int id, int sortOrder, String name, BigDecimal defaultCost) {
+    public ServicePackage(int id, int sortOrder, String name, BigDecimal defaultCost, boolean legacyPackage) {
         this.id = id;
         this.sortOrder = sortOrder;
         this.name = name;
         this.defaultCost = defaultCost;
+        this.legacyPackage = legacyPackage;
     }
 
     public int getId() {
@@ -34,5 +36,9 @@ public class ServicePackage {
 
     public BigDecimal getDefaultCost() {
         return defaultCost;
+    }
+
+    public boolean isLegacyPackage() {
+        return legacyPackage;
     }
 }

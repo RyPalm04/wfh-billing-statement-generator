@@ -102,7 +102,8 @@ public class CatalogClient {
                         node.get("id").asInt(),
                         node.get("sortOrder").asInt(),
                         node.get("name").asText(),
-                        node.get("defaultCost").decimalValue()));
+                        node.get("defaultCost").decimalValue(),
+                        node.get("legacyPackage").asBoolean()));
             }
 
             return result;
