@@ -188,9 +188,14 @@ public class StatementClient {
         body.put("salesTaxRate",  statement.getSalesTaxRate());
 
         if (statement.getSelectedPackage() != null) {
-            body.put("packageId",  statement.getSelectedPackage().getId());
+            ObjectNode servicePackage = body.putObject("servicePackage");
+            servicePackage.put("id", statement.getSelectedPackage().getId());
+            servicePackage.put("sortOrder", statement.getSelectedPackage().getSortOrder());
+            servicePackage.put("name", statement.getSelectedPackage().getName());
+            servicePackage.put("defaultCost",  statement.getSelectedPackage().getDefaultCost());
+            servicePackage.put("legacyPackage", statement.getSelectedPackage().isLegacyPackage());
         } else {
-            body.putNull("packageId");
+            body.putNull("servicePackage");
         }
 
         body.put("payment", statement.getPayment());
@@ -202,6 +207,8 @@ public class StatementClient {
                     ObjectNode service = services.addObject();
                     service.put("serviceId", item.getCatalog().getId());
                     service.put("inPackage", item.isInPackage());
+                    service.put("name", item.getCatalog().getName());
+                    service.put("price",  item.getCatalog().getDefaultCost());
                 });
 
         ArrayNode merchandise = body.putArray("merchandise");
@@ -210,6 +217,7 @@ public class StatementClient {
                 .forEach(item -> {
                     ObjectNode merchandiseItem = merchandise.addObject();
                     merchandiseItem.put("merchandiseId", item.getCatalog().getId());
+                    merchandiseItem.put("name", item.getCatalog().getName());
                     merchandiseItem.put("price", item.getPrice());
                     merchandiseItem.put("description", item.getDescription());
                 });
@@ -220,6 +228,7 @@ public class StatementClient {
                 .forEach(item -> {
                     ObjectNode specialChargeItem = specialCharges.addObject();
                     specialChargeItem.put("specialChargeId", item.getCatalog().getId());
+                    specialChargeItem.put("name", item.getCatalog().getName());
                     specialChargeItem.put("price",  item.getPrice());
                     specialChargeItem.put("description", item.getDescription());
                 });
@@ -230,6 +239,7 @@ public class StatementClient {
                 .forEach(item -> {
                     ObjectNode cashAdvanceItem = cashAdvances.addObject();
                     cashAdvanceItem.put("cashAdvanceId", item.getCatalog().getId());
+                    cashAdvanceItem.put("name", item.getCatalog().getName());
                     cashAdvanceItem.put("amount", item.getAmount());
                     cashAdvanceItem.put("provider", item.getProvider());
                 });
