@@ -48,6 +48,7 @@ public class StatementClient {
     }
 
     public List<SavedStatementSummary> getAllStatements() {
+        log.debug("Getting all saved statements");
         try {
             HttpResponse<String> response = getResponse();
 
@@ -66,6 +67,7 @@ public class StatementClient {
                 ));
             });
 
+            log.debug("Returning all saved statements {}", statements);
             return statements;
         } catch (Exception e) {
             log.error("Failed to get saved statements", e);

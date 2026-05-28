@@ -2,7 +2,6 @@ package com.palmer.billingstatementgenerator.views;
 
 import com.palmer.billingstatementgenerator.client.StatementClient;
 import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
-import com.palmer.billingstatementgenerator.models.statement.SavedStatementSummary;
 import com.palmer.billingstatementgenerator.models.statement.Statement;
 import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
@@ -14,40 +13,50 @@ import com.palmer.billingstatementgenerator.views.controllers.ServicesController
 import com.palmer.billingstatementgenerator.views.controllers.SpecialChargesController;
 import com.palmer.billingstatementgenerator.views.controllers.SummaryTabController;
 import com.palmer.billingstatementgenerator.views.dialogs.AppDialog;
-import com.palmer.billingstatementgenerator.views.dialogs.MessageDialog;
-import com.palmer.billingstatementgenerator.views.dialogs.StartupDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.IncompleteAlertDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.MessageDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.OpenStatementDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.PdfDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.ResetStatementDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.SettingsDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.StartupDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.UnsavedChangesDialog;
 import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
+import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 /**
  * The main application view, responsible for assembling the full UI layout.
@@ -58,7 +67,9 @@ import java.util.Objects;
 public class MainView {
     private static final Logger log = LoggerFactory.getLogger(MainView.class);
     private static final String FXML_BASE = "/views/";
-
+    private final StatementClient statementClient = new StatementClient();
+    private StackPane rootPane;
+    private StackPane overlay;
     private BorderPane root;
     private TabPane tabPane;
     private Button prevButton;
@@ -66,17 +77,14 @@ public class MainView {
     private Button clearButton;
     private Button saveButton;
     private Button resetButton;
-
     /**
      * Controller for the summary tab, held for refresh and reset operations.
      */
     private SummaryTabController summaryController;
-
     /**
      * Event tracker used to extend logging to modal dialog scenes.
      */
     private WorkflowEventTracker eventTracker;
-    private StatementClient statementClient = new  StatementClient();
 
     /**
      * Constructs the main view by creating tabs, the button bar, the layout,
@@ -96,7 +104,7 @@ public class MainView {
      * @return the root {@link Parent} node
      */
     public Parent asParent() {
-        return root;
+        return rootPane;
     }
 
     /**
@@ -247,6 +255,18 @@ public class MainView {
         root.setTop(header);
         root.setCenter(tabPane);
         root.setBottom(buildButtonBar());
+
+        ProgressIndicator spinner = new ProgressIndicator();
+        spinner.setMaxSize(100, 100);
+        spinner.setStyle("-fx-accent: -sm-navy;");
+        overlay = new StackPane(spinner);
+        overlay.setBackground(new Background(new BackgroundFill(
+                Color.rgb(0, 0, 0, 0.35),
+                CornerRadii.EMPTY,
+                Insets.EMPTY
+        )));
+        overlay.setVisible(false);
+        rootPane = new StackPane(root, overlay);
     }
 
     /**
@@ -281,7 +301,7 @@ public class MainView {
 
         prevButton.setDisable(index == 1);
         saveButton.disableProperty().bind(StatementContext.dirtyProperty().not());
-        saveButton.setOnAction(e -> saveCurrentStatement());
+        saveButton.setOnAction(e -> saveCurrentStatement(null));
 
         BooleanBinding invalid = tab.getController().hasInvalidSelections();
 
@@ -398,16 +418,27 @@ public class MainView {
      * Saves the current statement. Calls {@link StatementClient#save} if it has never
      * been saved, or {@link StatementClient#update} if it already exists.
      */
-    private void saveCurrentStatement() {
-        Integer savedId = StatementContext.getSavedId();
-        if (savedId == null) {
-            int newId = statementClient.save(StatementContext.current());
-            StatementContext.markSaved(newId);
-        } else {
+    private void saveCurrentStatement(Runnable onComplete) {
+        runAsync(() -> {
+            Integer savedId = StatementContext.getSavedId();
+
+            if (savedId == null) {
+                return statementClient.save(StatementContext.current());
+            }
+
             statementClient.update(savedId, StatementContext.current());
-            StatementContext.markSaved(savedId);
-        }
-        log.info("Statement saved, id={}", StatementContext.getSavedId());
+            return savedId;
+        }, id -> {
+            StatementContext.markSaved(id);
+            log.info("Statement saved, id={}", id);
+
+            if (onComplete != null) {
+                onComplete.run();
+            }
+        }, ex -> {
+            log.error("Error saving statement", ex);
+            new MessageDialog("Error saving statement", "Unable to save the statement. Please try again.").show();
+        });
     }
 
     /**
@@ -417,7 +448,7 @@ public class MainView {
         boolean done = false;
         while (!done) {
             switch (new ResetStatementDialog().open()) {
-                case NEW: {
+                case NEW -> {
                     Runnable doNew = () -> {
                         StatementContext.init();
                         rebuildView();
@@ -429,31 +460,29 @@ public class MainView {
                         doNew.run();
                     }
                     done = true;
-                    break;
                 }
-                case OPEN: {
-                    Runnable doOpen = () -> {
-                        if (!showOpenDialog()) {
-                            showResetDialog();
-                        }
-                    };
+                case OPEN -> {
                     if (StatementContext.isDirty()) {
-                        showUnsavedChangesDialog(doOpen);
+                        showUnsavedChangesDialog(() -> showOpenDialog(result -> {
+                            if (!result) {
+                                showResetDialog();
+                            }
+                        }));
                     } else {
-                        if (!showOpenDialog()) {
-                            continue;
-                        }
+                        showOpenDialog(result -> {
+                            if (!result) {
+                                showResetDialog();
+                            }
+                        });
                     }
                     done = true;
-                    break;
                 }
-                case CLEAR:
+                case CLEAR -> {
                     clearAllSelections();
                     tabPane.getSelectionModel().select(2);
                     done = true;
-                    break;
-                default:
-                    done = true;
+                }
+                default -> done = true;
             }
         }
     }
@@ -461,19 +490,40 @@ public class MainView {
     /**
      * Shows the open-statement dialog and returns {@code true} if a statement was loaded.
      */
-    private boolean showOpenDialog() {
-        List<SavedStatementSummary> summaries = statementClient.getAllStatements();
-        if (summaries.isEmpty()) {
-            return false;
-        }
-        Integer id = new OpenStatementDialog(summaries).open();
-        if (id != null) {
-            StatementContext.load(id);
-            rebuildView();
-            tabPane.getSelectionModel().select(1);
-            return true;
-        }
-        return false;
+    private void showOpenDialog(Consumer<Boolean> onResult) {
+        runAsync(statementClient::getAllStatements,
+                summaries -> {
+                    if (summaries.isEmpty()) {
+                        onResult.accept(false);
+                        return;
+                    }
+                    Integer id = new OpenStatementDialog(summaries).open();
+                    if (id == null) {
+                        onResult.accept(false);
+                        return;
+                    }
+                    runAsync(
+                            () -> {
+                                StatementContext.load(id);
+                                return null;
+                            },
+                            unused -> {
+                                rebuildView();
+                                tabPane.getSelectionModel().select(1);
+                                onResult.accept(true);
+                            },
+                            ex -> {
+                                log.error("Failed to load statement", ex);
+                                onResult.accept(false);
+                            }
+                    );
+                },
+                ex -> {
+                    log.error("Failed to fetch statements", ex);
+                    onResult.accept(false);
+                    new MessageDialog("Failed to fetch statements", "Please try again.").show();
+                }
+        );
     }
 
     /**
@@ -485,10 +535,7 @@ public class MainView {
      */
     private void showUnsavedChangesDialog(Runnable onDiscard) {
         new UnsavedChangesDialog(
-                () -> {
-                    saveCurrentStatement();
-                    onDiscard.run();
-                },
+                () -> saveCurrentStatement(onDiscard),
                 onDiscard
         ).open();
     }
@@ -501,23 +548,30 @@ public class MainView {
      *         whether this is the first time the app has been launched
      */
     public void onAppReady(boolean firstLaunch) {
-        boolean done = false;
-        while (!done) {
-            List<SavedStatementSummary> saved = statementClient.getAllStatements();
-            switch (new StartupDialog(!saved.isEmpty()).open()) {
-                case NEW:
-                    if (!firstLaunch) {
-                        skipInstructions();
+        log.info("onAppReady firstLaunch={}", firstLaunch);
+        runAsync(
+                statementClient::getAllStatements,
+                saved -> {
+                    switch (new StartupDialog(!saved.isEmpty()).open()) {
+                        case NEW -> {
+                            if (!firstLaunch) {
+                                skipInstructions();
+                            }
+                        }
+                        case OPEN -> showOpenDialog(result -> {
+                            if (!result) {
+                                onAppReady(firstLaunch);
+                            }
+                        });
+                        default -> {
+                        }
                     }
-                    done = true;
-                    break;
-                case OPEN:
-                    done = showOpenDialog();
-                    break;
-                default:
-                    done = true;
-            }
-        }
+                },
+                ex -> {
+                    log.error("Failed to fetch statements on startup", ex);
+                    new MessageDialog("Failed to Load Statements", "Unable to load statements.\nPlease try again or create a new statement.").show();
+                }
+        );
     }
 
     /**
@@ -578,5 +632,43 @@ public class MainView {
         for (int i = 2; i < tabPane.getTabs().size(); i++) {
             tabPane.getTabs().get(i).disableProperty().bind(infoIncomplete);
         }
+    }
+
+    private void showSpinner() {
+        PauseTransition delay = new PauseTransition(Duration.millis(150));
+        delay.setOnFinished(e -> overlay.setVisible(true));
+        overlay.getProperties().put("spinnerDelay", delay);
+        delay.play();
+    }
+
+    private void hideSpinner() {
+        PauseTransition delay = (PauseTransition) overlay.getProperties().get("spinnerDelay");
+        if (delay != null) {
+            delay.stop();
+        }
+        overlay.setVisible(false);
+    }
+
+    private <T> void runAsync(Callable<T> work, Consumer<T> onSuccess, Consumer<Throwable> onFailure) {
+        Task<T> task = new Task<>() {
+            @Override
+            protected T call() throws Exception {
+                return work.call();
+            }
+        };
+
+        task.setOnSucceeded(e -> {
+            log.info("runAsync succeeded");
+            hideSpinner();
+            onSuccess.accept(task.getValue());
+        });
+
+        task.setOnFailed(e -> {
+            hideSpinner();
+            onFailure.accept(task.getException());
+        });
+
+        showSpinner();
+        new Thread(task).start();
     }
 }

@@ -488,3 +488,7 @@
     -fx-font-size: 12px;
     -fx-text-fill: -sm-gold;
 }
+
+.progress-indicator > .spinner > .segment {
+    -fx-progress-color: -sm-gold;
+}
