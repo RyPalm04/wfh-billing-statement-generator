@@ -1,10 +1,11 @@
 package com.palmer.billingstatementgenerator.views;
 
-import com.palmer.billingstatementgenerator.client.StatementClient;
 import com.palmer.billingstatementgenerator.logging.WorkflowEventTracker;
 import com.palmer.billingstatementgenerator.models.statement.Statement;
 import com.palmer.billingstatementgenerator.models.statement.StatementCalculator;
 import com.palmer.billingstatementgenerator.models.statement.StatementContext;
+import com.palmer.billingstatementgenerator.services.PdfService;
+import com.palmer.billingstatementgenerator.services.StatementService;
 import com.palmer.billingstatementgenerator.views.controllers.BaseController;
 import com.palmer.billingstatementgenerator.views.controllers.CashAdvanceController;
 import com.palmer.billingstatementgenerator.views.controllers.InstructionsTabController;
@@ -22,10 +23,8 @@ import com.palmer.billingstatementgenerator.views.dialogs.SettingsDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.StartupDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.UnsavedChangesDialog;
 import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
-import javafx.animation.PauseTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -49,13 +48,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 /**
@@ -67,7 +64,7 @@ import java.util.function.Consumer;
 public class MainView {
     private static final Logger log = LoggerFactory.getLogger(MainView.class);
     private static final String FXML_BASE = "/views/";
-    private final StatementClient statementClient = new StatementClient();
+    private final StatementService statementService = StatementService.getInstance();
     private StackPane rootPane;
     private StackPane overlay;
     private BorderPane root;
@@ -265,7 +262,7 @@ public class MainView {
                 CornerRadii.EMPTY,
                 Insets.EMPTY
         )));
-        overlay.setVisible(false);
+        overlay.visibleProperty().bind(statementService.runningProperty().or(PdfService.getInstance().runningProperty()));
         rootPane = new StackPane(root, overlay);
     }
 
@@ -301,7 +298,7 @@ public class MainView {
 
         prevButton.setDisable(index == 1);
         saveButton.disableProperty().bind(StatementContext.dirtyProperty().not());
-        saveButton.setOnAction(e -> saveCurrentStatement(null));
+        saveButton.setOnAction(e -> statementService.save(null));
 
         BooleanBinding invalid = tab.getController().hasInvalidSelections();
 
@@ -389,10 +386,9 @@ public class MainView {
             return;
         }
         Window window = root.getScene().getWindow();
-        if (!(window instanceof Stage)) {
+        if (!(window instanceof Stage stage)) {
             return;
         }
-        Stage stage = (Stage) window;
 
         int originalIndex = tabPane.getSelectionModel().getSelectedIndex();
         double maxWidth = 0;
@@ -415,74 +411,40 @@ public class MainView {
     }
 
     /**
-     * Saves the current statement. Calls {@link StatementClient#save} if it has never
-     * been saved, or {@link StatementClient#update} if it already exists.
-     */
-    private void saveCurrentStatement(Runnable onComplete) {
-        runAsync(() -> {
-            Integer savedId = StatementContext.getSavedId();
-
-            if (savedId == null) {
-                return statementClient.save(StatementContext.current());
-            }
-
-            statementClient.update(savedId, StatementContext.current());
-            return savedId;
-        }, id -> {
-            StatementContext.markSaved(id);
-            log.info("Statement saved, id={}", id);
-
-            if (onComplete != null) {
-                onComplete.run();
-            }
-        }, ex -> {
-            log.error("Error saving statement", ex);
-            new MessageDialog("Error saving statement", "Unable to save the statement. Please try again.").show();
-        });
-    }
-
-    /**
      * Shows the reset dialog in a loop until the user makes a terminal choice.
      */
     private void showResetDialog() {
-        boolean done = false;
-        while (!done) {
-            switch (new ResetStatementDialog().open()) {
-                case NEW -> {
-                    Runnable doNew = () -> {
-                        StatementContext.init();
-                        rebuildView();
-                        tabPane.getSelectionModel().select(1);
-                    };
-                    if (StatementContext.isDirty()) {
-                        showUnsavedChangesDialog(doNew);
-                    } else {
-                        doNew.run();
-                    }
-                    done = true;
+        switch (new ResetStatementDialog().open()) {
+            case NEW -> {
+                Runnable doNew = () -> {
+                    StatementContext.init();
+                    rebuildView();
+                    tabPane.getSelectionModel().select(1);
+                };
+                if (StatementContext.isDirty()) {
+                    showUnsavedChangesDialog(doNew);
+                } else {
+                    doNew.run();
                 }
-                case OPEN -> {
-                    if (StatementContext.isDirty()) {
-                        showUnsavedChangesDialog(() -> showOpenDialog(result -> {
-                            if (!result) {
-                                showResetDialog();
-                            }
-                        }));
-                    } else {
-                        showOpenDialog(result -> {
-                            if (!result) {
-                                showResetDialog();
-                            }
-                        });
-                    }
-                    done = true;
+            }
+            case OPEN -> {
+                if (StatementContext.isDirty()) {
+                    showUnsavedChangesDialog(() -> showOpenDialog(result -> {
+                        if (!result) {
+                            showResetDialog();
+                        }
+                    }));
+                } else {
+                    showOpenDialog(result -> {
+                        if (!result) {
+                            showResetDialog();
+                        }
+                    });
                 }
-                case CLEAR -> {
-                    clearAllSelections();
-                    tabPane.getSelectionModel().select(2);
-                    done = true;
-                }
-                default -> done = true;
+            }
+            case CLEAR -> {
+                clearAllSelections();
+                tabPane.getSelectionModel().select(2);
             }
         }
     }
@@ -491,39 +453,22 @@ public class MainView {
      * Shows the open-statement dialog and returns {@code true} if a statement was loaded.
      */
     private void showOpenDialog(Consumer<Boolean> onResult) {
-        runAsync(statementClient::getAllStatements,
-                summaries -> {
-                    if (summaries.isEmpty()) {
-                        onResult.accept(false);
-                        return;
-                    }
-                    Integer id = new OpenStatementDialog(summaries).open();
-                    if (id == null) {
-                        onResult.accept(false);
-                        return;
-                    }
-                    runAsync(
-                            () -> {
-                                StatementContext.load(id);
-                                return null;
-                            },
-                            unused -> {
-                                rebuildView();
-                                tabPane.getSelectionModel().select(1);
-                                onResult.accept(true);
-                            },
-                            ex -> {
-                                log.error("Failed to load statement", ex);
-                                onResult.accept(false);
-                            }
-                    );
-                },
-                ex -> {
-                    log.error("Failed to fetch statements", ex);
-                    onResult.accept(false);
-                    new MessageDialog("Failed to fetch statements", "Please try again.").show();
-                }
-        );
+        statementService.fetchAll(summaries -> {
+            if (summaries.isEmpty()) {
+                onResult.accept(false);
+                return;
+            }
+            Integer id = new OpenStatementDialog(summaries).open();
+            if (id == null) {
+                onResult.accept(false);
+                return;
+            }
+            statementService.load(id, () -> {
+                rebuildView();
+                tabPane.getSelectionModel().select(1);
+                onResult.accept(true);
+            });
+        });
     }
 
     /**
@@ -535,7 +480,7 @@ public class MainView {
      */
     private void showUnsavedChangesDialog(Runnable onDiscard) {
         new UnsavedChangesDialog(
-                () -> saveCurrentStatement(onDiscard),
+                () -> statementService.save(onDiscard),
                 onDiscard
         ).open();
     }
@@ -548,30 +493,22 @@ public class MainView {
      *         whether this is the first time the app has been launched
      */
     public void onAppReady(boolean firstLaunch) {
-        log.info("onAppReady firstLaunch={}", firstLaunch);
-        runAsync(
-                statementClient::getAllStatements,
-                saved -> {
-                    switch (new StartupDialog(!saved.isEmpty()).open()) {
-                        case NEW -> {
-                            if (!firstLaunch) {
-                                skipInstructions();
-                            }
-                        }
-                        case OPEN -> showOpenDialog(result -> {
-                            if (!result) {
-                                onAppReady(firstLaunch);
-                            }
-                        });
-                        default -> {
-                        }
+        statementService.fetchAll(saved -> {
+            switch (new StartupDialog(!saved.isEmpty()).open()) {
+                case NEW -> {
+                    if (!firstLaunch) {
+                        skipInstructions();
                     }
-                },
-                ex -> {
-                    log.error("Failed to fetch statements on startup", ex);
-                    new MessageDialog("Failed to Load Statements", "Unable to load statements.\nPlease try again or create a new statement.").show();
                 }
-        );
+                case OPEN -> showOpenDialog(result -> {
+                    if (!result) {
+                        onAppReady(firstLaunch);
+                    }
+                });
+                default -> {
+                }
+            }
+        });
     }
 
     /**
@@ -632,43 +569,5 @@ public class MainView {
         for (int i = 2; i < tabPane.getTabs().size(); i++) {
             tabPane.getTabs().get(i).disableProperty().bind(infoIncomplete);
         }
-    }
-
-    private void showSpinner() {
-        PauseTransition delay = new PauseTransition(Duration.millis(150));
-        delay.setOnFinished(e -> overlay.setVisible(true));
-        overlay.getProperties().put("spinnerDelay", delay);
-        delay.play();
-    }
-
-    private void hideSpinner() {
-        PauseTransition delay = (PauseTransition) overlay.getProperties().get("spinnerDelay");
-        if (delay != null) {
-            delay.stop();
-        }
-        overlay.setVisible(false);
-    }
-
-    private <T> void runAsync(Callable<T> work, Consumer<T> onSuccess, Consumer<Throwable> onFailure) {
-        Task<T> task = new Task<>() {
-            @Override
-            protected T call() throws Exception {
-                return work.call();
-            }
-        };
-
-        task.setOnSucceeded(e -> {
-            log.info("runAsync succeeded");
-            hideSpinner();
-            onSuccess.accept(task.getValue());
-        });
-
-        task.setOnFailed(e -> {
-            hideSpinner();
-            onFailure.accept(task.getException());
-        });
-
-        showSpinner();
-        new Thread(task).start();
     }
 }
