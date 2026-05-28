@@ -45,7 +45,7 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
         packagesCombo.setConverter(new javafx.util.StringConverter<>() {
             @Override
             public String toString(ServicePackage p) {
-                return p == null ? "" : String.format("%-15s %14s", p.getName(), DOLLAR_FORMATTER.format(p.getDefaultCost()));
+                return p == null ? "" : String.format("%-15s %14s", p.name(), DOLLAR_FORMATTER.format(p.defaultCost()));
             }
 
             @Override
@@ -60,7 +60,7 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
                 refreshTotal();
                 return;
             }
-            List<Integer> serviceIds = catalogClient.findServiceIdsForPackage(newPkg.getId());
+            List<Integer> serviceIds = catalogClient.findServiceIdsForPackage(newPkg.id());
             StatementContext.current().getServices().forEach(item -> {
                 boolean inPkg = serviceIds.contains(item.getCatalog().id());
                 item.setInPackage(inPkg);

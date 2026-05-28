@@ -113,8 +113,8 @@ public class SummaryTabController extends BaseController {
 
         addSectionHeader("Services, Facilities & Transportation", 2);
         if (stmt.getSelectedPackage() != null) {
-            addLineItem("Package: " + stmt.getSelectedPackage().getName(),
-                    stmt.getSelectedPackage().getDefaultCost());
+            addLineItem("Package: " + stmt.getSelectedPackage().name(),
+                    stmt.getSelectedPackage().defaultCost());
             selectedServices.stream()
                     .filter(ServiceLineItem::isInPackage)
                     .forEach(s -> addIncludedItem(s.getCatalog().name()));
@@ -138,8 +138,8 @@ public class SummaryTabController extends BaseController {
                 .toList();
 
         addSectionHeader("Merchandise", 3);
-        selectedMerch.forEach(m -> addLineItem(m.getCatalog().getName(),
-                m.getCatalog().isDescriptionRequired() ? m.getDescription() : null,
+        selectedMerch.forEach(m -> addLineItem(m.getCatalog().name(),
+                m.getCatalog().descriptionRequired() ? m.getDescription() : null,
                 m.getPrice(), 3));
 
         addSeparator();
@@ -152,8 +152,8 @@ public class SummaryTabController extends BaseController {
                 .toList();
 
         addSectionHeader("Special Charges", 4);
-        selectedCharges.forEach(sc -> addLineItem(sc.getCatalog().getName(),
-                sc.getCatalog().isDescriptionRequired() ? sc.getDescription() : null,
+        selectedCharges.forEach(sc -> addLineItem(sc.getCatalog().name(),
+                sc.getCatalog().descriptionRequired() ? sc.getDescription() : null,
                 sc.getPrice(), 4));
 
         addSeparator();
@@ -166,7 +166,7 @@ public class SummaryTabController extends BaseController {
                 .toList();
 
         addSectionHeader("Cash Advance Items", 5);
-        selectedCash.forEach(ca -> addLineItem(ca.getCatalog().getName(),
+        selectedCash.forEach(ca -> addLineItem(ca.getCatalog().name(),
                 ca.getProvider().isEmpty() ? null : ca.getProvider(),
                 ca.getAmount(), 5));
 

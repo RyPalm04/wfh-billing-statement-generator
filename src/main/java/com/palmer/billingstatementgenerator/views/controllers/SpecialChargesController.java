@@ -39,23 +39,23 @@ public class SpecialChargesController extends GridTabController<SpecialChargeLin
      */
     @Override
     protected CheckBox addItemRow(SpecialChargeLineItem item, int row) {
-        CheckBox cb = buildCheckBox(item.getCatalog().getName(), row, itemsGrid);
+        CheckBox cb = buildCheckBox(item.getCatalog().name(), row, itemsGrid);
         cb.selectedProperty().bindBidirectional(item.selectedProperty());
 
-        if (item.getCatalog().isDescriptionRequired()) {
+        if (item.getCatalog().descriptionRequired()) {
             TextField desc = buildTextField(18, 1, row, itemsGrid);
-            desc.setId(toId(item.getCatalog().getName()) + "_desc");
+            desc.setId(toId(item.getCatalog().name()) + "_desc");
             desc.textProperty().bindBidirectional(item.descriptionProperty());
             wireTextFieldToCheckBox(desc, cb);
         }
 
-        if (item.getCatalog().getDefaultCost() == null) {
+        if (item.getCatalog().defaultCost() == null) {
             TextField priceField = buildPriceField(item.priceProperty(), row, itemsGrid);
-            priceField.setId(toId(item.getCatalog().getName()) + "_price");
+            priceField.setId(toId(item.getCatalog().name()) + "_price");
             wireTextFieldToCheckBox(priceField, cb);
             addValidationPair(cb, item.priceProperty());
         } else {
-            buildPriceLabel(item.getCatalog().getDefaultCost(), row, itemsGrid);
+            buildPriceLabel(item.getCatalog().defaultCost(), row, itemsGrid);
         }
 
         return cb;

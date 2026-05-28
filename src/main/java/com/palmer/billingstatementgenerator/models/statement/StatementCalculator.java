@@ -7,7 +7,6 @@ import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineIt
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -34,7 +33,7 @@ public final class StatementCalculator {
      */
     public static BigDecimal servicesTotal(Statement stmt) {
         BigDecimal packageCost = stmt.getSelectedPackage() != null
-                ? stmt.getSelectedPackage().getDefaultCost()
+                ? stmt.getSelectedPackage().defaultCost()
                 : BigDecimal.ZERO;
 
         BigDecimal servicesTotal = stmt.getServices().stream()
@@ -107,7 +106,7 @@ public final class StatementCalculator {
     public static BigDecimal salesTax(Statement stmt) {
         BigDecimal taxableTotal = stmt.getMerchandise().stream()
                 .filter(MerchandiseLineItem::isSelected)
-                .filter(m -> m.getCatalog().isSalesTaxable())
+                .filter(m -> m.getCatalog().salesTaxable())
                 .map(MerchandiseLineItem::getPrice)
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);

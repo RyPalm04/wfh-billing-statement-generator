@@ -47,26 +47,26 @@ public class MerchandiseController extends GridTabController<MerchandiseLineItem
      */
     @Override
     protected CheckBox addItemRow(MerchandiseLineItem item, int row) {
-        CheckBox cb = buildCheckBox(item.getCatalog().getName(), row, itemsGrid);
+        CheckBox cb = buildCheckBox(item.getCatalog().name(), row, itemsGrid);
         cb.selectedProperty().bindBidirectional(item.selectedProperty());
 
-        if (item.getCatalog().getPricingMode() == Merchandise.PricingMode.PER_UNIT) {
+        if (item.getCatalog().pricingMode() == Merchandise.PricingMode.PER_UNIT) {
             addPerUnitRow(item, cb, row);
         } else {
-            if (item.getCatalog().isDescriptionRequired()) {
+            if (item.getCatalog().descriptionRequired()) {
                 TextField desc = buildTextField(18, 1, row, itemsGrid);
-                desc.setId(toId(item.getCatalog().getName()) + "_desc");
+                desc.setId(toId(item.getCatalog().name()) + "_desc");
                 desc.textProperty().bindBidirectional(item.descriptionProperty());
                 wireTextFieldToCheckBox(desc, cb);
             }
 
-            if (item.getCatalog().getDefaultCost() == null) {
+            if (item.getCatalog().defaultCost() == null) {
                 TextField priceField = buildPriceField(item.priceProperty(), row, itemsGrid);
-                priceField.setId(toId(item.getCatalog().getName()) + "_price");
+                priceField.setId(toId(item.getCatalog().name()) + "_price");
                 wireTextFieldToCheckBox(priceField, cb);
                 addValidationPair(cb, item.priceProperty());
             } else {
-                buildPriceLabel(item.getCatalog().getDefaultCost(), row, itemsGrid);
+                buildPriceLabel(item.getCatalog().defaultCost(), row, itemsGrid);
             }
         }
 
@@ -88,7 +88,7 @@ public class MerchandiseController extends GridTabController<MerchandiseLineItem
      */
     private void addPerUnitRow(MerchandiseLineItem item, CheckBox cb, int row) {
         Spinner<Integer> spinner = new Spinner<>(1, 999, item.getQuantity());
-        spinner.setId(toId(item.getCatalog().getName()) + "_spinner");
+        spinner.setId(toId(item.getCatalog().name()) + "_spinner");
         spinner.setPrefWidth(70);
         spinner.setEditable(true);
         GridPane.setConstraints(spinner, 1, row);
@@ -101,7 +101,7 @@ public class MerchandiseController extends GridTabController<MerchandiseLineItem
 
         spinner.valueProperty().addListener((obs, oldVal, newVal) -> {
             item.setQuantity(newVal);
-            BigDecimal unit = item.getCatalog().getDefaultCost();
+            BigDecimal unit = item.getCatalog().defaultCost();
             BigDecimal total = unit != null ? unit.multiply(BigDecimal.valueOf(newVal)) : BigDecimal.ZERO;
             item.setPrice(total);
             totalPrice.setText(DOLLAR_FORMATTER.format(total));
@@ -109,7 +109,7 @@ public class MerchandiseController extends GridTabController<MerchandiseLineItem
             refreshTotal();
         });
 
-        BigDecimal unit = item.getCatalog().getDefaultCost();
+        BigDecimal unit = item.getCatalog().defaultCost();
         if (unit != null) {
             item.setPrice(unit.multiply(BigDecimal.valueOf(item.getQuantity())));
         }
@@ -130,7 +130,7 @@ public class MerchandiseController extends GridTabController<MerchandiseLineItem
      * @return a formatted currency string, or an empty string if the unit cost is null
      */
     private String formatUnitTotal(MerchandiseLineItem item) {
-        BigDecimal unit = item.getCatalog().getDefaultCost();
+        BigDecimal unit = item.getCatalog().defaultCost();
         if (unit == null) {
             return "";
         }

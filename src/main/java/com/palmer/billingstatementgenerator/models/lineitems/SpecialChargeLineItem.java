@@ -24,7 +24,7 @@ public class SpecialChargeLineItem {
 
     public SpecialChargeLineItem(SpecialCharge catalog) {
         this.catalog = catalog;
-        this.price = new SimpleObjectProperty<>(catalog.getDefaultCost());
+        this.price = new SimpleObjectProperty<>(catalog.defaultCost());
     }
 
     public SpecialCharge getCatalog() {
