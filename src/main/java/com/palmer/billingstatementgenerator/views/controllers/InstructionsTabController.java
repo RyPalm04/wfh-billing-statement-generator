@@ -60,7 +60,7 @@ public class InstructionsTabController extends BaseController {
         root.setMaxWidth(640);
 
         Image logo = new Image(Objects.requireNonNull(
-                getClass().getResourceAsStream("/img/app-icon.svg")));
+                getClass().getResourceAsStream("/img/app-icon.png")));
         ImageView logoView = new ImageView(logo);
         logoView.setFitWidth(120);
         logoView.setPreserveRatio(true);

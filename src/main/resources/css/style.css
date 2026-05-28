@@ -1,4 +1,4 @@
-/* Wright Funeral Home Theme */
+/* Statement Manager Theme */
 .root {
     -fx-base: #f7f5f2;
     -fx-background: #f7f5f2;
@@ -6,24 +6,24 @@
     -fx-font-family: "Lato";
     -fx-font-size: 13px;
 
-    /* Wright Brand Colors */
-    -wfh-green: #2d6a35;
-    -wfh-green-dark: #1e4a24;
-    -wfh-green-light: #e8f0e9;
-    -wfh-rose: #a0522d;
-    -wfh-rose-dark: #7a3d22;
+    /* Brand Colors */
+    -sm-navy: #1B3A6B;
+    -sm-navy-dark: #122947;
+    -sm-navy-light: #E8EDF5;
+    -sm-gold: #C9A84C;
+    -sm-gold-dark: #A8873A;
 
     /* Neutrals */
-    -wfh-primary: #2c2c2c;
-    -wfh-secondary: #555555;
-    -wfh-muted: #888888;
-    -wfh-border: #d0ccc7;
-    -wfh-bg: #f7f5f2;
+    -sm-primary: #2c2c2c;
+    -sm-secondary: #555555;
+    -sm-muted: #888888;
+    -sm-border: #d0ccc7;
+    -sm-bg: #f7f5f2;
 }
 
 /* General Text */
 .label {
-    -fx-text-fill: -wfh-primary;
+    -fx-text-fill: -sm-primary;
     -fx-font-size: 13px;
 }
 
@@ -32,46 +32,46 @@
     -fx-font-family: "Lato";
     -fx-font-size: 13px;
     -fx-background-color: white;
-    -fx-border-color: -wfh-border;
+    -fx-border-color: -sm-border;
     -fx-border-radius: 3;
     -fx-background-radius: 3;
     -fx-padding: 5 8 5 8;
 }
 
 .text-field:focused, .date-picker:focused .text-field {
-    -fx-border-color: -wfh-green;
+    -fx-border-color: -sm-navy;
 }
 
 .combo-box {
     -fx-font-family: "Lato";
     -fx-font-size: 13px;
     -fx-background-color: white;
-    -fx-border-color: -wfh-border;
+    -fx-border-color: -sm-border;
     -fx-border-radius: 3;
     -fx-background-radius: 3;
 }
 
 .combo-box:focused {
-    -fx-border-color: -wfh-green;
+    -fx-border-color: -sm-navy;
 }
 
 /* Checkboxes */
 .check-box {
     -fx-font-family: "Lato";
     -fx-font-size: 13px;
-    -fx-text-fill: -wfh-primary;
+    -fx-text-fill: -sm-primary;
 }
 
 .check-box .box {
     -fx-background-color: white;
-    -fx-border-color: -wfh-border;
+    -fx-border-color: -sm-border;
     -fx-border-radius: 2;
     -fx-background-radius: 2;
 }
 
 .check-box:selected .box {
-    -fx-background-color: -wfh-green;
-    -fx-border-color: -wfh-green-dark;
+    -fx-background-color: -sm-navy;
+    -fx-border-color: -sm-navy-dark;
 }
 
 .check-box:selected .mark {
@@ -79,14 +79,14 @@
 }
 
 .check-box:hover .box, .check-box:focused .box {
-    -fx-border-color: -wfh-green;
+    -fx-border-color: -sm-navy;
 }
 
 /* Buttons */
 .button {
     -fx-font-family: "Lato";
     -fx-font-weight: bold;
-    -fx-background-color: -wfh-green;
+    -fx-background-color: -sm-navy;
     -fx-text-fill: white;
     -fx-font-size: 13px;
     -fx-padding: 8 18 8 18;
@@ -96,26 +96,26 @@
 }
 
 .button:hover {
-    -fx-background-color: -wfh-green-dark;
+    -fx-background-color: -sm-navy-dark;
 }
 
 .button:disabled {
     -fx-opacity: 0.45;
 }
 
-/* Clear button — subdued, not green */
+/* Clear button — subdued, not blue */
 .button-clear {
     -fx-background-color: transparent;
-    -fx-text-fill: -wfh-secondary;
-    -fx-border-color: -wfh-border;
+    -fx-text-fill: -sm-secondary;
+    -fx-border-color: -sm-border;
     -fx-border-radius: 4;
     -fx-background-radius: 4;
     -fx-font-weight: normal;
 }
 
 .button-clear:hover {
-    -fx-background-color: -wfh-border;
-    -fx-text-fill: -wfh-primary;
+    -fx-background-color: -sm-border;
+    -fx-text-fill: -sm-primary;
 }
 
 /* Tab Strip */
@@ -124,17 +124,17 @@
 }
 
 .tab-pane .tab-header-background {
-    -fx-background-color: -wfh-green-dark;
+    -fx-background-color: -sm-navy-dark;
 }
 
 .tab {
-    -fx-background-color: -wfh-green-dark;
+    -fx-background-color: -sm-navy-dark;
     -fx-padding: 12 16 12 16;
 }
 
 .tab:selected {
-    -fx-background-color: -wfh-green;
-    -fx-border-color: -wfh-rose transparent transparent transparent;
+    -fx-background-color: -sm-navy;
+    -fx-border-color: -sm-gold transparent transparent transparent;
     -fx-border-width: 3 0 0 0;
 }
 
@@ -154,25 +154,25 @@
 .price-label {
     -fx-font-family: "Lato";
     -fx-font-weight: bold;
-    -fx-text-fill: -wfh-rose;
+    -fx-text-fill: -sm-gold-dark;
 }
 
 /* Form Layout */
 .form-grid {
     -fx-padding: 24;
-    -fx-background-color: -wfh-bg;
+    -fx-background-color: -sm-bg;
 }
 
 .field-label {
     -fx-font-family: "Playfair Display";
     -fx-font-weight: bold;
     -fx-font-size: 13px;
-    -fx-text-fill: -wfh-secondary;
+    -fx-text-fill: -sm-secondary;
 }
 
 .field-readonly {
-    -fx-background-color: -wfh-green-light;
-    -fx-text-fill: -wfh-secondary;
+    -fx-background-color: -sm-navy-light;
+    -fx-text-fill: -sm-secondary;
 }
 
 .required-asterisk {
@@ -184,7 +184,7 @@
 /* Dialog */
 .dialog-container {
     -fx-background-color: white;
-    -fx-border-color: -wfh-border;
+    -fx-border-color: -sm-border;
     -fx-border-width: 1;
     -fx-background-radius: 8;
     -fx-border-radius: 8;
@@ -192,7 +192,7 @@
 }
 
 .dialog-header {
-    -fx-background-color: -wfh-green-dark;
+    -fx-background-color: -sm-navy-dark;
     -fx-padding: 12 16 12 16;
     -fx-cursor: move;
     -fx-background-radius: 8 8 0 0;
@@ -208,7 +208,7 @@
 /* Splash */
 .splash-container {
     -fx-background-color: white;
-    -fx-border-color: -wfh-border;
+    -fx-border-color: -sm-border;
     -fx-border-width: 1;
 }
 
@@ -216,13 +216,13 @@
     -fx-font-family: "Playfair Display";
     -fx-font-weight: bold;
     -fx-font-size: 24px;
-    -fx-text-fill: -wfh-green;
+    -fx-text-fill: -sm-navy;
 }
 
 .splash-subtitle {
     -fx-font-family: "Lato Light";
     -fx-font-size: 15px;
-    -fx-text-fill: -wfh-secondary;
+    -fx-text-fill: -sm-secondary;
 }
 
 .progress-bar {
@@ -231,12 +231,12 @@
 }
 
 .progress-bar .track {
-    -fx-background-color: -wfh-border;
+    -fx-background-color: -sm-border;
     -fx-background-radius: 8;
 }
 
 .progress-bar .bar {
-    -fx-background-color: -wfh-green;
+    -fx-background-color: -sm-navy;
     -fx-background-radius: 8;
     -fx-background-insets: 0;
 }
@@ -245,97 +245,97 @@
     -fx-font-family: "Playfair Display";
     -fx-font-weight: bold;
     -fx-font-size: 13px;
-    -fx-text-fill: -wfh-secondary;
+    -fx-text-fill: -sm-secondary;
 }
 
 .app-header {
-    -fx-background-color: -wfh-bg;
-    -fx-border-color: transparent transparent -wfh-border transparent;
+    -fx-background-color: -sm-bg;
+    -fx-border-color: transparent transparent -sm-border transparent;
     -fx-border-width: 0 0 1 0;
 }
 
 .button-bar {
-    -fx-background-color: -wfh-bg;
-    -fx-border-color: -wfh-border transparent transparent transparent;
+    -fx-background-color: -sm-bg;
+    -fx-border-color: -sm-border transparent transparent transparent;
     -fx-border-width: 1 0 0 0;
 }
 
 .price-field {
     -fx-font-family: "Lato";
     -fx-font-weight: bold;
-    -fx-text-fill: -wfh-rose;
+    -fx-text-fill: -sm-gold;
     -fx-pref-column-count: 10;
-    -fx-border-color: -wfh-border;
+    -fx-border-color: -sm-border;
     -fx-border-radius: 3;
     -fx-background-radius: 3;
 }
 
 .price-field:focused {
-    -fx-border-color: -wfh-rose;
+    -fx-border-color: -sm-gold-dark;
 }
 
 .splash-copyright {
     -fx-font-family: "Lato Light";
     -fx-font-size: 11px;
-    -fx-text-fill: -wfh-muted;
+    -fx-text-fill: -sm-muted;
 }
 
 .summary-section-header {
     -fx-font-family: "Playfair Display";
     -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: -wfh-green;
+    -fx-text-fill: -sm-navy;
     -fx-padding: 8 0 4 0;
 }
 
 .summary-label {
     -fx-font-family: "Lato";
     -fx-font-size: 13px;
-    -fx-text-fill: -wfh-primary;
+    -fx-text-fill: -sm-primary;
 }
 
 .summary-value {
     -fx-font-family: "Lato";
     -fx-font-size: 13px;
-    -fx-text-fill: -wfh-secondary;
+    -fx-text-fill: -sm-secondary;
 }
 
 .summary-subtitle {
     -fx-font-family: "Lato";
     -fx-font-size: 11px;
-    -fx-text-fill: -wfh-secondary;
+    -fx-text-fill: -sm-secondary;
 }
 
 .summary-total-label {
     -fx-font-family: "Lato";
     -fx-font-weight: bold;
     -fx-font-size: 13px;
-    -fx-text-fill: -wfh-secondary;
+    -fx-text-fill: -sm-secondary;
 }
 
 .summary-total-value {
     -fx-font-family: "Lato";
     -fx-font-weight: bold;
     -fx-font-size: 13px;
-    -fx-text-fill: -wfh-rose;
+    -fx-text-fill: -sm-gold;
 }
 
 .summary-grand-total-label {
     -fx-font-family: "Playfair Display";
     -fx-font-weight: bold;
     -fx-font-size: 16px;
-    -fx-text-fill: -wfh-green;
+    -fx-text-fill: -sm-navy;
 }
 
 .summary-grand-total-value {
     -fx-font-family: "Playfair Display";
     -fx-font-weight: bold;
     -fx-font-size: 16px;
-    -fx-text-fill: -wfh-green;
+    -fx-text-fill: -sm-navy;
 }
 
 .summary-separator {
-    -fx-background-color: -wfh-border;
+    -fx-background-color: -sm-border;
 }
 
 .summary-clickable {
@@ -343,36 +343,36 @@
 }
 
 .summary-clickable:hover {
-    -fx-text-fill: -wfh-green;
+    -fx-text-fill: -sm-navy;
     -fx-underline: true;
 }
 
 .button-save {
     -fx-background-color: transparent;
-    -fx-text-fill: -wfh-green;
-    -fx-border-color: -wfh-green;
+    -fx-text-fill: -sm-navy;
+    -fx-border-color: -sm-navy;
     -fx-border-radius: 4;
     -fx-background-radius: 4;
     -fx-font-weight: normal;
 }
 
 .button-save:hover {
-    -fx-background-color: -wfh-green-light;
+    -fx-background-color: -sm-navy-light;
 }
 
 .button-reset {
-    -fx-text-fill: -wfh-rose;
-    -fx-border-color: -wfh-rose;
+    -fx-text-fill: -sm-gold;
+    -fx-border-color: -sm-gold;
 }
 
 .button-reset:hover {
-    -fx-background-color: -wfh-rose;
+    -fx-background-color: -sm-gold;
     -fx-text-fill: white;
 }
 
 .button-close {
     -fx-background-color: transparent;
-    -fx-text-fill: -wfh-muted;
+    -fx-text-fill: -sm-muted;
     -fx-border-color: transparent;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
@@ -382,7 +382,7 @@
 }
 
 .button-close:hover {
-    -fx-background-color: -wfh-rose;
+    -fx-background-color: -sm-gold;
     -fx-text-fill: white;
 }
 
@@ -394,28 +394,28 @@
     -fx-font-family: "Playfair Display";
     -fx-font-weight: bold;
     -fx-font-size: 20px;
-    -fx-text-fill: -wfh-green;
+    -fx-text-fill: -sm-navy;
 }
 
 .instructions-subtitle {
     -fx-font-family: "Lato";
     -fx-font-size: 13px;
-    -fx-text-fill: -wfh-secondary;
+    -fx-text-fill: -sm-secondary;
 }
 
 .step-card {
     -fx-background-color: white;
-    -fx-border-color: -wfh-border;
+    -fx-border-color: -sm-border;
     -fx-border-radius: 6;
     -fx-background-radius: 6;
 }
 
 .step-card:hover {
-    -fx-border-color: -wfh-green;
+    -fx-border-color: -sm-navy;
 }
 
 .step-number {
-    -fx-background-color: -wfh-green;
+    -fx-background-color: -sm-navy;
     -fx-text-fill: white;
     -fx-font-family: "Playfair Display";
     -fx-font-weight: bold;
@@ -427,20 +427,20 @@
     -fx-font-family: "Playfair Display";
     -fx-font-weight: bold;
     -fx-font-size: 14px;
-    -fx-text-fill: -wfh-primary;
+    -fx-text-fill: -sm-primary;
 }
 
 .step-description {
     -fx-font-family: "Lato";
     -fx-font-size: 12px;
-    -fx-text-fill: -wfh-secondary;
+    -fx-text-fill: -sm-secondary;
 }
 
 .button-get-started {
     -fx-font-family: "Lato";
     -fx-font-weight: bold;
     -fx-font-size: 14px;
-    -fx-background-color: -wfh-green;
+    -fx-background-color: -sm-navy;
     -fx-text-fill: white;
     -fx-padding: 12 32 12 32;
     -fx-background-radius: 4;
@@ -448,7 +448,7 @@
 }
 
 .button-get-started:hover {
-    -fx-background-color: -wfh-green-dark;
+    -fx-background-color: -sm-navy-dark;
 }
 
 .summary-scroll {
@@ -471,6 +471,6 @@
     -fx-font-family: "Playfair Display";
     -fx-font-weight: bold;
     -fx-font-size: 14px;
-    -fx-text-fill: -wfh-green;
+    -fx-text-fill: -sm-navy;
     -fx-padding: 4 0 0 0;
 }
