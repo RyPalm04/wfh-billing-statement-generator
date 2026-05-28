@@ -35,7 +35,13 @@ public final class PdfService {
           @Override protected Task<PdfResult> createTask() {
               return new Task<>() {
                   @Override protected PdfResult call() {
-                      return client.getPdf(StatementContext.getSavedId());
+                      Integer savedId = StatementContext.getSavedId();
+
+                      if (savedId == null) {
+                          throw new IllegalStateException("Statement must be saved before generating a PDF");
+                      }
+
+                      return client.getPdf(savedId);
                   }
               };
           }
@@ -58,7 +64,13 @@ public final class PdfService {
           @Override protected Task<Void> createTask() {
               return new Task<>() {
                   @Override protected Void call() throws Exception {
-                      PdfResult pdf = client.getPdf(StatementContext.getSavedId());
+                      Integer savedId = StatementContext.getSavedId();
+
+                      if (savedId == null) {
+                          throw new IllegalStateException("Statement must be saved before generating a PDF");
+                      }
+
+                      PdfResult pdf = client.getPdf(savedId);
                       Path temp = Files.createTempFile(pdf.fileName().split("\\.")[0], ".pdf");
                       Files.write(temp, pdf.bytes());
                       Desktop.getDesktop().print(temp.toFile());
@@ -71,14 +83,17 @@ public final class PdfService {
       public void export(Window ownerWindow) {
           fetchService.setOnSucceeded(e -> {
               pendingPdf = fetchService.getValue();
-              FileChooser fc = new FileChooser();
-              fc.setTitle("Save Statement as PDF");
-              fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF files", "*.pdf"));
-              fc.setInitialFileName(pendingPdf.fileName());
-              exportTarget = fc.showSaveDialog(ownerWindow);
+              FileChooser fileChooser = new FileChooser();
+              fileChooser.setTitle("Save Statement as PDF");
+              fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF files", "*.pdf"));
+              fileChooser.setInitialFileName(pendingPdf.fileName());
+
+              exportTarget = fileChooser.showSaveDialog(ownerWindow);
+
               if (exportTarget == null) {
                   return;
               }
+
               writeService.setOnSucceeded(ev ->
                   new MessageDialog("PDF Saved", "PDF saved to:\n" + exportTarget.getAbsolutePath()).show());
               writeService.setOnFailed(ev ->
@@ -90,7 +105,7 @@ public final class PdfService {
           fetchService.restart();
       }
 
-      public void print(Window ownerWindow) {
+      public void print() {
           printService.setOnFailed(e ->
               new MessageDialog("Print Error", "Failed to print PDF.").show());
           printService.restart();

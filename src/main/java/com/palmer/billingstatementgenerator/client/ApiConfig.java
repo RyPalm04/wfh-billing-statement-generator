@@ -19,7 +19,7 @@ public class ApiConfig {
     private static final String CONFIG_PATH = CONFIG_DIR + "/api.properties";
     private static String baseUrl;
     private static HttpClient httpClient;
-    private static String apiKey;
+    private static String apiKey = "";
 
     private ApiConfig() {
     }
@@ -30,7 +30,9 @@ public class ApiConfig {
             return;
         }
 
-        new File(CONFIG_DIR).mkdirs();
+        if (!new File(CONFIG_DIR).mkdirs()) {
+            log.error("Unable to create configuration directory");
+        }
 
         Properties config = loadConfig();
 
