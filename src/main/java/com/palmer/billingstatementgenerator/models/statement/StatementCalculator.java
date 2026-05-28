@@ -7,7 +7,9 @@ import com.palmer.billingstatementgenerator.models.lineitems.SpecialChargeLineIt
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * Stateless utility class for calculating financial totals from a {@link Statement}.
@@ -38,7 +40,7 @@ public final class StatementCalculator {
         BigDecimal servicesTotal = stmt.getServices().stream()
                 .filter(ServiceLineItem::isSelected)
                 .filter(s -> !s.isInPackage())
-                .map(s -> s.getCatalog().getDefaultCost())
+                .map(ServiceLineItem::getPrice)
                 .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
@@ -157,12 +159,9 @@ public final class StatementCalculator {
      * @return the sum, never null
      */
     private static BigDecimal safeAdd(BigDecimal... values) {
-        BigDecimal total = BigDecimal.ZERO;
-        for (BigDecimal v : values) {
-            if (v != null) {
-                total = total.add(v);
-            }
-        }
-        return total.setScale(2, RoundingMode.HALF_UP);
+        return Stream.of(values)
+                .filter(Objects::nonNull)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
     }
 }

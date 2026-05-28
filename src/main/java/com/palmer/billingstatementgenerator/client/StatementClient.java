@@ -25,8 +25,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StatementClient {
     private static final Logger log = LoggerFactory.getLogger(StatementClient.class);
@@ -205,10 +207,11 @@ public class StatementClient {
                 .filter(ServiceLineItem::isSelected)
                 .forEach(item -> {
                     ObjectNode service = services.addObject();
-                    service.put("serviceId", item.getCatalog().getId());
+                    service.put("serviceId", item.getCatalog().id());
                     service.put("inPackage", item.isInPackage());
-                    service.put("name", item.getCatalog().getName());
-                    service.put("price",  item.getCatalog().getDefaultCost());
+                    service.put("name", item.getCatalog().name());
+                    service.put("price",  item.getPrice());
+                    service.put("description", item.getDescription());
                 });
 
         ArrayNode merchandise = body.putArray("merchandise");
@@ -248,15 +251,18 @@ public class StatementClient {
 
     private static void loadServices(Statement statement, JsonNode root) {
         Map<Integer, ServiceLineItem> lineItems = statement.getServices().stream()
-                .collect(Collectors.toMap(i -> i.getCatalog().getId(), Function.identity()));
+                .collect(Collectors.toMap(i -> i.getCatalog().id(), Function.identity()));
         statement.getServices().forEach(line -> {
             line.setSelected(false);
             line.setInPackage(false);
         });
+
         for (JsonNode node : root.get("services")) {
             ServiceLineItem item = lineItems.get(node.get("serviceId").asInt());
             if (item != null) {
                 item.setInPackage(node.get("inPackage").asBoolean());
+                item.setDescription(node.get("description").asText(""));
+                item.setPrice(node.get("price").decimalValue());
                 item.setSelected(true);
             }
         }

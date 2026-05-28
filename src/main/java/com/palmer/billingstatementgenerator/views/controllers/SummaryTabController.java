@@ -19,12 +19,12 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * Controller for the Summary tab, displayed as the final tab before PDF generation.
@@ -88,61 +88,90 @@ public class SummaryTabController extends BaseController {
         var stmt = StatementContext.current();
 
         addSectionHeader("Service Information", 1);
-        addInfoRow("Control Number", String.valueOf(stmt.getControlNumber()), 1);
-        addInfoRow("Services For", stmt.getServicesForName(), 1);
-        addInfoRow("Date of Death", stmt.getDateOfDeath() != null ? stmt.getDateOfDeath().toString() : "", 1);
-        addInfoRow("Place of Death", stmt.getPlaceOfDeath(), 1);
-        addInfoRow("Service Date", stmt.getServiceDate() != null ? stmt.getServiceDate().toString() : "", 1);
+        addInfoRow("Control Number", String.valueOf(stmt.getControlNumber()));
+        addInfoRow("Services For", stmt.getServicesForName());
+        addInfoRow("Date of Death", stmt.getDateOfDeath() != null ? DATE_TIME_FORMATTER.format(stmt.getDateOfDeath()) : "");
+        addInfoRow("Place of Death", stmt.getPlaceOfDeath());
+        addInfoRow("Service Date", stmt.getServiceDate() != null ? DATE_TIME_FORMATTER.format(stmt.getServiceDate()) : "");
 
-        List<ServiceLineItem> selectedServices = stmt.getServices().stream()
-                .filter(ServiceLineItem::isSelected)
-                .collect(Collectors.toList());
-
-        addSectionHeader("Services, Facilities & Transportation", 2);
-        if (stmt.getSelectedPackage() != null) {
-            addLineItem(stmt.getSelectedPackage().getName(),
-                    stmt.getSelectedPackage().getDefaultCost(), 2);
-        }
-        selectedServices.forEach(s ->
-                addLineItem(s.getCatalog().getName(),
-                        s.isInPackage() ? null : s.getCatalog().getDefaultCost(), 2));
-        addTotalRow("Services Total", StatementCalculator.servicesTotal(stmt));
-
-        List<MerchandiseLineItem> selectedMerch = stmt.getMerchandise().stream()
-                .filter(MerchandiseLineItem::isSelected)
-                .collect(Collectors.toList());
-
-        addSectionHeader("Merchandise", 3);
-        selectedMerch.forEach(m -> addLineItem(m.getCatalog().getName(),
-                m.getCatalog().isDescriptionRequired() ? m.getDescription() : null,
-                m.getPrice(), 3));
-        addTotalRow("Merchandise Total", StatementCalculator.merchandiseTotal(stmt));
-
-        List<SpecialChargeLineItem> selectedCharges = stmt.getSpecialCharges().stream()
-                .filter(SpecialChargeLineItem::isSelected)
-                .collect(Collectors.toList());
-
-        addSectionHeader("Special Charges", 4);
-        selectedCharges.forEach(sc -> addLineItem(sc.getCatalog().getName(),
-                sc.getCatalog().isDescriptionRequired() ? sc.getDescription() : null,
-                sc.getPrice(), 4));
-        addTotalRow("Special Charges Total", StatementCalculator.specialChargesTotal(stmt));
-
-        List<CashAdvanceLineItem> selectedCash = stmt.getCashAdvances().stream()
-                .filter(CashAdvanceLineItem::isSelected)
-                .collect(Collectors.toList());
-
-        addSectionHeader("Cash Advance Items", 5);
-        selectedCash.forEach(ca -> addLineItem(ca.getCatalog().getName(),
-                ca.getProvider().isEmpty() ? null : ca.getProvider(),
-                ca.getAmount(), 5));
-        addTotalRow("Cash Advances Total", StatementCalculator.cashAdvancesTotal(stmt));
+        addServiceSection(stmt);
+        addMerchandiseSection(stmt);
+        addSpecialChargeSection(stmt);
+        addCashAdvancesSection(stmt);
 
         addSeparator();
         addTotalRow("Sales Tax", StatementCalculator.salesTax(stmt));
         addTotalRow("Subtotal", StatementCalculator.subtotal(stmt));
         addPaymentRow(stmt);
         addGrandTotalRow("Total", StatementCalculator.finalTotal(stmt));
+    }
+
+    private void addServiceSection(Statement stmt) {
+        List<ServiceLineItem> selectedServices = stmt.getServices().stream()
+                .filter(ServiceLineItem::isSelected)
+                .toList();
+
+        addSectionHeader("Services, Facilities & Transportation", 2);
+        if (stmt.getSelectedPackage() != null) {
+            addLineItem("Package: " + stmt.getSelectedPackage().getName(),
+                    stmt.getSelectedPackage().getDefaultCost());
+            selectedServices.stream()
+                    .filter(ServiceLineItem::isInPackage)
+                    .forEach(s -> addIncludedItem(s.getCatalog().name()));
+        }
+
+        selectedServices.stream()
+                .filter(s -> !s.isInPackage())
+                .forEach(s ->
+                        addLineItem(
+                                s.getCatalog().name(),
+                                s.getDescription() != null && !s.getDescription().isBlank() ? s.getDescription() : null,
+                                s.getPrice(), 2));
+
+        addSeparator();
+        addTotalRow("Services Total", StatementCalculator.servicesTotal(stmt));
+    }
+
+    private void addMerchandiseSection(Statement stmt) {
+        List<MerchandiseLineItem> selectedMerch = stmt.getMerchandise().stream()
+                .filter(MerchandiseLineItem::isSelected)
+                .toList();
+
+        addSectionHeader("Merchandise", 3);
+        selectedMerch.forEach(m -> addLineItem(m.getCatalog().getName(),
+                m.getCatalog().isDescriptionRequired() ? m.getDescription() : null,
+                m.getPrice(), 3));
+
+        addSeparator();
+        addTotalRow("Merchandise Total", StatementCalculator.merchandiseTotal(stmt));
+    }
+
+    private void addSpecialChargeSection(Statement stmt) {
+        List<SpecialChargeLineItem> selectedCharges = stmt.getSpecialCharges().stream()
+                .filter(SpecialChargeLineItem::isSelected)
+                .toList();
+
+        addSectionHeader("Special Charges", 4);
+        selectedCharges.forEach(sc -> addLineItem(sc.getCatalog().getName(),
+                sc.getCatalog().isDescriptionRequired() ? sc.getDescription() : null,
+                sc.getPrice(), 4));
+
+        addSeparator();
+        addTotalRow("Special Charges Total", StatementCalculator.specialChargesTotal(stmt));
+    }
+
+    private void addCashAdvancesSection(Statement stmt) {
+        List<CashAdvanceLineItem> selectedCash = stmt.getCashAdvances().stream()
+                .filter(CashAdvanceLineItem::isSelected)
+                .toList();
+
+        addSectionHeader("Cash Advance Items", 5);
+        selectedCash.forEach(ca -> addLineItem(ca.getCatalog().getName(),
+                ca.getProvider().isEmpty() ? null : ca.getProvider(),
+                ca.getAmount(), 5));
+
+        addSeparator();
+        addTotalRow("Cash Advances Total", StatementCalculator.cashAdvancesTotal(stmt));
     }
 
     /**
@@ -157,7 +186,9 @@ public class SummaryTabController extends BaseController {
         Label header = new Label(title);
         header.getStyleClass().addAll("summary-section-header", "summary-clickable");
         header.setOnMouseClicked(e -> onJumpToTab.accept(tabIndex));
-        root.getChildren().add(header);
+        Region spacer = new Region();
+        spacer.setPrefHeight(32);
+        root.getChildren().addAll(spacer, header);
     }
 
     /**
@@ -168,15 +199,13 @@ public class SummaryTabController extends BaseController {
      *         the field label
      * @param value
      *         the field value
-     * @param tabIndex
-     *         the tab index to navigate to when clicked
      */
-    private void addInfoRow(String label, String value, int tabIndex) {
+    private void addInfoRow(String label, String value) {
         if (value == null || value.isEmpty()) {
             return;
         }
         GridPane row = buildRow();
-        Label lbl = clickableLabel(label, tabIndex);
+        Label lbl = clickableLabel(label, 1);
         lbl.getStyleClass().add("summary-label");
         Label val = new Label(value);
         val.getStyleClass().add("summary-value");
@@ -194,11 +223,9 @@ public class SummaryTabController extends BaseController {
      *         the line item name
      * @param price
      *         the line item price, or null for a blank price
-     * @param tabIndex
-     *         the tab index to navigate to when clicked
      */
-    private void addLineItem(String name, BigDecimal price, int tabIndex) {
-        addLineItem(name, null, price, tabIndex);
+    private void addLineItem(String name, BigDecimal price) {
+        addLineItem(name, null, price, 2);
     }
 
     /**
@@ -217,26 +244,18 @@ public class SummaryTabController extends BaseController {
     private void addLineItem(String name, String subtitle, BigDecimal price, int tabIndex) {
         GridPane row = buildRow();
 
-        Label nameLbl = clickableLabel(name, tabIndex);
-        nameLbl.getStyleClass().add("summary-label");
-
-        javafx.scene.Node nameNode;
-        if (subtitle != null && !subtitle.isBlank()) {
-            Label subLbl = new Label(subtitle);
-            subLbl.getStyleClass().add("summary-subtitle");
-            VBox nameBox = new VBox(2, nameLbl, subLbl);
-            nameNode = nameBox;
-        } else {
-            nameNode = nameLbl;
-        }
+        String displayName = (subtitle != null && !subtitle.isBlank()) ? name + " \u2014 " + subtitle : name;
+        Label nameLabel = clickableLabel(displayName, tabIndex);
+        nameLabel.getStyleClass().add("summary-label");
 
         Label val = new Label(price != null ? DOLLAR_FORMATTER.format(price) : "");
         val.getStyleClass().add("price-label");
-        GridPane.setConstraints(nameNode, 0, 0);
+
+        GridPane.setConstraints(nameLabel, 0, 0);
         GridPane.setConstraints(val, 1, 0);
         GridPane.setHalignment(val, HPos.RIGHT);
         GridPane.setValignment(val, javafx.geometry.VPos.TOP);
-        row.getChildren().addAll(nameNode, val);
+        row.getChildren().addAll(nameLabel, val);
         root.getChildren().add(row);
     }
 
@@ -383,6 +402,19 @@ public class SummaryTabController extends BaseController {
         lbl.getStyleClass().add("summary-clickable");
         lbl.setOnMouseClicked(e -> onJumpToTab.accept(tabIndex));
         return lbl;
+    }
+
+    private void addIncludedItem(String name) {
+        GridPane row = buildRow();
+        Label nameLabel = clickableLabel(name, 2);
+        nameLabel.getStyleClass().add("summary-included-label");
+        Label value = new Label("Included");
+        value.getStyleClass().add("summary-included-value");
+        GridPane.setConstraints(nameLabel, 0, 0);
+        GridPane.setConstraints(value, 1, 0);
+        GridPane.setHalignment(value, HPos.RIGHT);
+        row.getChildren().addAll(nameLabel, value);
+        root.getChildren().add(row);
     }
 
     /**
