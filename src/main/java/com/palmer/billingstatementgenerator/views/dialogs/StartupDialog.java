@@ -50,7 +50,7 @@ public class StartupDialog extends AppDialog<StartupDialog.Choice> {
         HBox buttons = new HBox(16, newStatement, openExisting);
         buttons.setAlignment(Pos.CENTER);
 
-        return contentBox("Wright Funeral Home", message, buttons);
+        return contentBox("Statement Manager", message, buttons);
     }
 
     /**

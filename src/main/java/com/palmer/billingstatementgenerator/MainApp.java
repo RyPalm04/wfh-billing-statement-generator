@@ -39,7 +39,7 @@ public class MainApp extends Application {
         log.info("Application starting");
         if (!AppLock.acquire()) {
             new MessageDialog("Already Running",
-                    "Wright Funeral Home Billing is already open.\n" +
+                    "Statement Manager is already open.\n" +
                     "Only one instance can run at a time.").open();
             Platform.exit();
             return;
@@ -106,7 +106,7 @@ public class MainApp extends Application {
 
             Stage mainStage = new Stage();
             mainStage.setScene(mainScene);
-            mainStage.setTitle("Wright Funeral Home Billing Statement Generator");
+            mainStage.setTitle("Statement Manager");
             mainStage.show();
 
             mainView.wireKeyNav(mainScene);

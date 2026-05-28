@@ -19,7 +19,7 @@ import java.util.function.IntConsumer;
 
 /**
  * Controller for the Instructions tab, displayed as the first tab in the application.
- * Presents a welcome message, the Wright Funeral Home logo, and a step-by-step
+ * Presents a welcome message, the Statement Manager logo, and a step-by-step
  * overview of the billing statement workflow. Provides a Get Started button
  * that navigates the user to the Service Information tab.
  */
@@ -60,7 +60,7 @@ public class InstructionsTabController extends BaseController {
         root.setMaxWidth(640);
 
         Image logo = new Image(Objects.requireNonNull(
-                getClass().getResourceAsStream("/img/wfh splash logo.jpg")));
+                getClass().getResourceAsStream("/img/app-icon.svg")));
         ImageView logoView = new ImageView(logo);
         logoView.setFitWidth(120);
         logoView.setPreserveRatio(true);
@@ -71,7 +71,7 @@ public class InstructionsTabController extends BaseController {
         welcome.setTextAlignment(TextAlignment.CENTER);
 
         Label subtitle = new Label(
-                "Follow the steps below to complete a billing statement for Wright Funeral Home. " +
+                "Follow the steps below to complete a billing statement. " +
                         "Use the tabs at the top to navigate between sections.");
         subtitle.getStyleClass().add("instructions-subtitle");
         subtitle.setWrapText(true);

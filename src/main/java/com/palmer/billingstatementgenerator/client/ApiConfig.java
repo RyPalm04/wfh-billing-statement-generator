@@ -15,7 +15,7 @@ import java.util.Properties;
 public class ApiConfig {
     private static final Logger log = LoggerFactory.getLogger(ApiConfig.class);
 
-    private static final String CONFIG_DIR = System.getProperty("user.home") + "/.wfh-billing";
+    private static final String CONFIG_DIR = System.getProperty("user.home") + "/.statement-generator";
     private static final String CONFIG_PATH = CONFIG_DIR + "/api.properties";
     private static String baseUrl;
     private static HttpClient httpClient;

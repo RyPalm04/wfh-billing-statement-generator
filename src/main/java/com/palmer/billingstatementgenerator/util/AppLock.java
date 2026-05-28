@@ -12,11 +12,11 @@ import java.nio.channels.FileLock;
 /**
  * Manages a per-user OS-level file lock to prevent multiple instances of the
  * application from running simultaneously. The lock file is created at
- * {@code ~/.wfh-billing/.lock} and is automatically released on JVM exit.
+ * {@code ~/.statement-generator/.lock} and is automatically released on JVM exit.
  */
 public final class AppLock {
     private static final Logger log = LoggerFactory.getLogger(AppLock.class);
-    private static final String LOCK_PATH = System.getProperty("user.home") + "/.wfh-billing/.lock";
+    private static final String LOCK_PATH = System.getProperty("user.home") + "/.statement-generator/.lock";
 
     private static FileChannel channel;
     private static FileLock lock;
