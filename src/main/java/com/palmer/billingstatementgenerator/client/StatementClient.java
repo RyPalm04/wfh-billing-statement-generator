@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class StatementClient {
@@ -155,9 +156,13 @@ public class StatementClient {
             }
 
             String disposition = response.headers().firstValue("Content-Disposition").orElse("");
-            String filename = disposition.contains("filename=") ?
-                    disposition.split("filename=")[1].replace("\"", "") :
-                    "statement.pdf";
+
+            String filename = Pattern.compile("filename=\"?([^\"\\s;]+)\"?")
+                    .matcher(disposition)
+                    .results()
+                    .findFirst()
+                    .map(m -> m.group(1))
+                    .orElse("statement.pdf");
 
             return new PdfResult(response.body(), filename);
         } catch (Exception e) {
