@@ -70,7 +70,7 @@ public final class StatementContext {
         int packageId = new StatementClient().load(id, statement);
         if (packageId > 0) {
             ServicePackage pkg = catalogClient.findAllServicePackages().stream()
-                    .filter(p -> p.getId() == packageId)
+                    .filter(p -> p.id() == packageId)
                     .findFirst()
                     .orElse(null);
             statement.setSelectedPackage(pkg);

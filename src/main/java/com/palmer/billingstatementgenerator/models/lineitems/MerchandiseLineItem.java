@@ -28,7 +28,7 @@ public class MerchandiseLineItem {
 
     public MerchandiseLineItem(Merchandise catalog) {
         this.catalog = catalog;
-        this.price = new SimpleObjectProperty<>(catalog.getDefaultCost());
+        this.price = new SimpleObjectProperty<>(catalog.defaultCost());
     }
 
     public Merchandise getCatalog() {

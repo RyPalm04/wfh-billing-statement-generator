@@ -25,10 +25,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class StatementClient {
     private static final Logger log = LoggerFactory.getLogger(StatementClient.class);
@@ -191,11 +189,11 @@ public class StatementClient {
 
         if (statement.getSelectedPackage() != null) {
             ObjectNode servicePackage = body.putObject("servicePackage");
-            servicePackage.put("id", statement.getSelectedPackage().getId());
-            servicePackage.put("sortOrder", statement.getSelectedPackage().getSortOrder());
-            servicePackage.put("name", statement.getSelectedPackage().getName());
-            servicePackage.put("defaultCost",  statement.getSelectedPackage().getDefaultCost());
-            servicePackage.put("legacyPackage", statement.getSelectedPackage().isLegacyPackage());
+            servicePackage.put("id", statement.getSelectedPackage().id());
+            servicePackage.put("sortOrder", statement.getSelectedPackage().sortOrder());
+            servicePackage.put("name", statement.getSelectedPackage().name());
+            servicePackage.put("defaultCost",  statement.getSelectedPackage().defaultCost());
+            servicePackage.put("legacyPackage", statement.getSelectedPackage().legacyPackage());
         } else {
             body.putNull("servicePackage");
         }
@@ -219,8 +217,8 @@ public class StatementClient {
                 .filter(MerchandiseLineItem::isSelected)
                 .forEach(item -> {
                     ObjectNode merchandiseItem = merchandise.addObject();
-                    merchandiseItem.put("merchandiseId", item.getCatalog().getId());
-                    merchandiseItem.put("name", item.getCatalog().getName());
+                    merchandiseItem.put("merchandiseId", item.getCatalog().id());
+                    merchandiseItem.put("name", item.getCatalog().name());
                     merchandiseItem.put("price", item.getPrice());
                     merchandiseItem.put("description", item.getDescription());
                 });
@@ -230,8 +228,8 @@ public class StatementClient {
                 .filter(SpecialChargeLineItem::isSelected)
                 .forEach(item -> {
                     ObjectNode specialChargeItem = specialCharges.addObject();
-                    specialChargeItem.put("specialChargeId", item.getCatalog().getId());
-                    specialChargeItem.put("name", item.getCatalog().getName());
+                    specialChargeItem.put("specialChargeId", item.getCatalog().id());
+                    specialChargeItem.put("name", item.getCatalog().name());
                     specialChargeItem.put("price",  item.getPrice());
                     specialChargeItem.put("description", item.getDescription());
                 });
@@ -241,8 +239,8 @@ public class StatementClient {
                 .filter(CashAdvanceLineItem::isSelected)
                 .forEach(item -> {
                     ObjectNode cashAdvanceItem = cashAdvances.addObject();
-                    cashAdvanceItem.put("cashAdvanceId", item.getCatalog().getId());
-                    cashAdvanceItem.put("name", item.getCatalog().getName());
+                    cashAdvanceItem.put("cashAdvanceId", item.getCatalog().id());
+                    cashAdvanceItem.put("name", item.getCatalog().name());
                     cashAdvanceItem.put("amount", item.getAmount());
                     cashAdvanceItem.put("provider", item.getProvider());
                 });
@@ -270,7 +268,7 @@ public class StatementClient {
 
     private static void loadMerchandise(Statement statement, JsonNode root) {
         Map<Integer, MerchandiseLineItem> lineItems = statement.getMerchandise().stream()
-                .collect(Collectors.toMap(i -> i.getCatalog().getId(), Function.identity()));
+                .collect(Collectors.toMap(i -> i.getCatalog().id(), Function.identity()));
         statement.getMerchandise().forEach(line -> line.setSelected(false));
         for (JsonNode node : root.get("merchandise")) {
             MerchandiseLineItem item = lineItems.get(node.get("merchandiseId").asInt());
@@ -284,7 +282,7 @@ public class StatementClient {
 
     private static void loadSpecialCharges(Statement statement, JsonNode root) {
         Map<Integer, SpecialChargeLineItem> lineItems = statement.getSpecialCharges().stream()
-                .collect(Collectors.toMap(i -> i.getCatalog().getId(), Function.identity()));
+                .collect(Collectors.toMap(i -> i.getCatalog().id(), Function.identity()));
         statement.getSpecialCharges().forEach(line -> line.setSelected(false));
         for (JsonNode node : root.get("specialCharges")) {
             SpecialChargeLineItem item = lineItems.get(node.get("specialChargeId").asInt());
@@ -298,7 +296,7 @@ public class StatementClient {
 
     private static void loadCashAdvances(Statement statement, JsonNode root) {
         Map<Integer, CashAdvanceLineItem> lineItems = statement.getCashAdvances().stream()
-                .collect(Collectors.toMap(i -> i.getCatalog().getId(), Function.identity()));
+                .collect(Collectors.toMap(i -> i.getCatalog().id(), Function.identity()));
         statement.getCashAdvances().forEach(line -> line.setSelected(false));
         for (JsonNode node : root.get("cashAdvances")) {
             CashAdvanceLineItem item = lineItems.get(node.get("cashAdvanceId").asInt());
