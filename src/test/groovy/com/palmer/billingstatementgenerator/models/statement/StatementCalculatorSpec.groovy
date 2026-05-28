@@ -18,7 +18,7 @@ class StatementCalculatorSpec extends Specification {
     }
 
     private static ServiceLineItem serviceItem(BigDecimal cost, boolean selected = false) {
-        def item = new ServiceLineItem(new Service(1, 1, "Service", cost, false))
+        def item = new ServiceLineItem(new Service(1, 1, "Service", cost, false, false))
         item.selected = selected
         item
     }

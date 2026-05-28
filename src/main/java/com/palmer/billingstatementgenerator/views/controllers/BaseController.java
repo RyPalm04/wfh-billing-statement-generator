@@ -18,6 +18,7 @@ import javafx.util.converter.NumberStringConverter;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,6 +28,11 @@ import java.util.List;
  * binding helpers used across all tab controllers.
  */
 public abstract class BaseController {
+
+    /**
+     * Date formatter for displaying dates in Month/Day/Year format
+     */
+    protected static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
     /**
      * Currency formatter for displaying monetary values.

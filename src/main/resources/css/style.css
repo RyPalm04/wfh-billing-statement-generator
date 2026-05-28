@@ -474,3 +474,17 @@
     -fx-text-fill: -sm-navy;
     -fx-padding: 4 0 0 0;
 }
+
+.summary-included-label {
+    -fx-font-family: "Lato Light";
+    -fx-font-size: 12px;
+    -fx-text-fill: -sm-secondary;
+    -fx-font-style: italic;
+    -fx-padding: 0 0 0 16;
+}
+
+.summary-included-value {
+    -fx-font-family: "Lato Light";
+    -fx-font-size: 12px;
+    -fx-text-fill: -sm-gold;
+}

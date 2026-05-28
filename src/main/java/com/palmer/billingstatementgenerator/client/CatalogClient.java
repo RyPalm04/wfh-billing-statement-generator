@@ -37,7 +37,8 @@ public class CatalogClient {
                         node.get("id").asInt(),
                         node.get("sortOrder").asInt(),
                         node.get("name").asText(),
-                        node.get("defaultCost").decimalValue(),
+                        node.get("defaultCost").isNull() ? null : node.get("defaultCost").decimalValue(),
+                        node.get("requiresDescription").asBoolean(),
                         node.get("includedInPackage").asBoolean()));
             }
             return result;
@@ -78,7 +79,7 @@ public class CatalogClient {
                         node.get("id").asInt(),
                         node.get("sortOrder").asInt(),
                         node.get("name").asText(),
-                        node.get("defaultCost").decimalValue(),
+                        node.get("defaultCost").isNull() ? null : node.get("defaultCost").decimalValue(),
                         node.get("requiresDescription").asBoolean(),
                         node.get("salesTaxable").asBoolean(),
                         Merchandise.PricingMode.valueOf(node.get("pricingMode").asText())));
@@ -102,7 +103,7 @@ public class CatalogClient {
                         node.get("id").asInt(),
                         node.get("sortOrder").asInt(),
                         node.get("name").asText(),
-                        node.get("defaultCost").decimalValue(),
+                        node.get("defaultCost").isNull() ? null : node.get("defaultCost").decimalValue(),
                         node.get("legacyPackage").asBoolean()));
             }
 
@@ -124,7 +125,7 @@ public class CatalogClient {
                         node.get("id").asInt(),
                         node.get("sortOrder").asInt(),
                         node.get("name").asText(),
-                        node.get("defaultCost").decimalValue(),
+                        node.get("defaultCost").isNull() ? null : node.get("defaultCost").decimalValue(),
                         node.get("requiresDescription").asBoolean()));
             }
 

@@ -8,6 +8,7 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
 import java.util.List;
@@ -61,7 +62,7 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
             }
             List<Integer> serviceIds = catalogClient.findServiceIdsForPackage(newPkg.getId());
             StatementContext.current().getServices().forEach(item -> {
-                boolean inPkg = serviceIds.contains(item.getCatalog().getId());
+                boolean inPkg = serviceIds.contains(item.getCatalog().id());
                 item.setInPackage(inPkg);
                 item.setSelected(inPkg);
             });
@@ -106,10 +107,22 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
      */
     @Override
     protected CheckBox addItemRow(ServiceLineItem item, int row) {
-        CheckBox cb = buildCheckBox(item.getCatalog().getName(), row, itemsGrid);
-        buildPriceLabel(item.getCatalog().getDefaultCost(), row, itemsGrid);
+        CheckBox cb = buildCheckBox(item.getCatalog().name(), row, itemsGrid);
         cb.selectedProperty().bindBidirectional(item.selectedProperty());
         cb.disableProperty().bind(item.inPackageProperty());
+
+        if (item.getCatalog().requiresDescription()) {
+            TextField description = buildTextField(18, 1, row, itemsGrid);
+            description.textProperty().bindBidirectional(item.descriptionProperty());
+            wireTextFieldToCheckBox(description, cb);
+
+            TextField priceField = buildPriceField(item.priceProperty(), row, itemsGrid);
+            wireTextFieldToCheckBox(priceField, cb);
+            addValidationPair(cb, item.priceProperty());
+        } else {
+            buildPriceLabel(item.getCatalog().defaultCost(), row, itemsGrid);
+        }
+
         return cb;
     }
 
