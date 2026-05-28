@@ -37,12 +37,12 @@ public class SplashView {
         container.setAlignment(Pos.CENTER);
         container.setPrefSize(500, 400);
 
-        Image logo = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/wfh splash logo.jpg")));
+        Image logo = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/app-icon.png")));
         ImageView imageView = new ImageView(logo);
         imageView.setFitWidth(400);
         imageView.setPreserveRatio(true);
 
-        Label titleLabel = new Label("Wright Funeral Home");
+        Label titleLabel = new Label("Statement Manager");
         titleLabel.getStyleClass().add("splash-title");
 
         Label subtitleLabel = new Label("Billing Statement Generator");

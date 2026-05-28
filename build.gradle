@@ -67,7 +67,7 @@ test {
 run {
     if (org.gradle.internal.os.OperatingSystem.current().macOsX) {
         jvmArgs "-Xdock:icon=${projectDir}/packaging/app.icns",
-                '-Xdock:name=WFH Billing Statement Generator'
+                '-Xdock:name=Statement Manager'
     }
 }
 
@@ -87,9 +87,9 @@ tasks.register('jpackageApp', Exec) {
 
     commandLine 'jpackage',
             '--type', os.macOsX ? 'dmg' : (os.windows ? 'exe' : 'deb'),
-            '--name', 'WFH Billing Statement Generator',
+            '--name', 'Statement Manager',
             '--app-version', appVersionBase,
-            '--vendor', 'Wright Funeral Home',
+            '--vendor', 'Statement Manager',
             '--icon', iconFile,
             '--input', libDir.absolutePath,
             '--main-jar', "${rootProject.name}-${project.version}.jar",
@@ -101,14 +101,14 @@ tasks.register('jpackageApp', Exec) {
             def ext = os.macOsX ? 'dmg' : (os.windows ? 'exe' : 'deb')
             def found = outputDir.listFiles()?.find { it.name.endsWith(".${ext}") }
             if (found) {
-                found.renameTo(new File(outputDir, "WFH Billing Statement Generator-${appVersion}.${ext}"))
+                found.renameTo(new File(outputDir, "Statement Manager-${appVersion}.${ext}"))
             }
         }
     }
 }
 
 javadoc {
-    title = 'WFH Billing Statement Generator'
+    title = 'Statement Manager'
     options.encoding = 'UTF-8'
     options.memberLevel = JavadocMemberLevel.PROTECTED
     options.addStringOption('Xdoclint:none', '-quiet')
