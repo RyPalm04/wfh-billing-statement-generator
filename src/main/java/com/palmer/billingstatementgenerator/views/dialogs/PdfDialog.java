@@ -33,7 +33,7 @@ public class PdfDialog extends AppDialog<Void> {
         printButton.setId("pdfPrintButton");
         printButton.setOnAction(e -> {
             close();
-            pdfService.print(getOwner());
+            pdfService.print();
         });
 
         Button cancel = new Button("Cancel");
