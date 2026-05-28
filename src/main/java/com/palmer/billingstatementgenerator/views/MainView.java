@@ -212,7 +212,7 @@ public class MainView {
      */
     private void createLayout() {
         Image logo = new Image(Objects.requireNonNull(
-                getClass().getResourceAsStream("/img/wfh splash logo.jpg")));
+                getClass().getResourceAsStream("/img/app-icon.png")));
         ImageView logoView = new ImageView(logo);
         logoView.setFitWidth(80);
         logoView.setPreserveRatio(true);

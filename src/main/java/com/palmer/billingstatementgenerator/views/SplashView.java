@@ -1,5 +1,6 @@
 package com.palmer.billingstatementgenerator.views;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -35,11 +36,12 @@ public class SplashView {
         container = new VBox(20);
         container.getStyleClass().add("splash-container");
         container.setAlignment(Pos.CENTER);
-        container.setPrefSize(500, 400);
+        container.setPrefSize(400, 500);
+        container.setPadding(new Insets(24, 0, 0, 0));
 
         Image logo = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/app-icon.png")));
         ImageView imageView = new ImageView(logo);
-        imageView.setFitWidth(400);
+        imageView.setFitWidth(250);
         imageView.setPreserveRatio(true);
 
         Label titleLabel = new Label("Statement Manager");
