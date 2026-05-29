@@ -8,6 +8,7 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
@@ -76,8 +77,17 @@ public class ServicesController extends GridTabController<ServiceLineItem> {
         GridPane.setColumnSpan(packagesCombo, 2);
         pane.getChildren().add(packagesCombo);
 
+        Label reasonLabel = new Label("Reason for Embalming:");
+        reasonLabel.getStyleClass().add("field-label");
+        TextField reasonField = new TextField();
+        reasonField.textProperty().bindBidirectional(StatementContext.current().reasonForEmbalmingProperty());
+        reasonField.setMaxWidth(200);
+        GridPane.setConstraints(reasonLabel, 0, 1);
+        GridPane.setConstraints(reasonField, 1, 1);
+        pane.getChildren().addAll(reasonLabel, reasonField);
+
         GridPane itemsPane = super.buildView();
-        GridPane.setConstraints(itemsPane, 0, 1);
+        GridPane.setConstraints(itemsPane, 0, 2);
         GridPane.setColumnSpan(itemsPane, 2);
         pane.getChildren().add(itemsPane);
 
