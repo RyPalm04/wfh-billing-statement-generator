@@ -7,13 +7,8 @@ import java.time.LocalDateTime;
  * Lightweight summary of a saved statement, used to populate the Open Existing dialog.
  * Contains only the fields needed for display — the full statement is loaded on demand.
  */
-public class SavedStatementSummary {
-
-    private final int id;
-    private final int controlNumber;
-    private final String servicesForName;
-    private final LocalDate serviceDate;
-    private final LocalDateTime savedAt;
+public record SavedStatementSummary(int id, int controlNumber, String servicesForName, LocalDate serviceDate,
+                                    LocalDateTime savedAt) {
 
     /**
      * @param id
@@ -27,47 +22,46 @@ public class SavedStatementSummary {
      * @param savedAt
      *         the timestamp when the statement was last saved
      */
-    public SavedStatementSummary(int id, int controlNumber, String servicesForName,
-                                 LocalDate serviceDate, LocalDateTime savedAt) {
-        this.id = id;
-        this.controlNumber = controlNumber;
-        this.servicesForName = servicesForName;
-        this.serviceDate = serviceDate;
-        this.savedAt = savedAt;
+    public SavedStatementSummary {
     }
 
     /**
      * @return the database ID
      */
-    public int getId() {
+    @Override
+    public int id() {
         return id;
     }
 
     /**
      * @return the control number
      */
-    public int getControlNumber() {
+    @Override
+    public int controlNumber() {
         return controlNumber;
     }
 
     /**
      * @return the services-for name
      */
-    public String getServicesForName() {
+    @Override
+    public String servicesForName() {
         return servicesForName;
     }
 
     /**
      * @return the service date, or null if not set
      */
-    public LocalDate getServiceDate() {
+    @Override
+    public LocalDate serviceDate() {
         return serviceDate;
     }
 
     /**
      * @return the timestamp when the statement was last saved
      */
-    public LocalDateTime getSavedAt() {
+    @Override
+    public LocalDateTime savedAt() {
         return savedAt;
     }
 }
