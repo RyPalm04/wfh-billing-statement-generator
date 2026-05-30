@@ -37,6 +37,11 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get install -y fakeroot
 
+      - name: Inject API config
+        run: |
+          echo "api.base-url=${{ secrets.API_BASE_URL }}" >> src/main/resources/api.properties
+          echo "api.key=${{ secrets.DESKTOP_API_KEY }}" >> src/main/resources/api.properties
+
       - name: Build and package
         run: ./gradlew installDist jpackageApp
 

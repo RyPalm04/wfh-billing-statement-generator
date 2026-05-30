@@ -99,7 +99,7 @@ tasks.register('jpackageApp', Exec) {
             '--main-class', 'com.palmer.billingstatementgenerator.Launcher',
             '--dest', outputDir.absolutePath,
     ]
-    if (os.windows) args += ['--win-per-user-install']
+    if (os.windows) args += ['--win-shortcut', '--win-menu']
     commandLine args
 
     doLast {

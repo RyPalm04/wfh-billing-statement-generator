@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -88,27 +88,30 @@ public class ApiConfig {
 
     private static Properties loadConfig() {
         File configFile = new File(CONFIG_PATH);
-        if (!configFile.exists()) {
-            writeConfigTemplate(configFile);
-            log.error("API config file does not exist");
-            throw new IllegalStateException("API configuration not found. A template has been created at " + CONFIG_PATH + ". Please set api.base-url and restart.");
+        if (configFile.exists()) {
+            Properties props = new Properties();
+            try (FileInputStream fis = new FileInputStream(configFile)) {
+                props.load(fis);
+            } catch (IOException e) {
+                log.error("Failed to read API configuration from {}", CONFIG_PATH, e);
+                throw new RuntimeException("Failed to read API configuration from " + CONFIG_PATH, e);
+            }
+            return props;
         }
 
-        Properties props = new Properties();
-        try (FileInputStream fis = new FileInputStream(configFile)) {
-            props.load(fis);
+        try (InputStream is = ApiConfig.class.getResourceAsStream("/api.properties")) {
+            if (is != null) {
+                Properties props = new Properties();
+                props.load(is);
+                log.info("Loaded API config from bundled defaults");
+                return props;
+            }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read API configuration from " + CONFIG_PATH, e);
+            log.error("Failed to read bundled API configuration", e);
+            throw new RuntimeException("Failed to read bundled API configuration", e);
         }
-        return props;
-    }
 
-    private static void writeConfigTemplate(File configFile) {
-        try (FileWriter w = new FileWriter(configFile)) {
-            w.write("api.base-url=http://localhost:18080\n");
-            w.write("# api.service-account-key=/path/to/service-account.json\n");
-        } catch (IOException e) {
-            log.warn("Could not write config template to {}", CONFIG_PATH, e);
-        }
+        log.error("No API configuration found — expected user config at {} or bundled api.properties", CONFIG_PATH);
+        throw new IllegalStateException("API configuration not found. Please create " + CONFIG_PATH + " with api.base-url set.");
     }
 }
