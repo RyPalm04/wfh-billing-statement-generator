@@ -9,6 +9,8 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -16,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public final class PdfService {
+      private static final Logger log = LoggerFactory.getLogger(PdfService.class);
       private static PdfService INSTANCE;
       private final StatementClient client = new StatementClient();
       private PdfResult pendingPdf;
@@ -70,10 +73,14 @@ public final class PdfService {
                           throw new IllegalStateException("Statement must be saved before generating a PDF");
                       }
 
+                      log.debug("Print requested for statement id={}", savedId);
                       PdfResult pdf = client.getPdf(savedId);
                       Path temp = Files.createTempFile(pdf.fileName().split("\\.")[0], ".pdf");
+                      log.debug("Writing PDF to temp file: {}", temp);
                       Files.write(temp, pdf.bytes());
+                      log.debug("Invoking Desktop.print() on {}", temp);
                       Desktop.getDesktop().print(temp.toFile());
+                      log.debug("Desktop.print() returned");
                       return null;
                   }
               };
@@ -106,8 +113,10 @@ public final class PdfService {
       }
 
       public void print() {
-          printService.setOnFailed(e ->
-              new MessageDialog("Print Error", "Failed to print PDF.").show());
+          printService.setOnFailed(e -> {
+              log.error("Print service failed", printService.getException());
+              new MessageDialog("Print Error", "Failed to print PDF.").show();
+          });
           printService.restart();
       }
 

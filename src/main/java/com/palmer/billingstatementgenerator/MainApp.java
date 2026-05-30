@@ -107,6 +107,7 @@ public class MainApp extends Application {
             Stage mainStage = new Stage();
             mainStage.setScene(mainScene);
             mainStage.setTitle("Statement Manager");
+            mainStage.getIcons().addAll(primaryStage.getIcons());
             mainStage.show();
 
             mainView.wireKeyNav(mainScene);
