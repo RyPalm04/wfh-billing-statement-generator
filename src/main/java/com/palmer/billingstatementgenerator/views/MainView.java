@@ -14,6 +14,7 @@ import com.palmer.billingstatementgenerator.views.controllers.ServicesController
 import com.palmer.billingstatementgenerator.views.controllers.SpecialChargesController;
 import com.palmer.billingstatementgenerator.views.controllers.SummaryTabController;
 import com.palmer.billingstatementgenerator.views.dialogs.AppDialog;
+import com.palmer.billingstatementgenerator.views.dialogs.FeedbackDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.IncompleteAlertDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.MessageDialog;
 import com.palmer.billingstatementgenerator.views.dialogs.OpenStatementDialog;
@@ -25,8 +26,11 @@ import com.palmer.billingstatementgenerator.views.dialogs.UnsavedChangesDialog;
 import com.palmer.billingstatementgenerator.views.tabs.GeneratorTabs;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -48,6 +52,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +72,6 @@ public class MainView {
     private static final String FXML_BASE = "/views/";
     private final StatementService statementService = StatementService.getInstance();
     private StackPane rootPane;
-    private StackPane overlay;
     private BorderPane root;
     private TabPane tabPane;
     private Button prevButton;
@@ -169,19 +174,11 @@ public class MainView {
      * Creates the shared navigation buttons and applies their base style classes.
      */
     private void createButtonBar() {
-        prevButton = new Button("Previous");
-        prevButton.setId("prevButton");
-        clearButton = new Button("Clear Selections");
-        clearButton.setId("clearButton");
-        saveButton = new Button("Save");
-        saveButton.setId("saveButton");
-        nextButton = new Button("Next");
-        nextButton.setId("nextButton");
-        resetButton = new Button("Reset");
-        resetButton.setId("resetButton");
-        clearButton.getStyleClass().add("button-clear");
-        saveButton.getStyleClass().add("button-save");
-        resetButton.getStyleClass().add("button-reset");
+        prevButton = createButton("Previous", "prevButton", "");
+        clearButton = createButton("Clear Selections", "clearButton", "button-clear");
+        saveButton = createButton("Save", "saveButton", "button-save");
+        nextButton = createButton("Next", "nextButton", "");
+        resetButton = createButton("Reset", "resetButton",  "button-reset");
         resetButton.setVisible(false);
     }
 
@@ -216,34 +213,20 @@ public class MainView {
      * tab pane in the center, and button bar at the bottom.
      */
     private void createLayout() {
-        Image logo = new Image(Objects.requireNonNull(
-                getClass().getResourceAsStream("/img/app-icon.png")));
+        Image logo = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/img/app-icon.png")));
         ImageView logoView = new ImageView(logo);
         logoView.setFitWidth(80);
         logoView.setPreserveRatio(true);
         logoView.setOpacity(0.9);
 
-        Button closeBtn = new Button("✕");
-        closeBtn.setId("closeButton");
-        closeBtn.getStyleClass().add("button-close");
-        closeBtn.setOnAction(e -> {
-            Stage stage = (Stage) root.getScene().getWindow();
-            if (StatementContext.isDirty()) {
-                showUnsavedChangesOnClose(stage);
-            } else {
-                stage.close();
-            }
-        });
-
-        Button settingsBtn = new Button("⚙");
-        settingsBtn.setId("settingsButton");
-        settingsBtn.getStyleClass().add("button-close");
-        settingsBtn.setOnAction(e -> new SettingsDialog().open());
+        Button closeBtn = createButton(new FontIcon(FontAwesomeSolid.TIMES), "closeButton", "button-close", e -> closeAppAction());
+        Button settingsBtn = createButton(new FontIcon(FontAwesomeSolid.COG), "settingsButton", "button-close", e -> new SettingsDialog().open());
+        Button feedbackBtn = createButton(new FontIcon(FontAwesomeSolid.COMMENT_ALT), "feedbackButton", "button-close", e -> openFeedbackDialogAction());
 
         Region headerSpacer = new Region();
         HBox.setHgrow(headerSpacer, Priority.ALWAYS);
 
-        HBox header = new HBox(logoView, headerSpacer, settingsBtn, closeBtn);
+        HBox header = new HBox(logoView, headerSpacer, feedbackBtn, settingsBtn, closeBtn);
         header.setPadding(new Insets(10, 16, 10, 16));
         header.setAlignment(Pos.CENTER_LEFT);
         header.getStyleClass().add("app-header");
@@ -256,7 +239,7 @@ public class MainView {
         ProgressIndicator spinner = new ProgressIndicator();
         spinner.setMaxSize(100, 100);
         spinner.setStyle("-fx-accent: -sm-navy;");
-        overlay = new StackPane(spinner);
+        StackPane overlay = new StackPane(spinner);
         overlay.setBackground(new Background(new BackgroundFill(
                 Color.rgb(0, 0, 0, 0.35),
                 CornerRadii.EMPTY,
@@ -264,6 +247,36 @@ public class MainView {
         )));
         overlay.visibleProperty().bind(statementService.runningProperty().or(PdfService.getInstance().runningProperty()));
         rootPane = new StackPane(root, overlay);
+    }
+
+    private Button createButton(String name, String btnId, String styleClass) {
+        Button button = createButton(null, btnId, styleClass, e -> {});
+        button.setText(name);
+        return button;
+    }
+
+    private Button createButton(Node graphic, String btnId, String styleClass, EventHandler<ActionEvent> onAction) {
+        Button button = new Button();
+        button.setGraphic(graphic);
+        button.setId(btnId);
+        button.getStyleClass().add(styleClass);
+        button.setOnAction(onAction);
+
+        return button;
+    }
+
+    private void closeAppAction() {
+        Stage stage = (Stage) root.getScene().getWindow();
+        if (StatementContext.isDirty()) {
+            showUnsavedChangesOnClose(stage);
+        } else {
+            stage.close();
+        }
+    }
+
+    private void openFeedbackDialogAction() {
+        String tab = tabPane.getSelectionModel().getSelectedItem().getText();
+        new FeedbackDialog(tab).open();
     }
 
     /**
@@ -370,6 +383,9 @@ public class MainView {
                     e.consume();
                 } else if (e.getCode() == KeyCode.LEFT) {
                     tabPane.getSelectionModel().selectPrevious();
+                    e.consume();
+                } else if (e.getCode() == KeyCode.F) {
+                    openFeedbackDialogAction();
                     e.consume();
                 }
             }
@@ -489,26 +505,9 @@ public class MainView {
      * Called by the application after startup completes. Shows the launch dialog
      * and navigates based on the user's choice.
      *
-     * @param firstLaunch
-     *         whether this is the first time the app has been launched
      */
-    public void onAppReady(boolean firstLaunch) {
-        statementService.fetchAll(saved -> {
-            switch (new StartupDialog(!saved.isEmpty()).open()) {
-                case NEW -> {
-                    if (!firstLaunch) {
-                        skipInstructions();
-                    }
-                }
-                case OPEN -> showOpenDialog(result -> {
-                    if (!result) {
-                        onAppReady(firstLaunch);
-                    }
-                });
-                default -> {
-                }
-            }
-        });
+    public void onAppReady() {
+        statementService.fetchAll(saved -> new StartupDialog(!saved.isEmpty()).open());
     }
 
     /**
@@ -518,11 +517,11 @@ public class MainView {
     private void clearAllSelections() {
         log.info("Clearing all selections");
         tabPane.getTabs().stream()
-                .filter(t -> t instanceof GeneratorTabs)
-                .map(t -> ((GeneratorTabs) t).getController())
-                .filter(Objects::nonNull)
-                .filter(c -> c != summaryController)
-                .forEach(BaseController::reset);
+               .filter(t -> t instanceof GeneratorTabs)
+               .map(t -> ((GeneratorTabs) t).getController())
+               .filter(Objects::nonNull)
+               .filter(c -> c != summaryController)
+               .forEach(BaseController::reset);
         summaryController.refresh();
     }
 

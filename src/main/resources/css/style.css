@@ -376,7 +376,6 @@
     -fx-border-color: transparent;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-padding: 2 8 2 8;
     -fx-background-radius: 4;
     -fx-cursor: hand;
 }
@@ -386,8 +385,20 @@
     -fx-text-fill: white;
 }
 
-#settingsButton {
-    -fx-font-size: 26px;
+#closeButton:hover {
+    -fx-background-color: #C0392B;
+}
+
+.button-close .ikonli-font-icon {
+    -fx-icon-color: -sm-navy;
+}
+
+.button-close:hover .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+#closeButton:hover .ikonli-font-icon {
+    -fx-icon-color: white;
 }
 
 .instructions-title {
