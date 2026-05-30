@@ -22,7 +22,7 @@ def resolveQualifier = {
 ext {
     junitVersion = '5.7.1'
     spockVersion = '2.3-groovy-4.0'
-    appVersionBase = '1.1.0'
+    appVersionBase = '2.0.0'
     appVersionQualifier = resolveQualifier()
     appVersion = appVersionQualifier ? "${appVersionBase}-${appVersionQualifier}" : appVersionBase
 }
