@@ -2,7 +2,6 @@ name: Package
 
 on:
   push:
-    branches: [ master, develop, beta ]
     tags: [ 'v*' ]
   workflow_dispatch:
 
@@ -64,7 +63,7 @@ jobs:
       - name: Download Windows installer
         uses: actions/download-artifact@v4
         with:
-          name: installer-exe
+          name: installer-msi
           path: artifacts/windows
 
       - name: Download Linux installer
