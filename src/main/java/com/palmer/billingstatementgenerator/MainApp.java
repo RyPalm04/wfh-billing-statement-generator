@@ -112,7 +112,7 @@ public class MainApp extends Application {
             mainView.wireKeyNav(mainScene);
             mainView.setEventTracker(new WorkflowEventTracker(mainStage, mainView.getTabPane()));
             mainView.fitWindowToLargestTab();
-            mainView.onAppReady(firstLaunch);
+            mainView.onAppReady();
 
             mainStage.setOnCloseRequest(event -> {
                 if (StatementContext.isDirty()) {
