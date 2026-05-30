@@ -87,8 +87,9 @@ tasks.register('jpackageApp', Exec) {
 
     def iconFile = os.macOsX ? 'packaging/app.icns' : (os.windows ? 'packaging/app.ico' : 'packaging/app.png')
 
-    commandLine 'jpackage',
-            '--type', os.macOsX ? 'dmg' : (os.windows ? 'exe' : 'deb'),
+    def args = [
+            'jpackage',
+            '--type', os.macOsX ? 'dmg' : (os.windows ? 'msi' : 'deb'),
             '--name', 'Statement Manager',
             '--app-version', appVersionBase,
             '--vendor', 'Statement Manager',
@@ -96,11 +97,14 @@ tasks.register('jpackageApp', Exec) {
             '--input', libDir.absolutePath,
             '--main-jar', "${rootProject.name}-${project.version}.jar",
             '--main-class', 'com.palmer.billingstatementgenerator.Launcher',
-            '--dest', outputDir.absolutePath
+            '--dest', outputDir.absolutePath,
+    ]
+    if (os.windows) args += ['--win-per-user-install']
+    commandLine args
 
     doLast {
         if (appVersionQualifier) {
-            def ext = os.macOsX ? 'dmg' : (os.windows ? 'exe' : 'deb')
+            def ext = os.macOsX ? 'dmg' : (os.windows ? 'msi' : 'deb')
             def found = outputDir.listFiles()?.find { it.name.endsWith(".${ext}") }
             if (found) {
                 found.renameTo(new File(outputDir, "Statement Manager-${appVersion}.${ext}"))

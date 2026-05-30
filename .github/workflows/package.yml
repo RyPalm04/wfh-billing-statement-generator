@@ -17,7 +17,7 @@ jobs:
           - os: macos-latest
             installer-type: dmg
           - os: windows-latest
-            installer-type: exe
+            installer-type: msi
           - os: ubuntu-latest
             installer-type: deb
     runs-on: ${{ matrix.os }}
