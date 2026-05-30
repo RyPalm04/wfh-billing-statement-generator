@@ -469,21 +469,27 @@ public class MainView {
      * Shows the open-statement dialog and returns {@code true} if a statement was loaded.
      */
     private void showOpenDialog(Consumer<Boolean> onResult) {
+        log.debug("showOpenDialog called");
         statementService.fetchAll(summaries -> {
+            log.debug("fetchAll callback fired, summaries={}", summaries.size());
             if (summaries.isEmpty()) {
                 onResult.accept(false);
                 return;
             }
-            Integer id = new OpenStatementDialog(summaries).open();
-            if (id == null) {
-                onResult.accept(false);
-                return;
+            try {
+                Integer id = new OpenStatementDialog(summaries).open();
+                if (id == null) {
+                    onResult.accept(false);
+                    return;
+                }
+                statementService.load(id, () -> {
+                    rebuildView();
+                    tabPane.getSelectionModel().select(1);
+                    onResult.accept(true);
+                });
+            } catch (Exception e) {
+                log.error("OpenStatementDialog failed", e);
             }
-            statementService.load(id, () -> {
-                rebuildView();
-                tabPane.getSelectionModel().select(1);
-                onResult.accept(true);
-            });
         });
     }
 
@@ -507,7 +513,17 @@ public class MainView {
      *
      */
     public void onAppReady() {
-        statementService.fetchAll(saved -> new StartupDialog(!saved.isEmpty()).open());
+        statementService.fetchAll(saved -> {
+            if (Objects.requireNonNull(new StartupDialog(!saved.isEmpty()).open()) != StartupDialog.Choice.OPEN) {
+                return;
+            }
+
+            showOpenDialog(result -> {
+                if (!result) {
+                    onAppReady();
+                }
+            });
+        });
     }
 
     /**

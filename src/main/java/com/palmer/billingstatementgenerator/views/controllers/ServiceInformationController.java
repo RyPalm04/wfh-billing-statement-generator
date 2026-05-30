@@ -6,6 +6,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 /**
@@ -15,6 +16,11 @@ import javafx.scene.control.TextField;
  */
 public class ServiceInformationController extends BaseController {
 
+    /**
+     * Label for the title of the service information tab
+     */
+    @FXML
+    public Label titleLabel;
     /**
      * Field for entering the statement control number.
      */
@@ -53,6 +59,7 @@ public class ServiceInformationController extends BaseController {
     private void initialize() {
         Statement stmt = StatementContext.current();
 
+        titleLabel.setText(StatementContext.getSavedId() != null ? "Billing Statement" : "New Billing Statement");
         controlNumberField.textProperty().bind(stmt.controlNumberProperty().asString());
 
         servicesForField.textProperty().bindBidirectional(stmt.servicesForNameProperty());
